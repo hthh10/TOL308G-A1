@@ -42,7 +42,7 @@ Bomberman.prototype.KEY_DOWN   = 'S'.charCodeAt(0);
 Bomberman.prototype.KEY_LEFT   = 'A'.charCodeAt(0);
 Bomberman.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
 
-Bomberman.prototype.KEY_FIRE   = ' '.charCodeAt(0);
+Bomberman.prototype.KEY_FIRE   = 'E'.charCodeAt(0);
 
 Bomberman.prototype.cx = 50;
 Bomberman.prototype.cy = 50;

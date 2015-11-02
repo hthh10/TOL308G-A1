@@ -46,16 +46,18 @@ function gatherInputs() {
 function updateSimulation(du) {
     
     processDiagnostics();
-    
-    entityManager.update(du);
+    if (g_gameStarted) entityManager.update(du);
 }
 
 // GAME-SPECIFIC DIAGNOSTICS
 var g_renderSpatialDebug = false;
 var g_multiplayer = false;
+var g_gameStarted = false;
+var g_level = 1;
 
 var KEY_SPATIAL = keyCode('X');
 
+var KEY_STARTGAME  = keyCode(' ');
 var KEY_PLAYER2  = keyCode('O');
 var KEY_RESET = keyCode('R');
 
@@ -66,6 +68,7 @@ function processDiagnostics() {
 		g_multiplayer = true;
 		entityManager.addPlayer2();
 	}
+	if (eatKey(KEY_STARTGAME)) g_gameStarted = true;
 
     // if (eatKey(KEY_RESET)) entityManager.resetShips();
 }
@@ -87,6 +90,7 @@ function processDiagnostics() {
 
 function renderSimulation(ctx) {
 
+	renderScore(ctx);
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
