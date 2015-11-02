@@ -68,6 +68,19 @@ generateBomberman : function(descr) {
 	this._bombermen.push(new Bomberman(descr));
 },
 
+addPlayer2 : function() {
+	this._bombermen.push(new Bomberman({
+        cx   : g_canvas.width-50,
+        cy   : 50,
+		KEY_UP     : 'I'.charCodeAt(0),
+		KEY_DOWN   : 'K'.charCodeAt(0),
+		KEY_LEFT   : 'J'.charCodeAt(0),
+		KEY_RIGHT  : 'L'.charCodeAt(0),
+
+		KEY_FIRE   : 'O'.charCodeAt(0)
+    }));
+},
+
 generateShip : function(descr) {
     this._ships.push(new Ship(descr));
 },

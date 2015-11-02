@@ -52,17 +52,20 @@ function updateSimulation(du) {
 
 // GAME-SPECIFIC DIAGNOSTICS
 var g_renderSpatialDebug = false;
+var g_multiplayer = false;
 
 var KEY_SPATIAL = keyCode('X');
 
-var KEY_HALT  = keyCode('H');
+var KEY_PLAYER2  = keyCode('O');
 var KEY_RESET = keyCode('R');
 
 function processDiagnostics() {
 
     if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
-
-    if (eatKey(KEY_HALT)) entityManager.haltShips();
+	if (eatKey(KEY_PLAYER2) && !g_multiplayer) {
+		g_multiplayer = true;
+		entityManager.addPlayer2();
+	}
 
     // if (eatKey(KEY_RESET)) entityManager.resetShips();
 }
