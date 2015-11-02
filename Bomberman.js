@@ -124,10 +124,10 @@ Bomberman.prototype.computePosition = function () {
         if(this.cy < (g_canvas.height - this.sprite.height / 2)) this.cy += NOMINAL_WALKSPEED;
     }
 	if (keys[this.KEY_LEFT]) {
-        this.cx -= NOMINAL_WALKSPEED;
+        if(this.cx >= this.sprite.width / 2) this.cx -= NOMINAL_WALKSPEED;
     }
-    if (keys[this.KEY_RIGHT]) {
-        this.cx += NOMINAL_WALKSPEED;
+    if (keys[this.KEY_RIGHT]) { 
+        if(this.cx <= (g_canvas.width - this.sprite.width / 2 )) this.cx += NOMINAL_WALKSPEED;
     }
 };
 
