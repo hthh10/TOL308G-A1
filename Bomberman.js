@@ -44,8 +44,8 @@ Bomberman.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
 
 Bomberman.prototype.KEY_FIRE   = 'E'.charCodeAt(0);
 
-Bomberman.prototype.cx = 60;
-Bomberman.prototype.cy = 160;
+Bomberman.prototype.cx = 40;
+Bomberman.prototype.cy = 120;
 Bomberman.prototype.velX = 0;
 Bomberman.prototype.velY = 0;
 
@@ -115,28 +115,22 @@ Bomberman.prototype.update = function (du) {
           // BOMBERMAN GETUR ÓVART SKOTIST INNÍ
     } else if (this.isColliding() instanceof Bomb && (this.isColliding().lifeSpan < 100.0)) {
         this.isCollidingWithBomb(this.isColliding());
-    } else {
-      console.log(this.isColliding());
-      spatialManager.register(this);
-    }
-
+    } else spatialManager.register(this);
+     
     };
-var NOMINAL_WALKSPEED = 4;
+var NOMINAL_WALKSPEED = 3;
 
 Bomberman.prototype.computePosition = function () {
 
     if (keys[this.KEY_UP]) {
-        if(this.cy > this.sprite.height / 2) {
-            console.log(this.isColliding());
-            this.cy -= NOMINAL_WALKSPEED;
-        }
+        if(this.cy > g_sprites.wall.height*2.5) this.cy -= NOMINAL_WALKSPEED;
 
     }
     if (keys[this.KEY_DOWN]) {
-        if(this.cy < (g_canvas.height - this.sprite.height / 2)) this.cy += NOMINAL_WALKSPEED;
+        if(this.cy < (g_canvas.height - g_sprites.wall.height)) this.cy += NOMINAL_WALKSPEED;
     }
     if (keys[this.KEY_LEFT]) {
-        if(this.cx >= this.sprite.width / 2) this.cx -= NOMINAL_WALKSPEED;
+        if(this.cx >= this.sprite.width/2) this.cx -= NOMINAL_WALKSPEED;
     }
     if (keys[this.KEY_RIGHT]) {
         if(this.cx <= (g_canvas.width - this.sprite.width / 2 )) this.cx += NOMINAL_WALKSPEED;

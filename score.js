@@ -13,13 +13,14 @@ var g_score = {
 function renderScore (ctx) {
 	renderP1Score(ctx);
 	renderP2Score(ctx);
+	renderEdges(ctx);
 
 	ctx.save();
     if (!g_gameStarted && g_score.P1_lives > 0) {
 		ctx.font="20px Arial";
 		ctx.fillStyle = "orange";
 		ctx.textAlign = "center"
-        ctx.fillText("Press space to start!", g_canvas.width/2,300);
+        ctx.fillText("Press space to start!", g_canvas.width/2,g_canvas.height/3.3);
     }
 	/* Game over condition - To be implemented
     if (g_score.P1_lives <= 0 && 
@@ -32,6 +33,33 @@ function renderScore (ctx) {
     }
 	*/
 	ctx.restore();
+}
+function renderEdges (ctx) {
+	// Start a little off screen to make playable are larger
+	var height = g_images.wall.height, width = g_images.wall.width;
+	var cx = -20 , cy = 50;
+	// Top left to bottom left
+	for(var i = 0; i < 14; i++) {
+		ctx.drawImage(g_images.wall,cx,cy);
+		cy += g_images.wall.height;
+	}
+	// bottom left to bottom right
+	for(var i = 0; i < g_canvas.width/g_images.wall.width; i++) {
+		ctx.drawImage(g_images.wall,cx,cy);
+		cx += g_images.wall.width;
+	}
+	
+	// bottom right to top right
+	for(var i = 0; i < 14; i++) {
+		ctx.drawImage(g_images.wall,cx,cy);
+		cy -= g_images.wall.height;
+	}
+	//top right to top left
+	for(var i = 0; i < g_canvas.width/g_images.wall.width; i++) {
+		ctx.drawImage(g_images.wall,cx,cy);
+		cx -= g_images.wall.width;
+	}
+	
 }
 
 function renderP1Score (ctx) {
