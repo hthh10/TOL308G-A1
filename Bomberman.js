@@ -44,8 +44,8 @@ Bomberman.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
 
 Bomberman.prototype.KEY_FIRE   = 'E'.charCodeAt(0);
 
-Bomberman.prototype.cx = 50;
-Bomberman.prototype.cy = 50;
+Bomberman.prototype.cx = 60;
+Bomberman.prototype.cy = 160;
 Bomberman.prototype.velX = 0;
 Bomberman.prototype.velY = 0;
 
@@ -83,7 +83,7 @@ Bomberman.prototype._updateReset = function (du) {
 
 Bomberman.prototype._moveToBeginning = function () {
     // Move to initial position
-	this.cx = this.reset_cx;
+    this.cx = this.reset_cx;
     this.cy = this.reset_cy;
 };
 
@@ -96,10 +96,10 @@ Bomberman.prototype.update = function (du) {
     }
 
     // Unregister and check for death
-	spatialManager.unregister(this);
-	if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+    spatialManager.unregister(this);
+    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
-	this.computePosition();
+    this.computePosition();
 
     // Handle firing
     this.maybeDropBomb();
@@ -129,12 +129,16 @@ var NOMINAL_WALKSPEED = 4;
 Bomberman.prototype.computePosition = function () {
 
     if (keys[this.KEY_UP]) {
-        if(this.cy > this.sprite.height / 2) this.cy -= NOMINAL_WALKSPEED;
+        if(this.cy > this.sprite.height / 2) {
+            console.log(this.isColliding()); 
+            this.cy -= NOMINAL_WALKSPEED;
+        }
+
     }
     if (keys[this.KEY_DOWN]) {
         if(this.cy < (g_canvas.height - this.sprite.height / 2)) this.cy += NOMINAL_WALKSPEED;
     }
-	if (keys[this.KEY_LEFT]) {
+    if (keys[this.KEY_LEFT]) {
         if(this.cx >= this.sprite.width / 2) this.cx -= NOMINAL_WALKSPEED;
     }
     if (keys[this.KEY_RIGHT]) {
@@ -144,7 +148,7 @@ Bomberman.prototype.computePosition = function () {
 
 Bomberman.prototype.maybeDropBomb = function () {
     if (keys[this.KEY_FIRE]) {
-		entityManager.dropBomb(this.cx, this.cy);
+        entityManager.dropBomb(this.cx, this.cy);
     }
 
 };

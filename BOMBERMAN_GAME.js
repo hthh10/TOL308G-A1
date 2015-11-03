@@ -111,12 +111,12 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
-
-
-    enemy1 : "https://notendur.hi.is/~pk/308G/images/ship.png",
-    Bomb : "Sprites/Bombsprite.gif",
-		bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-    explosion : "Sprites/Explosionsprite.gif"
+        wall : "Sprites/wall.png",
+        brick : "Sprites/brick.png",
+        enemy1 : "https://notendur.hi.is/~pk/308G/images/ship.png",
+        Bomb : "Sprites/Bombsprite.gif",
+	   bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
+        explosion : "Sprites/Explosionsprite.gif"
 
     };
 
@@ -127,10 +127,12 @@ var g_sprites = {};
 
 
 function preloadDone() {
+    g_sprites.brick = new Sprite(g_images.brick);
+    g_sprites.wall = new Sprite(g_images.wall);
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
-  g_sprites.enemy1 = new Sprite(g_images.enemy1);
-  g_sprites.bomb = new Sprite(g_images.Bomb);
-  g_sprites.Explosion = new Sprite(g_images.explosion);
+    g_sprites.enemy1 = new Sprite(g_images.enemy1);
+    g_sprites.bomb = new Sprite(g_images.Bomb);
+    g_sprites.Explosion = new Sprite(g_images.explosion);
 
 
 	entityManager.init();

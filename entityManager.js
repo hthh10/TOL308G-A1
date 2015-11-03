@@ -30,6 +30,10 @@ _bombs : [],
 _bombermen : [],
 _enemies: [],
 _explosions : [],
+_wall : [],
+
+// -------------
+// Ugly var for level design
 
 
 // "PRIVATE" METHODS
@@ -40,6 +44,10 @@ _generateBombermen : function() {
 
 _generateEnemies : function() {
     this.generateEnemy();
+},
+
+_generateWall : function() {
+    this.generateBaseWall();
 },
 
 _forEachOf: function(aCategory, fn) {
@@ -60,13 +68,30 @@ KILL_ME_NOW : -1,
 //
 deferredSetup : function () {
 
-    this._categories = [this._bombermen, this._enemies, this._bombs, this._explosions];
+    this._categories = [this._wall, this._bombermen, this._enemies, this._bombs, this._explosions];
 
 },
 
 init: function() {
+    this._generateWall();
     this._generateBombermen();
     this._generateEnemies();
+},
+
+
+generateBaseWall : function(){
+    //var cx = 20;
+    //var cy = 20;
+   // this._wall.push(new Wall(cx,cy,false));
+
+    for(var i = 0; i < 13; i++) {
+        var cy = 100 + (i*40);
+        var cx = 20
+        for(var j = 0; j < 15; j++) {
+            if(baseWall[i][j] > 0) this._wall.push(new Wall(cx,cy,false));
+            cx += 40;
+        }
+    }
 },
 
 
@@ -123,8 +148,8 @@ generateEnemy : function(descr){
 
 addPlayer2 : function() {
 	this._bombermen.push(new Bomberman({
-        cx   : g_canvas.width-50,
-        cy   : 50,
+        cx   : g_canvas.width-60,
+        cy   : 160,
 		KEY_UP     : 'I'.charCodeAt(0),
 		KEY_DOWN   : 'K'.charCodeAt(0),
 		KEY_LEFT   : 'J'.charCodeAt(0),
