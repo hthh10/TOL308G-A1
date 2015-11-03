@@ -46,26 +46,37 @@ function gatherInputs() {
 function updateSimulation(du) {
 
     processDiagnostics();
+<<<<<<< HEAD
 
     entityManager.update(du);
 
     // Prevent perpetual firing!      BREYTT HÉR
 eatKey(Bomberman.prototype.KEY_FIRE);   //   BREYTT HÉR
+=======
+    if (g_gameStarted) entityManager.update(du);
+>>>>>>> refs/remotes/origin/master
 }
 
 // GAME-SPECIFIC DIAGNOSTICS
 var g_renderSpatialDebug = false;
+var g_multiplayer = false;
+var g_gameStarted = false;
+var g_level = 1;
 
 var KEY_SPATIAL = keyCode('X');
 
-var KEY_HALT  = keyCode('H');
+var KEY_STARTGAME  = keyCode(' ');
+var KEY_PLAYER2  = keyCode('O');
 var KEY_RESET = keyCode('R');
 
 function processDiagnostics() {
 
     if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
-
-    if (eatKey(KEY_HALT)) entityManager.haltShips();
+	if (eatKey(KEY_PLAYER2) && !g_multiplayer) {
+		g_multiplayer = true;
+		entityManager.addPlayer2();
+	}
+	if (eatKey(KEY_STARTGAME)) g_gameStarted = true;
 
     // if (eatKey(KEY_RESET)) entityManager.resetShips();
 }
@@ -87,6 +98,7 @@ function processDiagnostics() {
 
 function renderSimulation(ctx) {
 
+	renderScore(ctx);
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);

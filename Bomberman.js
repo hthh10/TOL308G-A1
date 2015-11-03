@@ -36,16 +36,16 @@ Bomberman.prototype.rememberResets = function () {
     this.reset_cy = this.cy;
 };
 
+// Values for first bomberman
 Bomberman.prototype.KEY_UP     = 'W'.charCodeAt(0);
 Bomberman.prototype.KEY_DOWN   = 'S'.charCodeAt(0);
 Bomberman.prototype.KEY_LEFT   = 'A'.charCodeAt(0);
 Bomberman.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
 
-Bomberman.prototype.KEY_FIRE   = ' '.charCodeAt(0);
+Bomberman.prototype.KEY_FIRE   = 'E'.charCodeAt(0);
 
-// Initial, inheritable, default values
-Bomberman.prototype.cx = 200;
-Bomberman.prototype.cy = 200;
+Bomberman.prototype.cx = 50;
+Bomberman.prototype.cy = 50;
 Bomberman.prototype.velX = 0;
 Bomberman.prototype.velY = 0;
 

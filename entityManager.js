@@ -2,7 +2,7 @@
 
 entityManager.js
 
-A module which handles arbitrary entity-management for "Asteroids"
+A module which handles arbitrary entity-management for "Bomberman"
 
 
 We create this module as a single global object, and initialise it
@@ -70,6 +70,19 @@ dropBomb: function(cx, cy) {
 
 generateBomberman : function(descr) {
 	this._bombermen.push(new Bomberman(descr));
+},
+
+addPlayer2 : function() {
+	this._bombermen.push(new Bomberman({
+        cx   : g_canvas.width-50,
+        cy   : 50,
+		KEY_UP     : 'I'.charCodeAt(0),
+		KEY_DOWN   : 'K'.charCodeAt(0),
+		KEY_LEFT   : 'J'.charCodeAt(0),
+		KEY_RIGHT  : 'L'.charCodeAt(0),
+
+		KEY_FIRE   : 'O'.charCodeAt(0)
+    }));
 },
 
 generateShip : function(descr) {
