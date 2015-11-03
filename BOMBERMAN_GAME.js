@@ -44,10 +44,13 @@ function gatherInputs() {
 // GAME-SPECIFIC UPDATE LOGIC
 
 function updateSimulation(du) {
-    
+
     processDiagnostics();
-    
+
     entityManager.update(du);
+
+    // Prevent perpetual firing!      BREYTT HÉR
+eatKey(Bomberman.prototype.KEY_FIRE);   //   BREYTT HÉR
 }
 
 // GAME-SPECIFIC DIAGNOSTICS
@@ -99,6 +102,7 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
+    Bomb : "Sprites/Bombsprite.png",
 		bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png"
     };
 
@@ -110,7 +114,9 @@ var g_sprites = {};
 
 function preloadDone() {
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
-	
+  g_sprites.bullet = new Sprite(g_images.Bomb);  //breytt
+
+
 	entityManager.init();
 
     main.init();

@@ -19,10 +19,10 @@ function Bomberman(descr) {
     this.setup(descr);
 
     this.rememberResets();
-    
+
     // Default sprite, if not otherwise specified
     this.sprite = this.sprite || g_sprites.bomberman;
-    
+
     // Set normal drawing scale, and warp state off
     this._scale = 1;
     this._isReseting = false;
@@ -53,7 +53,7 @@ Bomberman.prototype.reset = function () {
 
     this._isReseting = true;
     this._scaleDirn = -1;
-    
+
     // Unregister me from my old posistion
     // ...so that I can't be collided with while warping
     spatialManager.unregister(this);
@@ -63,18 +63,18 @@ Bomberman.prototype._updateReset = function (du) {
 
     var SHRINK_RATE = 3 / SECS_TO_NOMINALS;
     this._scale += this._scaleDirn * SHRINK_RATE * du;
-    
+
     if (this._scale < 0.2) {
-    
+
         this._moveToBeginning();
         this.halt();
         this._scaleDirn = 1;
-        
+
     } else if (this._scale > 1) {
-    
+
         this._scale = 1;
         this._isReseting = false;
-        
+
         // Reregister me from my old posistion
         // ...so that I can be collided with again
         spatialManager.register(this);
@@ -86,7 +86,7 @@ Bomberman.prototype._moveToBeginning = function () {
 	this.cx = this.reset_cx;
     this.cy = this.reset_cy;
 };
-    
+
 Bomberman.prototype.update = function (du) {
 
     // Handle warping
@@ -94,18 +94,20 @@ Bomberman.prototype.update = function (du) {
         this._updateReset(du);
         return;
     }
-    
+
     // Unregister and check for death
 	spatialManager.unregister(this);
 	if (this._isDeadNow) return entityManager.KILL_ME_NOW;
-	
+
 	this.computePosition();
 
     // Handle firing
     this.maybeDropBomb();
 
     // Reset position if isColliding, otherwise Register
-    if (this.isColliding()) {
+    // athuga hvort það er sprengja því þá viljum við ekki resetta. smá shitmix
+    if (this.isColliding() && !(this.isColliding() instanceof Bomb) ) {
+      console.log(this.isColliding());
         this.reset();
     }
 	else {
@@ -116,7 +118,7 @@ Bomberman.prototype.update = function (du) {
 var NOMINAL_WALKSPEED = 4;
 
 Bomberman.prototype.computePosition = function () {
-    
+
     if (keys[this.KEY_UP]) {
         if(this.cy > this.sprite.height / 2) this.cy -= NOMINAL_WALKSPEED;
     }
@@ -126,7 +128,7 @@ Bomberman.prototype.computePosition = function () {
 	if (keys[this.KEY_LEFT]) {
         if(this.cx >= this.sprite.width / 2) this.cx -= NOMINAL_WALKSPEED;
     }
-    if (keys[this.KEY_RIGHT]) { 
+    if (keys[this.KEY_RIGHT]) {
         if(this.cx <= (g_canvas.width - this.sprite.width / 2 )) this.cx += NOMINAL_WALKSPEED;
     }
 };
@@ -135,6 +137,7 @@ Bomberman.prototype.maybeDropBomb = function () {
     if (keys[this.KEY_FIRE]) {
 		entityManager.dropBomb(this.cx, this.cy);
     }
+
 };
 
 Bomberman.prototype.getRadius = function () {
