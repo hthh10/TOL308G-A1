@@ -17,7 +17,7 @@ with suitable 'data' and 'methods'.
 
 
 // Tell jslint not to complain about my use of underscore prefixes (nomen),
-// my flattening of some indentation (white), or my use of incr/decr ops 
+// my flattening of some indentation (white), or my use of incr/decr ops
 // (plusplus).
 //
 /*jslint nomen: true, white: true, plusplus: true*/
@@ -26,7 +26,7 @@ with suitable 'data' and 'methods'.
 var entityManager = {
 
 // "PRIVATE" DATA
-
+_bombs : [],
 _bombermen : [],
 _enemies: [],
 
@@ -58,6 +58,7 @@ KILL_ME_NOW : -1,
 //
 deferredSetup : function () {
     this._categories = [this._bombermen, this._enemies];
+    this._categories = [this._bombs, this._bombermen];
 },
 
 init: function() {
@@ -67,7 +68,11 @@ init: function() {
 
 // DO THIS LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 dropBomb: function(cx, cy) {
-	
+  this._bombs.push(new Bomb({
+      cx   : cx,
+      cy   : cy
+
+  }));
 },
 
 generateBomberman : function(descr) {
@@ -142,4 +147,3 @@ render: function(ctx) {
 
 // Some deferred setup which needs the object to have been created first
 entityManager.deferredSetup();
-

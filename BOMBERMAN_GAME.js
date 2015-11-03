@@ -44,18 +44,26 @@ function gatherInputs() {
 // GAME-SPECIFIC UPDATE LOGIC
 
 function updateSimulation(du) {
-    
+
     processDiagnostics();
-    
+
     entityManager.update(du);
+
+    // Prevent perpetual firing!      BREYTT HÉR
+    eatKey(Bomberman.prototype.KEY_FIRE);   //   BREYTT HÉR
+    if (g_gameStarted) entityManager.update(du);
+
 }
 
 // GAME-SPECIFIC DIAGNOSTICS
 var g_renderSpatialDebug = false;
 var g_multiplayer = false;
+var g_gameStarted = false;
+var g_level = 1;
 
 var KEY_SPATIAL = keyCode('X');
 
+var KEY_STARTGAME  = keyCode(' ');
 var KEY_PLAYER2  = keyCode('O');
 var KEY_RESET = keyCode('R');
 
@@ -66,6 +74,7 @@ function processDiagnostics() {
 		g_multiplayer = true;
 		entityManager.addPlayer2();
 	}
+	if (eatKey(KEY_STARTGAME)) g_gameStarted = true;
 
     // if (eatKey(KEY_RESET)) entityManager.resetShips();
 }
@@ -87,6 +96,7 @@ function processDiagnostics() {
 
 function renderSimulation(ctx) {
 
+	renderScore(ctx);
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -104,6 +114,8 @@ function requestPreloads() {
     var requiredImages = {
 		bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
         enemy1 : "https://notendur.hi.is/~pk/308G/images/ship.png"
+    Bomb : "Sprites/Bombsprite.png",
+		bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -115,7 +127,8 @@ var g_sprites = {};
 function preloadDone() {
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
     g_sprites.enemy1 = new Sprite(g_images.enemy1);
-	
+    g_sprites.bullet = new Sprite(g_images.Bomb);  //breytt
+
 	entityManager.init();
 
     main.init();
