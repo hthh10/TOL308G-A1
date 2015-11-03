@@ -106,15 +106,24 @@ Bomberman.prototype.update = function (du) {
 
     // Reset position if isColliding, otherwise Register
     // athuga hvort það er sprengja því þá viljum við ekki resetta. smá shitmix
-    if (this.isColliding() && !(this.isColliding() instanceof Bomb) ) {
-      console.log(this.isColliding());
+    if (this.isColliding() && !(this.isColliding() instanceof Bomb)) {
         this.reset();
+      //athuga hvort hann collidar við sprengjuna eftir smá delay og
+      // lokar svo fyrir að hann komist í gegnum hana
+          // ATH HÉR GÆTI VERIÐ VANDAMÁL ÞEGAR BORÐIÐ ER FULLT AF HLUTUM SEM
+          // BOMBERMAN GETUR ÓVART SKOTIST INNÍ
+    } else if (this.isColliding() instanceof Bomb && (this.isColliding().lifeSpan < 100.0)) {
+      //console.log(this.isColliding().lifeSpan);
+      var bomba = this.isColliding();
+      if (this.cy > bomba.cy) this.cy += NOMINAL_WALKSPEED;
+      if (this.cy < bomba.cy) this.cy -= NOMINAL_WALKSPEED;
+      if (this.cx > bomba.cx) this.cx += NOMINAL_WALKSPEED;
+      if (this.cx < bomba.cx) this.cx -= NOMINAL_WALKSPEED;
+    } else {
+      spatialManager.register(this);
     }
-	else {
-		spatialManager.register(this);
-	}
-};
 
+    };
 var NOMINAL_WALKSPEED = 4;
 
 Bomberman.prototype.computePosition = function () {

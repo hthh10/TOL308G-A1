@@ -29,6 +29,8 @@ var entityManager = {
 _bombs : [],
 _bombermen : [],
 _enemies: [],
+_explosions : [],
+
 
 // "PRIVATE" METHODS
 
@@ -57,7 +59,9 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._bombermen, this._enemies, this._bombs];
+
+    this._categories = [this._bombermen, this._enemies, this._bombs, this._explosions];
+
 },
 
 init: function() {
@@ -65,13 +69,48 @@ init: function() {
     this._generateEnemies();
 },
 
-// DO THIS LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 dropBomb: function(cx, cy) {
   this._bombs.push(new Bomb({
       cx   : cx,
       cy   : cy
 
   }));
+},
+
+
+explode: function(cx, cy) {
+  console.log(cx);
+  // 5 er lengd spreningar
+  // fyrir hvern hluta af sprengjunni er athugað hvort hún sé að fara útfyrir canvas
+  // ef svo er hættir hún
+  for (var i = 0; i < 5; i++) {
+
+    if ((cx + 25 * i) < g_canvas.width - 20 / 2) {
+      this._bombs.push(new Explosion({
+        cx: cx + 25 * i,
+        cy: cy
+      }));
+    }
+    if ((cx - 25 * i) > 20) {
+      this._bombs.push(new Explosion({
+        cx: cx - 25 * i,
+        cy: cy
+      }));
+    }
+    if ((cy + 25 * i) < g_canvas.height - 20 / 2) {
+      this._bombs.push(new Explosion({
+        cx: cx,
+        cy: cy + 25 * i
+      }));
+    }
+    if ((cy - 25 * i) > 20) {
+      this._bombs.push(new Explosion({
+        cx: cx,
+        cy: cy - 25 * i
+      }));
+    }
+  }
 },
 
 generateBomberman : function(descr) {

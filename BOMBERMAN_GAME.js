@@ -47,11 +47,10 @@ function updateSimulation(du) {
 
     processDiagnostics();
 
-    entityManager.update(du);
 
-    // Prevent perpetual firing!      BREYTT HÉR
-    eatKey(Bomberman.prototype.KEY_FIRE);   //   BREYTT HÉR
-    if (g_gameStarted) entityManager.update(du);
+if (g_gameStarted) entityManager.update(du);
+// Prevent perpetual firing!
+eatKey(Bomberman.prototype.KEY_FIRE);
 
 }
 
@@ -112,9 +111,13 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
+
+
+    enemy1 : "https://notendur.hi.is/~pk/308G/images/ship.png",
+    Bomb : "Sprites/Bombsprite.gif",
 		bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        enemy1 : "https://notendur.hi.is/~pk/308G/images/ship.png",
-        Bomb : "Sprites/Bombsprite.png"
+    explosion : "Sprites/Explosionsprite.gif"
+
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -125,8 +128,10 @@ var g_sprites = {};
 
 function preloadDone() {
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
-    g_sprites.enemy1 = new Sprite(g_images.enemy1);
-    g_sprites.bullet = new Sprite(g_images.Bomb);  //breytt
+  g_sprites.enemy1 = new Sprite(g_images.enemy1);
+  g_sprites.bomb = new Sprite(g_images.Bomb);
+  g_sprites.Explosion = new Sprite(g_images.explosion);
+
 
 	entityManager.init();
 

@@ -1,5 +1,5 @@
 // ======
-// BULLET
+// EXPLOSION
 // ======
 
 "use strict";
@@ -13,7 +13,7 @@
 
 
 // A generic contructor which accepts an arbitrary descriptor object
-function Bomb(descr) {
+function Explosion(descr) {
 
   // Common inherited setup logic from Entity
   this.setup(descr);
@@ -30,26 +30,26 @@ function Bomb(descr) {
 
 }
 
-Bomb.prototype = new Entity();
+Explosion.prototype = new Entity();
 
 
 // HACKED-IN AUDIO (no preloading)
-// Bomb.prototype.fireSound = new Audio(
+// Explosion.prototype.fireSound = new Audio(
 //   "sounds/bulletFire.ogg");
-// Bomb.prototype.zappedSound = new Audio(
+// Explosion.prototype.zappedSound = new Audio(
 //   "sounds/bulletZapped.ogg");
 
 // Initial, inheritable, default values
-Bomb.prototype.rotation = 0;
-Bomb.prototype.cx = 16;
-Bomb.prototype.cy = 200;
-Bomb.prototype.velX = 1;
-Bomb.prototype.velY = 1;
+Explosion.prototype.rotation = 0;
+Explosion.prototype.cx = 16;
+Explosion.prototype.cy = 200;
+Explosion.prototype.velX = 1;
+Explosion.prototype.velY = 1;
 
 // Convert times from milliseconds to "nominal" time units.
-Bomb.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
+Explosion.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
-Bomb.prototype.update = function(du) {
+Explosion.prototype.update = function(du) {
 
   spatialManager.unregister(this);
   if (this._isDeadNow) {
@@ -58,8 +58,7 @@ Bomb.prototype.update = function(du) {
 
 
   this.lifeSpan -= du;
-  if (this.lifeSpan < 40) {
-    entityManager.explode(this.cx,this.cy);
+  if (this.lifeSpan < 0) {
     return entityManager.KILL_ME_NOW;
 }
 
@@ -71,8 +70,8 @@ Bomb.prototype.update = function(du) {
   // Handle collisions
   //
   // var hitEntity = this.findHitEntity();
-  // if (hitEntity) {
-  //   var canTakeHit = hitEntity.takeBombHit;
+  // if (hitEntity && !(hitEntity instanceof Bomb)) {
+  //   var canTakeHit = hitEntity.takeExplosionHit;
   //   if (canTakeHit) canTakeHit.call(hitEntity);
   //   return entityManager.KILL_ME_NOW;
   // }
@@ -82,26 +81,26 @@ Bomb.prototype.update = function(du) {
   spatialManager.register(this);
 };
 
-Bomb.prototype.getRadius = function() {
+Explosion.prototype.getRadius = function() {
     return 14;
 };
 
-Bomb.prototype.takeBombHit = function() {
+Explosion.prototype.takeExplosionHit = function() {
   this.kill();
 
   // Make a noise when I am zapped by another bullet
   //this.zappedSound.play();
 };
 
-Bomb.prototype.render = function(ctx) {
+Explosion.prototype.render = function(ctx) {
 
-  var fadeThresh = Bomb.prototype.lifeSpan / 3;
+  var fadeThresh = Explosion.prototype.lifeSpan / 3;
 
-  // if (this.lifeSpan < fadeThresh) {
-  //   ctx.globalAlpha = this.lifeSpan / fadeThresh;
-  // }
+  if (this.lifeSpan < fadeThresh) {
+    ctx.globalAlpha = this.lifeSpan / fadeThresh;
+  }
 
-  g_sprites.bomb.drawWrappedCentredAt(
+  g_sprites.Explosion.drawWrappedCentredAt(
     ctx, this.cx, this.cy
   );
 
