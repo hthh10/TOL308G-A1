@@ -31,7 +31,8 @@ var baseWall = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
                 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
 
 function Wall(cx,cy,destroyable) {
-
+	
+	this.setup(); // Verður að vera með til að úthluta spatial ID
     this.cx = cx;
     this.cy = cy;
     this.destroyable = destroyable;
@@ -43,6 +44,10 @@ function Wall(cx,cy,destroyable) {
 Wall.prototype = new Entity();
 
 // Initial, inheritable, default values
+
+Wall.prototype.getRadius = function () {
+    return (this.sprite.width / 2) * 0.9;
+};
 
 Wall.prototype.update = function(du) {
 
