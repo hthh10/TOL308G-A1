@@ -40,7 +40,7 @@ Enemy.prototype.update = function(du) {
 var NOMINAL_WALKSPEED = 4;
 
 Enemy.prototype.computePosition = function () {
-    //Enemy moves by default
+    //Enemy moves by default 
     var moveEnemy = true;
     if(this.moveEnemy){
         this.cx += NOMINAL_WALKSPEED;

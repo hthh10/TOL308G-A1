@@ -113,9 +113,8 @@ function requestPreloads() {
 
     var requiredImages = {
 		bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
-        enemy1 : "https://notendur.hi.is/~pk/308G/images/ship.png"
-    Bomb : "Sprites/Bombsprite.png",
-		bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png"
+        enemy1 : "https://notendur.hi.is/~pk/308G/images/ship.png",
+        Bomb : "Sprites/Bombsprite.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
