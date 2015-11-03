@@ -80,11 +80,11 @@ init: function() {
 
 
 generateBaseWall : function(){
+	// MAGIC NUMBERS Í FOR LOOP VÆRI FÍNT AÐ LAGA
+    for(var i = 0; i < baseWall.length; i++) {
 
-    for(var i = 0; i < 13; i++) {
-
-        var cy = 70 + (i*40), cx = 40;
-        for(var j = 0; j < 15; j++) {
+        var cy = 150 + (i*40), cx = 40;
+        for(var j = 0; j < baseWall[i].length; j++) {
             if(baseWall[i][j] > 0) this._wall.push(new Wall({
                 cx : cx,
                 cy : cy,
