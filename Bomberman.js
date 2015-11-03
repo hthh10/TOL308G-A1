@@ -126,11 +126,10 @@ Bomberman.prototype.update = function (du) {
           // BOMBERMAN GETUR ÓVART SKOTIST INNÍ
     } else if (this.isColliding() instanceof Bomb && (this.isColliding().lifeSpan < 100.0)) {
         this.isCollidingWithBomb(this.isColliding());
-    } else {
-      spatialManager.register(this);
-    }
-
+    } else spatialManager.register(this);
+     
     };
+
 var NOMINAL_WALKSPEED = 2.5;
 
 Bomberman.prototype.computePosition = function () {
