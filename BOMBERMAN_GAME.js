@@ -102,7 +102,8 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
-		bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png"
+		bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
+        enemy1 : "https://notendur.hi.is/~pk/308G/images/ship.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -113,6 +114,7 @@ var g_sprites = {};
 
 function preloadDone() {
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
+    g_sprites.enemy1 = new Sprite(g_images.enemy1);
 	
 	entityManager.init();
 

@@ -28,11 +28,16 @@ var entityManager = {
 // "PRIVATE" DATA
 
 _bombermen : [],
+_enemies: [],
 
 // "PRIVATE" METHODS
 
 _generateBombermen : function() {
     this.generateBomberman();
+},
+
+_generateEnemies : function() {
+    this.generateEnemy();
 },
 
 _forEachOf: function(aCategory, fn) {
@@ -52,11 +57,12 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._bombermen];
+    this._categories = [this._bombermen, this._enemies];
 },
 
 init: function() {
     this._generateBombermen();
+    this._generateEnemies();
 },
 
 // DO THIS LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -66,6 +72,10 @@ dropBomb: function(cx, cy) {
 
 generateBomberman : function(descr) {
 	this._bombermen.push(new Bomberman(descr));
+},
+
+generateEnemy : function(descr){
+    this._enemies.push(new Enemy(descr));
 },
 
 addPlayer2 : function() {
@@ -80,10 +90,11 @@ addPlayer2 : function() {
 		KEY_FIRE   : 'O'.charCodeAt(0)
     }));
 },
-
+/*
 generateShip : function(descr) {
     this._ships.push(new Ship(descr));
 },
+*/
 
 update: function(du) {
 
