@@ -116,6 +116,7 @@ Bomberman.prototype.update = function (du) {
     } else if (this.isColliding() instanceof Bomb && (this.isColliding().lifeSpan < 100.0)) {
         this.isCollidingWithBomb(this.isColliding());
     } else {
+      console.log(this.isColliding());
       spatialManager.register(this);
     }
 
@@ -126,7 +127,7 @@ Bomberman.prototype.computePosition = function () {
 
     if (keys[this.KEY_UP]) {
         if(this.cy > this.sprite.height / 2) {
-            console.log(this.isColliding()); 
+            console.log(this.isColliding());
             this.cy -= NOMINAL_WALKSPEED;
         }
 
