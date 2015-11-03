@@ -108,17 +108,13 @@ Bomberman.prototype.update = function (du) {
     // athuga hvort það er sprengja því þá viljum við ekki resetta. smá shitmix
     if (this.isColliding() && !(this.isColliding() instanceof Bomb)) {
         this.reset();
+        g_score.P1_lives -= 1;
       //athuga hvort hann collidar við sprengjuna eftir smá delay og
       // lokar svo fyrir að hann komist í gegnum hana
           // ATH HÉR GÆTI VERIÐ VANDAMÁL ÞEGAR BORÐIÐ ER FULLT AF HLUTUM SEM
           // BOMBERMAN GETUR ÓVART SKOTIST INNÍ
     } else if (this.isColliding() instanceof Bomb && (this.isColliding().lifeSpan < 100.0)) {
-      //console.log(this.isColliding().lifeSpan);
-      var bomba = this.isColliding();
-      if (this.cy > bomba.cy) this.cy += NOMINAL_WALKSPEED;
-      if (this.cy < bomba.cy) this.cy -= NOMINAL_WALKSPEED;
-      if (this.cx > bomba.cx) this.cx += NOMINAL_WALKSPEED;
-      if (this.cx < bomba.cx) this.cx -= NOMINAL_WALKSPEED;
+        this.isCollidingWithBomb(this.isColliding());
     } else {
       spatialManager.register(this);
     }
@@ -145,6 +141,15 @@ Bomberman.prototype.computePosition = function () {
         if(this.cx <= (g_canvas.width - this.sprite.width / 2 )) this.cx += NOMINAL_WALKSPEED;
     }
 };
+
+// athugar collision við sprengju og breytir hraðanum eftir því
+Bomberman.prototype.isCollidingWithBomb = function (bomba) {
+  if (this.cy > bomba.cy) this.cy += NOMINAL_WALKSPEED;
+  if (this.cy < bomba.cy) this.cy -= NOMINAL_WALKSPEED;
+  if (this.cx > bomba.cx) this.cx += NOMINAL_WALKSPEED;
+  if (this.cx < bomba.cx) this.cx -= NOMINAL_WALKSPEED;
+
+},
 
 Bomberman.prototype.maybeDropBomb = function () {
     if (keys[this.KEY_FIRE]) {

@@ -104,12 +104,12 @@ dropBomb: function(cx, cy) {
 },
 
 
-explode: function(cx, cy) {
+explode: function(cx, cy, Yield) {
   console.log(cx);
   // 5 er lengd spreningar
   // fyrir hvern hluta af sprengjunni er athugað hvort hún sé að fara útfyrir canvas
   // ef svo er hættir hún
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < Yield; i++) {
 
     if ((cx + 25 * i) < g_canvas.width - 20 / 2) {
       this._bombs.push(new Explosion({
@@ -154,8 +154,8 @@ addPlayer2 : function() {
 		KEY_DOWN   : 'K'.charCodeAt(0),
 		KEY_LEFT   : 'J'.charCodeAt(0),
 		KEY_RIGHT  : 'L'.charCodeAt(0),
-
-		KEY_FIRE   : 'O'.charCodeAt(0)
+    //BREYTTI Í 'H' því 'O' vildi ekki ganga þarna
+		KEY_FIRE   : 'H'.charCodeAt(0)
     }));
 },
 /*

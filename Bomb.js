@@ -59,27 +59,28 @@ Bomb.prototype.update = function(du) {
 
   this.lifeSpan -= du;
   if (this.lifeSpan < 40) {
-    entityManager.explode(this.cx,this.cy);
+    this.configureExplosion();
     return entityManager.KILL_ME_NOW;
 }
 
 
   this.wrapPosition();
 
-  // TODO? NO, ACTUALLY, I JUST DID THIS BIT FOR YOU! :-)
-  //
-  // Handle collisions
-  //
-  // var hitEntity = this.findHitEntity();
-  // if (hitEntity) {
-  //   var canTakeHit = hitEntity.takeBombHit;
-  //   if (canTakeHit) canTakeHit.call(hitEntity);
-  //   return entityManager.KILL_ME_NOW;
-  // }
-
+  // ef sprengjan verður fyrir sprengingu springur hún
+  if (this.isColliding() && (this.isColliding() instanceof Explosion)) {
+      this.configureExplosion();
+    }
 
 
   spatialManager.register(this);
+};
+
+// sendir entitymanager upplýsingar um sprengingu
+// ekki mikil þörf fyrr en við höfum powerups
+Bomb.prototype.configureExplosion = function() {
+  var bombyield = 5;
+
+  entityManager.explode(this.cx, this.cy, bombyield)
 };
 
 Bomb.prototype.getRadius = function() {

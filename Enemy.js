@@ -34,14 +34,24 @@ Enemy.prototype.update = function(du) {
 
     this.computePosition();
 
+    // if colliding with a bomb turn around
+    if (this.isColliding() instanceof Bomb){
+        this.isCollidingWithBomb(this.isColliding());
+    }
+    // if standing in fire, die!
+    if (this.isColliding() instanceof Explosion){
+        //award points?
+        return entityManager.KILL_ME_NOW;
+    }
+
     spatialManager.register(this);
 }
 
 var NOMINAL_WALKSPEED = 4;
-
+Enemy.prototype.moveEnemy = true;
 Enemy.prototype.computePosition = function () {
-    //Enemy moves by default 
-    var moveEnemy = true;
+    //Enemy moves by default
+    //var moveEnemy = true;
     if(this.moveEnemy){
         this.cx += NOMINAL_WALKSPEED;
     }
@@ -57,7 +67,17 @@ Enemy.prototype.computePosition = function () {
         this.moveEnemy = true;
     }
 };
+Enemy.prototype.getRadius = function() {
+      return (this.sprite.width / 2) * 0.9;
+};
+// athugar collision við sprengju og breytir hraðanum eftir því
+Enemy.prototype.isCollidingWithBomb = function (bomba) {
+  // if (this.cy > bomba.cy)   this.moveEnemy = true;
+  // if (this.cy < bomba.cy)   this.moveEnemy = false;
+  if (this.cx > bomba.cx)   this.moveEnemy = true;
+  if (this.cx < bomba.cx)   this.moveEnemy = false;
 
+},
 Enemy.prototype.render = function(ctx){
     var origScale = this.sprite.scale;
     //pass my scale into the sprite, for drawing
