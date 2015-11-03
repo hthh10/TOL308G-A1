@@ -46,15 +46,15 @@ function gatherInputs() {
 function updateSimulation(du) {
 
     processDiagnostics();
-<<<<<<< HEAD
+
 
     entityManager.update(du);
 
     // Prevent perpetual firing!      BREYTT HÉR
 eatKey(Bomberman.prototype.KEY_FIRE);   //   BREYTT HÉR
-=======
+
     if (g_gameStarted) entityManager.update(du);
->>>>>>> refs/remotes/origin/master
+
 }
 
 // GAME-SPECIFIC DIAGNOSTICS
@@ -126,7 +126,7 @@ var g_sprites = {};
 
 function preloadDone() {
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
-  g_sprites.bullet = new Sprite(g_images.Bomb);  //breytt
+  g_sprites.bullet = new Sprite(g_images.Bomb);
 
 
 	entityManager.init();

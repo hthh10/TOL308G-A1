@@ -78,14 +78,12 @@ Bomb.prototype.update = function(du) {
   // }
 
 
-  //REGISTERA EKKI þar sem það vantar         !!!!
-  //aðferð til að hafa mismunandi collisions
 
   spatialManager.register(this);
 };
 
 Bomb.prototype.getRadius = function() {
-  return 4;
+    return 14;
 };
 
 Bomb.prototype.takeBombHit = function() {
