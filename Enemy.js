@@ -31,6 +31,9 @@ Enemy.prototype.update = function(du) {
      // Unregister and check for death
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+    //remember previous position
+    //var oldCx = this.cx;
+    //var oldCy = this.cy;
 
     this.computePosition();
 
@@ -42,6 +45,12 @@ Enemy.prototype.update = function(du) {
     if (this.isColliding() instanceof Explosion){
         //award points?
         return entityManager.KILL_ME_NOW;
+    }
+    //if colliding with the wall, turn around
+    if (this.isColliding()) {
+        if (this.isColliding() instanceof Wall) {
+            this.moveEnemy = false;
+        }
     }
 
     spatialManager.register(this);
@@ -68,7 +77,7 @@ Enemy.prototype.computePosition = function () {
     }
 };
 Enemy.prototype.getRadius = function() {
-      return (this.sprite.width / 2) * 0.9;
+      return (this.sprite.width / 2) * 0.5;
 };
 // athugar collision við sprengju og breytir hraðanum eftir því
 Enemy.prototype.isCollidingWithBomb = function (bomba) {
@@ -76,8 +85,8 @@ Enemy.prototype.isCollidingWithBomb = function (bomba) {
   // if (this.cy < bomba.cy)   this.moveEnemy = false;
   if (this.cx > bomba.cx)   this.moveEnemy = true;
   if (this.cx < bomba.cx)   this.moveEnemy = false;
-
 },
+
 Enemy.prototype.render = function(ctx){
     var origScale = this.sprite.scale;
     //pass my scale into the sprite, for drawing
