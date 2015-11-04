@@ -20,7 +20,7 @@ function renderScore (ctx) {
 		ctx.font="20px Arial";
 		ctx.fillStyle = "orange";
 		ctx.textAlign = "center"
-        ctx.fillText("Press space to start!", g_canvas.width/2,g_canvas.height/3.3);
+        ctx.fillText("Press space to start!", g_canvas.width/2,g_canvas.height/16);
     }
 	/* Game over condition - To be implemented
     if (g_score.P1_lives <= 0 && 

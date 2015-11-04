@@ -47,7 +47,7 @@ Explosion.prototype.velX = 1;
 Explosion.prototype.velY = 1;
 
 // Convert times from milliseconds to "nominal" time units.
-Explosion.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
+Explosion.prototype.lifeSpan = 1000 / NOMINAL_UPDATE_INTERVAL;
 
 Explosion.prototype.update = function(du) {
 
@@ -84,7 +84,7 @@ Explosion.prototype.update = function(du) {
 
 
 Explosion.prototype.getRadius = function() {
-    return 14;
+    return 20;
 };
 
 Explosion.prototype.takeExplosionHit = function() {

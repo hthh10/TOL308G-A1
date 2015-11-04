@@ -15,24 +15,13 @@
 
 // UGLY var for level layout...
 
-var baseWall = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-				[1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-                [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
-                [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-                [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
-                [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-                [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
-                [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-                [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
-                [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-                [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
-                [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
-
-//function Wall(cx,cy,destroyable) {
+// 1 = wall
+// 0 = possible brick
+// 2 = blocked for player
 
 // UGLY var for level layout...0,
-var baseWall = [[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+var baseWall = [[2,2,0,0,0,0,0,0,0,0,0,0,0,2,2],
+                [2,1,0,1,0,1,0,1,0,1,0,1,0,1,2],
                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -42,7 +31,9 @@ var baseWall = [[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]];
+                [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                ];
 
 function Wall(descr) {
 
@@ -56,6 +47,10 @@ Wall.prototype = new Entity();
 
 // Initial, inheritable, default values
 
+Wall.prototype.isBrick = function() {
+    return destroyable;
+}
+
 Wall.prototype.getRadius = function () {
     return (this.sprite.width / 2) * 0.9;
 };
@@ -65,6 +60,12 @@ Wall.prototype.update = function(du) {
 
     spatialManager.unregister(this);
 
+    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+    
+    if (this.isColliding() instanceof Explosion && this.isBrick) {
+        this._isDeadNow = true;
+             console.log(this.isColliding())
+        }
 
     spatialManager.register(this);
 }

@@ -48,16 +48,19 @@ _generateEnemies : function() {
 },
 
 _generateWall : function() {
-    this.generateBaseWall();
+    this.generateLevel();
 },
 
 
 _generateRocks : function() {
+  this.generateRock();
+
+
     //only spawn in two rocks for now
-    var NUM_ROCKS = 2;
-    for(var i = 0; i < NUM_ROCKS; i++){
-        this.generateRock();
-    }
+//    var NUM_ROCKS = 2;
+//    for(var i = 0; i < NUM_ROCKS; i++){
+//        this.generateRock();
+//    }
 },
 
 
@@ -91,41 +94,32 @@ init: function() {
 },
 
 
-generateBaseWall : function(){
-	// MAGIC NUMBERS Í FOR LOOP VÆRI FÍNT AÐ LAGA
+generateLevel : function(){
+//TODO: Magic numbers for position of wall/rock. Higly dependent on the size of Wall sprite
     for(var i = 0; i < baseWall.length; i++) {
 
-        var cy = 150 + (i*40), cx = 40;
+        var cy = 110 + (i*40), cx = 40;
         for(var j = 0; j < baseWall[i].length; j++) {
-            if(baseWall[i][j] > 0) this._wall.push(new Wall({
+            if(baseWall[i][j] === 1) this._wall.push(new Wall({
                 cx : cx,
                 cy : cy,
                 destroyable: false
-            }));
-        cx += 40;
+              }));
+            if(baseWall[i][j] === 0) {
+              if(Math.random() >= 0.65) this._rocks.push(new Wall({
+                cx : cx,
+                cy : cy,
+                destroyable: true
+                }));
+
+            } 
+
+          cx += 40;
 
         }
     }
-
-    //var cx = 20;
-    //var cy = 20;
-   // this._wall.push(new Wall(cx,cy,false));
-
-/*
-for(var i = 0; i < 13; i++) {
-    var cy = 100 + (i*40);
-    var cx = 20
-    for(var j = 0; j < 15; j++) {
-        if(baseWall[i][j] > 0) this._wall.push(new Wall({
-          cx : cx,
-          cy : cy,
-          destroyable: false
-        }));
-        cx += 40;
-    }
-}
-*/
 },
+
 
 dropBomb: function(cx, cy) {
   this._bombs.push(new Bomb({
@@ -250,7 +244,7 @@ addPlayer2 : function() {
 
 
 generateRock : function(descr) {
-    this._rocks.push(new Rock(descr));
+    //this._rocks.push(new Rock(descr));
 },
 
 /*
