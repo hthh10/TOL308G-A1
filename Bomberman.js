@@ -93,11 +93,11 @@ Bomberman.prototype.update = function (du) {
         this._updateReset(du);
         return;
     }
-	
+
 	// Remember current position
 	var oldCx = this.cx;
 	var oldCy = this.cy;
-	
+
 
     // Unregister and check for death
     spatialManager.unregister(this);
@@ -115,8 +115,8 @@ Bomberman.prototype.update = function (du) {
 			this.cx = oldCx;
 			this.cy = oldCy;
 		}
-		
-		if (this.isColliding() instanceof Enemy || this.isColliding() instanceof Explosion) {
+
+    if (this.isColliding() instanceof Enemy || this.isColliding() instanceof Explosion) {
 			this.reset();
 			g_score.P1_lives -= 1;
 		}
@@ -127,7 +127,7 @@ Bomberman.prototype.update = function (du) {
     } else if (this.isColliding() instanceof Bomb && (this.isColliding().lifeSpan < 100.0)) {
         this.isCollidingWithBomb(this.isColliding());
     } else spatialManager.register(this);
-     
+
     };
 
 var NOMINAL_WALKSPEED = 2.5;

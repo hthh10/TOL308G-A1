@@ -136,39 +136,96 @@ dropBomb: function(cx, cy) {
 },
 
 
-explode: function(cx, cy) {
-  console.log(cx);
-  // 5 er lengd spreningar
-  // fyrir hvern hluta af sprengjunni er athugað hvort hún sé að fara útfyrir canvas
-  // ef svo er hættir hún
-  for (var i = 0; i < 5; i++) {
+// explode: function(cx, cy) {
+//   console.log(cx);
+//   // 5 er lengd spreningar
+//   // fyrir hvern hluta af sprengjunni er athugað hvort hún sé að fara útfyrir canvas
+//   // ef svo er hættir hún
+//   for (var i = 0; i < 5; i++) {
+//
+//         //((cx + 25 * i) < g_canvas.width - 20 / 2) &&
+//     if (spatialManager.checkForWall((cx + 25 * i),cy)) {
+//       this._bombs.push(new Explosion({
+//         cx: cx + 25 * i,
+//         cy: cy
+//       }));
+//     }
+//     if ((cx - 25 * i) > 20) {
+//       this._bombs.push(new Explosion({
+//         cx: cx - 25 * i,
+//         cy: cy
+//       }));
+//     }
+//     if ((cy + 25 * i) < g_canvas.height - 20 / 2) {
+//       this._bombs.push(new Explosion({
+//         cx: cx,
+//         cy: cy + 25 * i
+//       }));
+//     }
+//     if ((cy - 25 * i) > 20) {
+//       this._bombs.push(new Explosion({
+//         cx: cx,
+//         cy: cy - 25 * i
+//       }));
+//     }
+//   }
+// },
 
-    if ((cx + 25 * i) < g_canvas.width - 20 / 2) {
+// OH THE HORROR
+// each for loop checks if the explosion will hit a wall or exit the canvas
+// if it does the loop is broken
+explode: function(cx, cy) {
+
+// explosion to the right
+  for (var i = 0; i < 5; i++) {
+    if (((cx + 25 * i) > g_canvas.width - 20 / 2) ||
+      (spatialManager.checkForWall((cx + 25 * i), cy))) {
+      break;
+    } else {
       this._bombs.push(new Explosion({
         cx: cx + 25 * i,
         cy: cy
       }));
     }
-    if ((cx - 25 * i) > 20) {
+  }
+  // explosion to the left
+  for (var j = 0; j < 5; j++) {
+    if (((cx - 25 * j) < 20) ||
+      (spatialManager.checkForWall((cx - 25 * j), cy))) {
+      break;
+    } else {
       this._bombs.push(new Explosion({
-        cx: cx - 25 * i,
+        cx: cx - 25 * j,
         cy: cy
       }));
     }
-    if ((cy + 25 * i) < g_canvas.height - 20 / 2) {
+  }
+  //down
+  for (var l = 0; l < 5; l++) {
+    if (((cy + 25 * i) > g_canvas.height - 20 / 2) ||
+      (spatialManager.checkForWall(cx, (cy + 25 * l)))) {
+      break;
+    } else {
       this._bombs.push(new Explosion({
         cx: cx,
-        cy: cy + 25 * i
+        cy: cy + 25 * l
       }));
     }
-    if ((cy - 25 * i) > 20) {
+  }
+  // up
+  for (var f = 0; f < 5; f++) {
+    if (((cy - 25 * i) < 20) ||
+      (spatialManager.checkForWall(cx, (cy - 25 * l)))) {
+      break;
+    } else {
       this._bombs.push(new Explosion({
         cx: cx,
-        cy: cy - 25 * i
+        cy: cy - 25 * f
       }));
     }
   }
 },
+
 
 generateBomberman : function(descr) {
 	this._bombermen.push(new Bomberman(descr));

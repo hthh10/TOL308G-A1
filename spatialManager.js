@@ -70,6 +70,13 @@ findEntityInRange: function(posX, posY, radius) {
 	}
 },
 
+// returns true if there's a wall there
+checkForWall: function(posX, posY) {	//THAT'S SOME MAGIC NUMBER RIGHT THERE
+    if(this.findEntityInRange(posX, posY, 14) instanceof Wall) {
+      return true;
+    }
+    return false;
+},
 render: function(ctx) {
 	var oldStyle = ctx.strokeStyle;
     ctx.strokeStyle = "red";

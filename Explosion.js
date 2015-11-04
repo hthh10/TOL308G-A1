@@ -81,6 +81,8 @@ Explosion.prototype.update = function(du) {
   spatialManager.register(this);
 };
 
+
+
 Explosion.prototype.getRadius = function() {
     return 14;
 };
