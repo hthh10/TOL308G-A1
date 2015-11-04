@@ -26,7 +26,7 @@ var baseWall = [[2,2,0,0,0,0,0,0,0,0,0,0,0,2,2],
                 [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                 [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
@@ -62,7 +62,7 @@ Wall.prototype.update = function(du) {
 
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     
-    if (this.isColliding() instanceof Explosion && this.isBrick()) {
+    if (this.isColliding() instanceof Explosion && this.destroyable) {
         this._isDeadNow = true; 
         }
 

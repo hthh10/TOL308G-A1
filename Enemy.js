@@ -24,7 +24,7 @@ function Enemy(descr) {
 Enemy.prototype = new Entity();
 
 // Initial, inheritable, default values
-Enemy.prototype.cx = 50;
+Enemy.prototype.cx = 40;
 Enemy.prototype.cy = 350;
 
 Enemy.prototype.update = function(du) {
@@ -43,6 +43,8 @@ Enemy.prototype.update = function(du) {
         //award points?
         return entityManager.KILL_ME_NOW;
     }
+     if (this.isColliding() instanceof Wall) this.moveEnemy = !(this.moveEnemy);
+
 
     spatialManager.register(this);
 }
@@ -59,16 +61,16 @@ Enemy.prototype.computePosition = function () {
         this.cx -= NOMINAL_WALKSPEED;
     }
     //if the enemy has reached a certain point, change the value of moveEnemy to false and move left
-    if(this.cx > 250){
+    if(this.cx > 640){
         this.moveEnemy = false;
     }
     //if the enemy has reached a certain point, change the value of MoveEnemy to true again and move right
-    else if(this.cx < 50){
+    else if(this.cx < 40){
         this.moveEnemy = true;
     }
 };
 Enemy.prototype.getRadius = function() {
-      return (this.sprite.width / 2) * 0.9;
+      return (this.sprite.width / 2) * 0.5;
 };
 // athugar collision við sprengju og breytir hraðanum eftir því
 Enemy.prototype.isCollidingWithBomb = function (bomba) {
