@@ -48,7 +48,7 @@ Wall.prototype = new Entity();
 // Initial, inheritable, default values
 
 Wall.prototype.isBrick = function() {
-    return destroyable;
+    return this.destroyable;
 }
 
 Wall.prototype.getRadius = function () {
@@ -62,9 +62,8 @@ Wall.prototype.update = function(du) {
 
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     
-    if (this.isColliding() instanceof Explosion && this.isBrick) {
-        this._isDeadNow = true;
-             console.log(this.isColliding())
+    if (this.isColliding() instanceof Explosion && this.isBrick()) {
+        this._isDeadNow = true; 
         }
 
     spatialManager.register(this);
