@@ -21,7 +21,7 @@ function Rock(descr) {
     this.randomisePosition();
       
     // Default sprite and scale, if not otherwise specified
-    this.sprite = this.sprite || g_sprites.rock;
+    this.sprite = this.sprite || g_sprites.brick;
     this.scale  = this.scale  || 1;
 
 };

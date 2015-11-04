@@ -117,7 +117,6 @@ function requestPreloads() {
         Bomb : "Sprites/Bombsprite.gif",
 	    bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
         explosion : "Sprites/Explosionsprite.gif",
-        rock : "https://notendur.hi.is/~pk/308G/images/rock.png"
 
     };
 
@@ -134,7 +133,6 @@ function preloadDone() {
     g_sprites.enemy1 = new Sprite(g_images.enemy1);
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
-    g_sprites.rock = new Sprite(g_images.rock);
 
 
 	entityManager.init();
