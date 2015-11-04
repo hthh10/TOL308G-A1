@@ -13,7 +13,6 @@
 
 //A generic constructor which accepts an arbitrary descriptor object
 
-
 // UGLY var for level layout...
 
 var baseWall = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -31,22 +30,35 @@ var baseWall = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
                 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
 
 //function Wall(cx,cy,destroyable) {
+
+// UGLY var for level layout...0,
+var baseWall = [[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]];
+
 function Wall(descr) {
 
 	this.setup(descr);
-    // this.cx = cx;
-    // this.cy = cy;
-    // this.destroyable = destroyable;
-		// if(destroyable) this.sprite = g_sprites.brick;
-    // else this.sprite = g_sprites.wall;
-		if (this.destroyable) {this.sprite = g_sprites.brick; }
-    else {this.sprite = g_sprites.wall;}
+	if (this.destroyable) this.sprite = g_sprites.brick;
+    else this.sprite = g_sprites.wall;
 
 }
 
 Wall.prototype = new Entity();
 
 // Initial, inheritable, default values
+
+Wall.prototype.getRadius = function () {
+    return (this.sprite.width / 2) * 0.9;
+};
 
 Wall.prototype.update = function(du) {
 

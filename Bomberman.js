@@ -44,8 +44,8 @@ Bomberman.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
 
 Bomberman.prototype.KEY_FIRE   = 'E'.charCodeAt(0);
 
-Bomberman.prototype.cx = 60;
-Bomberman.prototype.cy = 160;
+Bomberman.prototype.cx = 40;
+Bomberman.prototype.cy = 120;
 Bomberman.prototype.velX = 0;
 Bomberman.prototype.velY = 0;
 
@@ -88,55 +88,60 @@ Bomberman.prototype._moveToBeginning = function () {
 };
 
 Bomberman.prototype.update = function (du) {
-
     // Handle warping
     if (this._isReseting) {
         this._updateReset(du);
         return;
     }
+	
+	// Remember current position
+	var oldCx = this.cx;
+	var oldCy = this.cy;
+	
 
     // Unregister and check for death
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
-    this.computePosition();
+	this.computePosition();
 
     // Handle firing
     this.maybeDropBomb();
 
     // Reset position if isColliding, otherwise Register
     // athuga hvort það er sprengja því þá viljum við ekki resetta. smá shitmix
-    if (this.isColliding() && !(this.isColliding() instanceof Bomb)) {
-        this.reset();
-        g_score.P1_lives -= 1;
+    if (this.isColliding()) {
+        if (this.isColliding() instanceof Wall) {
+			this.cx = oldCx;
+			this.cy = oldCy;
+		}
+		
+		if (this.isColliding() instanceof Enemy) {
+			this.reset();
+			g_score.P1_lives -= 1;
+		}
       //athuga hvort hann collidar við sprengjuna eftir smá delay og
       // lokar svo fyrir að hann komist í gegnum hana
           // ATH HÉR GÆTI VERIÐ VANDAMÁL ÞEGAR BORÐIÐ ER FULLT AF HLUTUM SEM
           // BOMBERMAN GETUR ÓVART SKOTIST INNÍ
     } else if (this.isColliding() instanceof Bomb && (this.isColliding().lifeSpan < 100.0)) {
         this.isCollidingWithBomb(this.isColliding());
-    } else {
-      console.log(this.isColliding());
-      spatialManager.register(this);
-    }
-
+    } else spatialManager.register(this);
+     
     };
-var NOMINAL_WALKSPEED = 4;
+
+var NOMINAL_WALKSPEED = 2.5;
 
 Bomberman.prototype.computePosition = function () {
 
     if (keys[this.KEY_UP]) {
-        if(this.cy > this.sprite.height / 2) {
-            console.log(this.isColliding());
-            this.cy -= NOMINAL_WALKSPEED;
-        }
-
+        if(this.cy > g_sprites.wall.height*2.5) this.cy -= NOMINAL_WALKSPEED;
     }
     if (keys[this.KEY_DOWN]) {
-        if(this.cy < (g_canvas.height - this.sprite.height / 2)) this.cy += NOMINAL_WALKSPEED;
+        if(this.cy < (g_canvas.height - g_sprites.wall.height)) this.cy += NOMINAL_WALKSPEED;
     }
     if (keys[this.KEY_LEFT]) {
-        if(this.cx >= this.sprite.width / 2) this.cx -= NOMINAL_WALKSPEED;
+        if(this.cx >= this.sprite.width/2) this.cx -= NOMINAL_WALKSPEED;
     }
     if (keys[this.KEY_RIGHT]) {
         if(this.cx <= (g_canvas.width - this.sprite.width / 2 )) this.cx += NOMINAL_WALKSPEED;
@@ -160,7 +165,7 @@ Bomberman.prototype.maybeDropBomb = function () {
 };
 
 Bomberman.prototype.getRadius = function () {
-    return (this.sprite.width / 2) * 0.9;
+    return (this.sprite.width / 2) * 0.5;
 };
 
 Bomberman.prototype.takeBombHit = function () {

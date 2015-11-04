@@ -92,19 +92,26 @@ init: function() {
 
 
 generateBaseWall : function(){
+	// MAGIC NUMBERS Í FOR LOOP VÆRI FÍNT AÐ LAGA
+    for(var i = 0; i < baseWall.length; i++) {
+
+        var cy = 150 + (i*40), cx = 40;
+        for(var j = 0; j < baseWall[i].length; j++) {
+            if(baseWall[i][j] > 0) this._wall.push(new Wall({
+                cx : cx,
+                cy : cy,
+                destroyable: false
+            }));
+        cx += 40;
+
+        }
+    }
+
     //var cx = 20;
     //var cy = 20;
    // this._wall.push(new Wall(cx,cy,false));
-//
-//     for(var i = 0; i < 13; i++) {
-//         var cy = 100 + (i*40);
-//         var cx = 20
-//         for(var j = 0; j < 15; j++) {
-//             if(baseWall[i][j] > 0) this._wall.push(new Wall(cx,cy,false));
-//             cx += 40;
-//         }
-//     }
-// },
+
+/*
 for(var i = 0; i < 13; i++) {
     var cy = 100 + (i*40);
     var cx = 20
@@ -117,6 +124,7 @@ for(var i = 0; i < 13; i++) {
         cx += 40;
     }
 }
+*/
 },
 
 dropBomb: function(cx, cy) {
@@ -172,8 +180,8 @@ generateEnemy : function(descr){
 
 addPlayer2 : function() {
 	this._bombermen.push(new Bomberman({
-        cx   : g_canvas.width-60,
-        cy   : 160,
+        cx   : g_canvas.width-40,
+        cy   : 120,
 		KEY_UP     : 'I'.charCodeAt(0),
 		KEY_DOWN   : 'K'.charCodeAt(0),
 		KEY_LEFT   : 'J'.charCodeAt(0),
