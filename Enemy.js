@@ -49,7 +49,7 @@ Enemy.prototype.update = function(du) {
     //if colliding with the wall, turn around
     if (this.isColliding()) {
         if (this.isColliding() instanceof Wall) {
-            this.moveEnemy = false;
+            this.moveEnemy = !(this.moveEnemy);
         }
     }
 
@@ -72,7 +72,7 @@ Enemy.prototype.computePosition = function () {
         this.moveEnemy = false;
     }
     //if the enemy has reached a certain point, change the value of MoveEnemy to true again and move right
-    else if(this.cx < 50){
+    else if(this.cx < 40){
         this.moveEnemy = true;
     }
 };
