@@ -116,7 +116,7 @@ Bomberman.prototype.update = function (du) {
 			this.cy = oldCy;
 		}
 		
-		if (this.isColliding() instanceof Enemy) {
+		if (this.isColliding() instanceof Enemy || this.isColliding() instanceof Explosion) {
 			this.reset();
 			g_score.P1_lives -= 1;
 		}
