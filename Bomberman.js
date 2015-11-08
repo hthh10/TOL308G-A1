@@ -165,7 +165,7 @@ Bomberman.prototype.maybeDropBomb = function () {
 };
 
 Bomberman.prototype.getRadius = function () {
-    return (this.sprite.width / 2) * 0.5;
+    return (this.sprite.width / 2) * 0.8;
 };
 
 Bomberman.prototype.takeBombHit = function () {

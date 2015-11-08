@@ -113,9 +113,9 @@ function requestPreloads() {
     var requiredImages = {
         wall : "Sprites/wall.png",
         brick : "Sprites/brick.png",
-        enemy1 : "https://notendur.hi.is/~pk/308G/images/ship.png",
+        enemy1 : "Sprites/enemy.png",
         Bomb : "Sprites/Bombsprite.gif",
-	    bomberman : "https://notendur.hi.is/~pk/308G/images/ship_2.png",
+	    bomberman : "Sprites/bomberman.png",
         explosion : "Sprites/Explosionsprite.gif",
 
     };
