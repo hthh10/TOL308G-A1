@@ -22,6 +22,9 @@
 // -1 = blocked for player
 
 // UGLY var for level layout...0,
+var g_playzone = [[20, 620],  // x-coords
+				  [90, 610]]; // y-coords
+
 var wall = {
 // Private variables for the wall.
 baseWall : [[-1,-1,0,0,0,0,0,0,0,0,0,0,0,-1,-1],

@@ -132,45 +132,49 @@ var LEVEL_OFFSET_Y = 110;
 
 Bomberman.prototype.computePosition = function () {
 
-    // Magic numbers: Offset for playable area
-    var yMatrix = Math.ceil(this.cx / g_sprites.wall.width)-1;
-    var xMatrix = Math.ceil(this.cy / g_sprites.wall.height)-3;
-
-    if (keys[this.KEY_UP] && this.cy > g_sprites.wall.height*2.5) {
-        console.log(xMatrix,yMatrix);
-        if(!this.checkForWall(xMatrix,yMatrix)) this.cy -= NOMINAL_WALKSPEED;
-        else this.bounce(xMatrix,yMatrix);
-
+	// Variables for position logic
+	var wallId,
+		leftX = this.cx-this.getRadius(),
+		rightX = this.cx+this.getRadius(),
+		topY = this.cy-this.getRadius(),
+		bottomY = this.cy+this.getRadius();
+	
+	if (keys[this.KEY_UP] && topY > g_playzone[1][0]) {
+        wallId = this.getWallId(this.cx,topY);
+		if (!this.checkForWall(wallId[0],wallId[1]))
+			this.cy -= NOMINAL_WALKSPEED;
     }
-    if (keys[this.KEY_DOWN] && this.cy <= (g_canvas.height - this.sprite.height)) {
-        console.log(xMatrix,yMatrix);
-        if(!this.checkForWall(xMatrix,yMatrix)) this.cy += NOMINAL_WALKSPEED;
-        else this.bounce(xMatrix-1,yMatrix);
+    if (keys[this.KEY_DOWN] && bottomY < g_playzone[1][1]) {
+        wallId = this.getWallId(this.cx,bottomY);
+		if (!this.checkForWall(wallId[0],wallId[1]))
+			this.cy += NOMINAL_WALKSPEED;
     }
-    if (keys[this.KEY_LEFT] && this.cx >= this.sprite.width) {
-        console.log(xMatrix,yMatrix);
-        if(!this.checkForWall(xMatrix,yMatrix)) this.cx -= NOMINAL_WALKSPEED;
-        else this.bounce(xMatrix,yMatrix+1);
-        
+    if (keys[this.KEY_LEFT] && leftX > g_playzone[0][0]) {
+        wallId = this.getWallId(leftX,this.cy);
+		if (!this.checkForWall(wallId[0],wallId[1]))
+			this.cx -= NOMINAL_WALKSPEED;
     }
-    
-    if (keys[this.KEY_RIGHT] && this.cx < (g_canvas.width - this.sprite.width)) {
-        console.log(xMatrix,yMatrix);
-        console.log(this.cx,this.cy);
-        if(!this.checkForWall(xMatrix,yMatrix)) this.cx += NOMINAL_WALKSPEED;
-        else this.bounce(xMatrix,yMatrix-1);
-
+    if (keys[this.KEY_RIGHT] && rightX < g_playzone[0][1]) {
+        wallId = this.getWallId(rightX,this.cy);
+		if (!this.checkForWall(wallId[0],wallId[1]))
+			this.cx += NOMINAL_WALKSPEED;
     }
-    //if (keys[this.KEY_RIGHT]) {
-    //    if(this.cx <= (g_canvas.width - this.sprite.width / 2 )) this.cx += NOMINAL_WALKSPEED;
-    //}
 };
 
-Bomberman.prototype.checkForWall = function (cx,cy) {
-    if(wall.baseWall[cx][cy] === 2 || wall.baseWall[cx][cy] === 1) return true;
+Bomberman.prototype.getWallId = function (cx,cy) {
+	var xId = Math.floor((cx-g_playzone[0][0]) / g_sprites.wall.width);
+	var yId = Math.floor((cy-g_playzone[1][0]) / g_sprites.wall.height);
+	console.log(xId,yId);
+	return [yId, xId];
+};
+
+Bomberman.prototype.checkForWall = function (yId,xId) {
+    
+	if(wall.baseWall[yId][xId] > 0) return true;
     else return false;
 
-}
+};
+/*
 Bomberman.prototype.bounce = function (x,y) {
     console.log("bouncing to.. ", x,y);
 
@@ -179,7 +183,7 @@ Bomberman.prototype.bounce = function (x,y) {
 
     console.log("arriving at..", this.cx,this.cy);
 
-}
+}*/
 // athugar collision við sprengju og breytir hraðanum eftir því
 Bomberman.prototype.isCollidingWithBomb = function (bomba) {
   if (this.cy > bomba.cy) this.cy += NOMINAL_WALKSPEED;
@@ -187,7 +191,7 @@ Bomberman.prototype.isCollidingWithBomb = function (bomba) {
   if (this.cx > bomba.cx) this.cx += NOMINAL_WALKSPEED;
   if (this.cx < bomba.cx) this.cx -= NOMINAL_WALKSPEED;
 
-},
+};
 
 Bomberman.prototype.maybeDropBomb = function () {
     if (keys[this.KEY_FIRE]) {
