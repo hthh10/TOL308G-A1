@@ -96,6 +96,7 @@ function processDiagnostics() {
 function renderSimulation(ctx) {
 
 	renderScore(ctx);
+	wall.render(ctx);
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -134,7 +135,7 @@ function preloadDone() {
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
 
-
+	wall.init();
 	entityManager.init();
 
     main.init();

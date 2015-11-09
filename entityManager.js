@@ -30,8 +30,6 @@ _bombs : [],
 _bombermen : [],
 _enemies: [],
 _explosions : [],
-_wall : [],
-_rocks : [],
 
 // -------------
 // Ugly var for level design
@@ -45,22 +43,6 @@ _generateBombermen : function() {
 
 _generateEnemies : function() {
     this.generateEnemy();
-},
-
-_generateWall : function() {
-    this.generateLevel();
-},
-
-
-_generateRocks : function() {
-  this.generateRock();
-
-
-    //only spawn in two rocks for now
-//    var NUM_ROCKS = 2;
-//    for(var i = 0; i < NUM_ROCKS; i++){
-//        this.generateRock();
-//    }
 },
 
 
@@ -82,42 +64,13 @@ KILL_ME_NOW : -1,
 //
 deferredSetup : function () {
 
-    this._categories = [this._wall, this._bombermen, this._enemies, this._bombs, this._explosions, this._rocks];
+    this._categories = [this._bombermen, this._enemies, this._bombs, this._explosions];
 
 },
 
 init: function() {
-    this._generateWall();
     this._generateBombermen();
     this._generateEnemies();
-    this._generateRocks();
-},
-
-
-generateLevel : function(){
-//TODO: Magic numbers for position of wall/rock. Higly dependent on the size of Wall sprite
-    for(var i = 0; i < baseWall.length; i++) {
-
-        var cy = 110 + (i*40), cx = 40;
-        for(var j = 0; j < baseWall[i].length; j++) {
-            if(baseWall[i][j] === 1) this._wall.push(new Wall({
-                cx : cx,
-                cy : cy,
-                destroyable: false
-              }));
-            if(baseWall[i][j] === 0) {
-              if(Math.random() >= 0.65) this._rocks.push(new Wall({
-                cx : cx,
-                cy : cy,
-                destroyable: true
-                }));
-
-            } 
-
-          cx += 40;
-
-        }
-    }
 },
 
 
@@ -242,16 +195,6 @@ addPlayer2 : function() {
     }));
 },
 
-
-generateRock : function(descr) {
-    //this._rocks.push(new Rock(descr));
-},
-
-/*
-generateShip : function(descr) {
-    this._ships.push(new Ship(descr));
-},
-*/
 
 update: function(du) {
 
