@@ -74,13 +74,13 @@ init: function() {
 },
 
 
-dropBomb: function(cx, cy, xPos, yPos) {
+dropBomb: function(cx, cy, xPos, yPos, strength) {
   this._bombs.push(new Bomb({
       cx   : cx,
       cy   : cy,
       xPos : xPos,
-      yPos : yPos
-
+      yPos : yPos,
+      strength : strength
   }));
 },
 
@@ -120,10 +120,34 @@ dropBomb: function(cx, cy, xPos, yPos) {
 //   }
 // },
 
+
+
+
+explode : function(cx,cy,xPos,yPos,strength) {
+  //Middle
+  console.log("xPos: ",xPos, "yPos", yPos,"strength", strength);
+  this._bombs.push(new Explosion({
+    cx : cx,
+    cy : cy
+  }));
+  //Right
+  //if(wall.baseWall[xPos+1][yPos] === 2)
+
+ // this._bombs.push(new Explosion({
+ //   cx: cx+g_images.explosion.width,
+ //   cy: cy
+ // }))
+
+
+
+
+},
+
+
 // OH THE HORROR
 // each for loop checks if the explosion will hit a wall or exit the canvas
 // if it does the loop is broken
-explode: function(cx, cy) {
+/*explode: function(cx, cy) {
 //TODO: Hreinsa þessa ósköp :)
 
 // explosion to the right
@@ -176,6 +200,7 @@ explode: function(cx, cy) {
   }
 },
 
+*/
 
 generateBomberman : function(descr) {
 	this._bombermen.push(new Bomberman(descr));

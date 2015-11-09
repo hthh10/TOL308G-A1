@@ -78,13 +78,12 @@ Bomb.prototype.update = function(du) {
 // sendir entitymanager upplýsingar um sprengingu
 // ekki mikil þörf fyrr en við höfum powerups
 Bomb.prototype.configureExplosion = function() {
-  var bombyield = 5;
 
-  entityManager.explode(this.cx, this.cy, bombyield);
+  entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,this.strength);
 };
 
 Bomb.prototype.getRadius = function() {
-    return 14;
+    return g_images.explosion.width/2;
 };
 
 Bomb.prototype.takeBombHit = function() {
