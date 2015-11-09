@@ -28,7 +28,8 @@ var entityManager = {
 // "PRIVATE" DATA
 _bombs : [],
 _bombermen : [],
-_enemies: [],
+_ballom : [],
+_onil : [],
 _explosions : [],
 
 // -------------
@@ -64,7 +65,7 @@ KILL_ME_NOW : -1,
 //
 deferredSetup : function () {
 
-    this._categories = [this._bombermen, this._enemies, this._bombs, this._explosions];
+    this._categories = [this._bombermen, this._ballom, this._onil, this._bombs, this._explosions];
 
 },
 
@@ -146,8 +147,18 @@ generateBomberman : function(descr) {
 	this._bombermen.push(new Bomberman(descr)); 
 },
 
-generateEnemy : function(descr){
-    this._enemies.push(new Enemy(descr));
+generateEnemy : function(){
+    this._ballom.push(new Enemy({
+      cx : 40,
+      cy : 350,
+      sprite : g_sprites.ballom
+    }));
+
+    this._onil.push(new Enemy({
+      cx : 360,
+      cy : 190,
+      sprite : g_sprites.onil
+    }));
 },
 
 addPlayer2 : function() {
