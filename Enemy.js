@@ -46,14 +46,6 @@ Enemy.prototype.update = function(du) {
         //award points?
         return entityManager.KILL_ME_NOW;
     }
-    
-    //if colliding with the wall, turn around
-    if (this.isColliding()) {
-        if (this.isColliding() instanceof Wall) {
-            this.moveEnemy = !(this.moveEnemy);
-        }
-    }
-
 
     spatialManager.register(this);
 }

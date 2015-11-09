@@ -48,6 +48,7 @@ Bomberman.prototype.cx = 40;
 Bomberman.prototype.cy = 120;
 Bomberman.prototype.velX = 0;
 Bomberman.prototype.velY = 0;
+Bomberman.prototype.noBombs = 1;
 
 Bomberman.prototype.reset = function () {
 
@@ -110,12 +111,7 @@ Bomberman.prototype.update = function (du) {
 
     // Reset position if isColliding, otherwise Register
     // athuga hvort það er sprengja því þá viljum við ekki resetta. smá shitmix
-    if (this.isColliding()) {
-        if (this.isColliding() instanceof Wall) {
-			this.cx = oldCx;
-			this.cy = oldCy;
-		}
-
+  if (this.isColliding()) {
     if (this.isColliding() instanceof Enemy || this.isColliding() instanceof Explosion) {
 			this.reset();
 			g_score.P1_lives -= 1;
@@ -131,23 +127,59 @@ Bomberman.prototype.update = function (du) {
     };
 
 var NOMINAL_WALKSPEED = 2.5;
+var LEVEL_OFFSET_X = 40;
+var LEVEL_OFFSET_Y = 110;
 
 Bomberman.prototype.computePosition = function () {
 
-    if (keys[this.KEY_UP]) {
-        if(this.cy > g_sprites.wall.height*2.5) this.cy -= NOMINAL_WALKSPEED;
+    // Magic numbers: Offset for playable area
+    var yMatrix = Math.ceil(this.cx / g_sprites.wall.width)-1;
+    var xMatrix = Math.ceil(this.cy / g_sprites.wall.height)-3;
+
+    if (keys[this.KEY_UP] && this.cy > g_sprites.wall.height*2.5) {
+        console.log(xMatrix,yMatrix);
+        if(!this.checkForWall(xMatrix,yMatrix)) this.cy -= NOMINAL_WALKSPEED;
+        else this.bounce(xMatrix,yMatrix);
+
     }
-    if (keys[this.KEY_DOWN]) {
-        if(this.cy < (g_canvas.height - g_sprites.wall.height)) this.cy += NOMINAL_WALKSPEED;
+    if (keys[this.KEY_DOWN] && this.cy <= (g_canvas.height - this.sprite.height)) {
+        console.log(xMatrix,yMatrix);
+        if(!this.checkForWall(xMatrix,yMatrix)) this.cy += NOMINAL_WALKSPEED;
+        else this.bounce(xMatrix-1,yMatrix);
     }
-    if (keys[this.KEY_LEFT]) {
-        if(this.cx >= this.sprite.width/2) this.cx -= NOMINAL_WALKSPEED;
+    if (keys[this.KEY_LEFT] && this.cx >= this.sprite.width) {
+        console.log(xMatrix,yMatrix);
+        if(!this.checkForWall(xMatrix,yMatrix)) this.cx -= NOMINAL_WALKSPEED;
+        else this.bounce(xMatrix,yMatrix+1);
+        
     }
-    if (keys[this.KEY_RIGHT]) {
-        if(this.cx <= (g_canvas.width - this.sprite.width / 2 )) this.cx += NOMINAL_WALKSPEED;
+    
+    if (keys[this.KEY_RIGHT] && this.cx < (g_canvas.width - this.sprite.width)) {
+        console.log(xMatrix,yMatrix);
+        console.log(this.cx,this.cy);
+        if(!this.checkForWall(xMatrix,yMatrix)) this.cx += NOMINAL_WALKSPEED;
+        else this.bounce(xMatrix,yMatrix-1);
+
     }
+    //if (keys[this.KEY_RIGHT]) {
+    //    if(this.cx <= (g_canvas.width - this.sprite.width / 2 )) this.cx += NOMINAL_WALKSPEED;
+    //}
 };
 
+Bomberman.prototype.checkForWall = function (cx,cy) {
+    if(wall.baseWall[cx][cy] === 2 || wall.baseWall[cx][cy] === 1) return true;
+    else return false;
+
+}
+Bomberman.prototype.bounce = function (x,y) {
+    console.log("bouncing to.. ", x,y);
+
+    this.cx = LEVEL_OFFSET_X + (y*40);
+    this.cy = 110 + (x*40);
+
+    console.log("arriving at..", this.cx,this.cy);
+
+}
 // athugar collision við sprengju og breytir hraðanum eftir því
 Bomberman.prototype.isCollidingWithBomb = function (bomba) {
   if (this.cy > bomba.cy) this.cy += NOMINAL_WALKSPEED;
@@ -159,7 +191,20 @@ Bomberman.prototype.isCollidingWithBomb = function (bomba) {
 
 Bomberman.prototype.maybeDropBomb = function () {
     if (keys[this.KEY_FIRE]) {
-        entityManager.dropBomb(this.cx, this.cy);
+
+        // Can only drop one at a time
+        //if(this.noBombs > 0) {
+        //    this.noBombs -= 1;
+
+
+            // Always drop bombs in center of the square
+            // Some magic numbers: cx: 40, cy: 110 is the center of the first 
+            var baseCx = 20, baseCy = 90; // Magic numbers, due to level being uneven.
+            var xPos = (Math.floor((this.cx-baseCx) / g_sprites.wall.width)), yPos = Math.floor((this.cy-baseCy) / g_sprites.wall.height);
+            var bombCx = g_sprites.wall.width + (g_sprites.wall.width * xPos), bombCy = 110 + (g_sprites.wall.height * yPos);
+
+            entityManager.dropBomb(bombCx, bombCy, xPos, yPos);
+        //}
     }
 
 };

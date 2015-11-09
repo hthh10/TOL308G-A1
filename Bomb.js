@@ -80,7 +80,7 @@ Bomb.prototype.update = function(du) {
 Bomb.prototype.configureExplosion = function() {
   var bombyield = 5;
 
-  entityManager.explode(this.cx, this.cy, bombyield)
+  entityManager.explode(this.cx, this.cy, bombyield);
 };
 
 Bomb.prototype.getRadius = function() {

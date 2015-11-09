@@ -37,27 +37,29 @@ function renderScore (ctx) {
 function renderEdges (ctx) {
 	// Start a little off screen to make playable are larger
 	var height = g_images.wall.height, width = g_images.wall.width;
-	var cx = -20 , cy = 50;
+
+	var baseCx = -0.5*width, baseCy = 1.25*height;
+	var stepCx = baseCx, stepCy = baseCy
 	// Top left to bottom left
-	for(var i = 0; i < 14; i++) {
-		ctx.drawImage(g_images.wall,cx,cy);
-		cy += g_images.wall.height;
+	for(var i = 0; i < Math.floor((g_canvas.height-baseCy)/height); i++) {
+		ctx.drawImage(g_images.wall,stepCx,stepCy);
+		stepCy += g_images.wall.height;
 	}
 	// bottom left to bottom right
 	for(var i = 0; i < g_canvas.width/g_images.wall.width; i++) {
-		ctx.drawImage(g_images.wall,cx,cy);
-		cx += g_images.wall.width;
+		ctx.drawImage(g_images.wall,stepCx,stepCy);
+		stepCx += g_images.wall.width;
 	}
 	
 	// bottom right to top right
-	for(var i = 0; i < 14; i++) {
-		ctx.drawImage(g_images.wall,cx,cy);
-		cy -= g_images.wall.height;
+	for(var i = 0; i < Math.floor((g_canvas.height-baseCy)/height); i++) {
+		ctx.drawImage(g_images.wall,stepCx,stepCy);
+		stepCy -= g_images.wall.height;
 	}
 	//top right to top left
 	for(var i = 0; i < g_canvas.width/g_images.wall.width; i++) {
-		ctx.drawImage(g_images.wall,cx,cy);
-		cx -= g_images.wall.width;
+		ctx.drawImage(g_images.wall,stepCx,stepCy);
+		stepCx -= g_images.wall.width;
 	}
 	
 }

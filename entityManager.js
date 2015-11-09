@@ -74,10 +74,12 @@ init: function() {
 },
 
 
-dropBomb: function(cx, cy) {
+dropBomb: function(cx, cy, xPos, yPos) {
   this._bombs.push(new Bomb({
       cx   : cx,
-      cy   : cy
+      cy   : cy,
+      xPos : xPos,
+      yPos : yPos
 
   }));
 },
@@ -122,9 +124,10 @@ dropBomb: function(cx, cy) {
 // each for loop checks if the explosion will hit a wall or exit the canvas
 // if it does the loop is broken
 explode: function(cx, cy) {
+//TODO: Hreinsa þessa ósköp :)
 
 // explosion to the right
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 2; i++) {
     if (((cx + 25 * i) > g_canvas.width - 20 / 2) ||
       (spatialManager.checkForWall((cx + 25 * i), cy))) {
       break;
@@ -136,7 +139,7 @@ explode: function(cx, cy) {
     }
   }
   // explosion to the left
-  for (var j = 0; j < 5; j++) {
+  for (var j = 0; j < 2; j++) {
     if (((cx - 25 * j) < 20) ||
       (spatialManager.checkForWall((cx - 25 * j), cy))) {
       break;
@@ -148,7 +151,7 @@ explode: function(cx, cy) {
     }
   }
   //down
-  for (var l = 0; l < 5; l++) {
+  for (var l = 0; l < 2; l++) {
     if (((cy + 25 * i) > g_canvas.height - 20 / 2) ||
       (spatialManager.checkForWall(cx, (cy + 25 * l)))) {
       break;
@@ -160,7 +163,7 @@ explode: function(cx, cy) {
     }
   }
   // up
-  for (var f = 0; f < 5; f++) {
+  for (var f = 0; f < 2; f++) {
     if (((cy - 25 * i) < 20) ||
       (spatialManager.checkForWall(cx, (cy - 25 * l)))) {
       break;
