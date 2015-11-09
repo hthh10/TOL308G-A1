@@ -31,6 +31,7 @@ _bombermen : [],
 _ballom : [],
 _onil : [],
 _explosions : [],
+_powerups : [],
 
 // -------------
 // Ugly var for level design
@@ -65,7 +66,7 @@ KILL_ME_NOW : -1,
 //
 deferredSetup : function () {
 
-    this._categories = [this._bombermen, this._ballom, this._onil, this._bombs, this._explosions];
+    this._categories = [this._bombermen, this._ballom, this._onil, this._bombs, this._explosions, this._powerups];
 
 },
 
@@ -105,7 +106,7 @@ explode : function(cx,cy,xPos,yPos,strength) {
         cy : cy
       }));      
     }
-    if(wall.baseWall[yPos][xPos+1] === 2) wall.baseWall[yPos][xPos+1] = 0;
+    if(wall.baseWall[yPos][xPos+1] > 1) wall.destroyBrick(yPos,xPos+1);
   }
   //Left
   if(xPos > 0) {
@@ -115,7 +116,7 @@ explode : function(cx,cy,xPos,yPos,strength) {
           cy : cy
         }));
       }
-      if(wall.baseWall[yPos][xPos-1] === 2 ) wall.baseWall[yPos][xPos-1] = 0;
+      if(wall.baseWall[yPos][xPos-1] > 1 ) wall.destroyBrick(yPos,xPos-1);
    }
    //Up
   if(yPos > 0) {
@@ -125,7 +126,7 @@ explode : function(cx,cy,xPos,yPos,strength) {
         cy : cy-step
       }));
     }
-    if(wall.baseWall[yPos-1][xPos] === 2) wall.baseWall[yPos-1][xPos] = 0;
+    if(wall.baseWall[yPos-1][xPos] > 2) wall.destroyBrick(yPos-1,xPos);
   }
 
    //Down
@@ -136,7 +137,7 @@ explode : function(cx,cy,xPos,yPos,strength) {
         cy : cy+step
       }))
     }
-    if(wall.baseWall[yPos+1][xPos] === 2) wall.baseWall[yPos+1][xPos] = 0;
+    if(wall.baseWall[yPos+1][xPos] > 2) wall.destroyBrick(yPos+1,xPos);
    }
 },
 
@@ -159,6 +160,10 @@ generateEnemy : function(){
       cy : 190,
       sprite : g_sprites.onil
     }));
+},
+
+generatePowerup : function(descr) {
+	this._powerups.push(new Powerup(descr));
 },
 
 addPlayer2 : function() {

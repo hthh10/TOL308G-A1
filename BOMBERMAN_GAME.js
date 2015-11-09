@@ -136,6 +136,8 @@ function preloadDone() {
     g_sprites.onil = new Sprite(g_images.onil);
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
+	g_sprites.powerups = [new Sprite(g_images.bomberman),
+						  new Sprite(g_images.Bomb)];
 
 	wall.init();
 	entityManager.init();
