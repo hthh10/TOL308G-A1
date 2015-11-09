@@ -114,7 +114,8 @@ function requestPreloads() {
     var requiredImages = {
         wall : "Sprites/wall.png",
         brick : "Sprites/brick.png",
-        enemy1 : "Sprites/enemy.png",
+        ballom : "Sprites/ballom.png",
+        onil : "Sprites/onil.png",
         Bomb : "Sprites/Bombsprite.gif",
 	    bomberman : "Sprites/bomberman.png",
         explosion : "Sprites/Explosionsprite.gif",
@@ -131,7 +132,8 @@ function preloadDone() {
     g_sprites.brick = new Sprite(g_images.brick);
     g_sprites.wall = new Sprite(g_images.wall);
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
-    g_sprites.enemy1 = new Sprite(g_images.enemy1);
+    g_sprites.ballom = new Sprite(g_images.ballom);
+    g_sprites.onil = new Sprite(g_images.onil);
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
 

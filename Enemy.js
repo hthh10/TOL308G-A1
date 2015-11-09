@@ -17,7 +17,7 @@ function Enemy(descr) {
     //Common inherited setup logic from Entity
     this.setup(descr);
 
-    this.sprite = this.sprite || g_sprites.enemy1;
+    this.sprite = this.sprite || g_sprites.ballom || g_sprites.onil;
     this._scale = 1;
 }
 
@@ -26,15 +26,13 @@ Enemy.prototype = new Entity();
 // Initial, inheritable, default values
 Enemy.prototype.cx = 40;
 Enemy.prototype.cy = 350;
+Enemy.prototype.sprite = this.sprite;
 
 Enemy.prototype.update = function(du) {
      // Unregister and check for death
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     //remember previous position
-    //var oldCx = this.cx;
-    //var oldCy = this.cy;
-
     this.computePosition();
 
     // if colliding with a bomb turn around
@@ -54,7 +52,6 @@ var NOMINAL_WALKSPEED = 4;
 Enemy.prototype.moveEnemy = true;
 Enemy.prototype.computePosition = function () {
     //Enemy moves by default
-    //var moveEnemy = true;
     if(this.moveEnemy){
         this.cx += NOMINAL_WALKSPEED;
     }
@@ -62,7 +59,7 @@ Enemy.prototype.computePosition = function () {
         this.cx -= NOMINAL_WALKSPEED;
     }
     //if the enemy has reached a certain point, change the value of moveEnemy to false and move left
-    if(this.cx > 640){
+    if(this.cx > 600){
         this.moveEnemy = false;
     }
     //if the enemy has reached a certain point, change the value of MoveEnemy to true again and move right
