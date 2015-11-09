@@ -191,14 +191,15 @@ Bomberman.prototype.maybeDropBomb = function () {
         //    this.noBombs -= 1;
 
 
-            // Always drop bombs in center of the square
-            // Some magic numbers: cx: 40, cy: 110 is the center of the first 
-            var baseCx = 20, baseCy = 90; // Magic numbers, due to level being uneven.
-            var xPos = (Math.floor((this.cx-baseCx) / g_sprites.wall.width)), yPos = Math.floor((this.cy-baseCy) / g_sprites.wall.height);
-            var bombCx = g_sprites.wall.width + (g_sprites.wall.width * xPos), bombCy = 110 + (g_sprites.wall.height * yPos);
+        // Always drop bombs in center of the square
+        // Some magic numbers: cx: 40, cy: 110 is the center of the first 
+        var baseCx = g_playzone[0][0], baseCy = g_playzone[1][0];
+        var xPos = Math.floor((this.cx-baseCx) / g_sprites.wall.width), 
+			yPos = Math.floor((this.cy-baseCy) / g_sprites.wall.height);
+        var bombCx = g_sprites.wall.width + (g_sprites.wall.width * xPos), 
+			bombCy = 110 + (g_sprites.wall.height * yPos);
 
             entityManager.dropBomb(bombCx, bombCy, xPos, yPos,this.bombStrength);
-        //}
     }
 
 };
