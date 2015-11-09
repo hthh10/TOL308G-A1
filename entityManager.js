@@ -85,125 +85,65 @@ dropBomb: function(cx, cy, xPos, yPos, strength) {
 },
 
 
-// explode: function(cx, cy) {
-//   console.log(cx);
-//   // 5 er lengd spreningar
-//   // fyrir hvern hluta af sprengjunni er athugað hvort hún sé að fara útfyrir canvas
-//   // ef svo er hættir hún
-//   for (var i = 0; i < 5; i++) {
-//
-//         //((cx + 25 * i) < g_canvas.width - 20 / 2) &&
-//     if (spatialManager.checkForWall((cx + 25 * i),cy)) {
-//       this._bombs.push(new Explosion({
-//         cx: cx + 25 * i,
-//         cy: cy
-//       }));
-//     }
-//     if ((cx - 25 * i) > 20) {
-//       this._bombs.push(new Explosion({
-//         cx: cx - 25 * i,
-//         cy: cy
-//       }));
-//     }
-//     if ((cy + 25 * i) < g_canvas.height - 20 / 2) {
-//       this._bombs.push(new Explosion({
-//         cx: cx,
-//         cy: cy + 25 * i
-//       }));
-//     }
-//     if ((cy - 25 * i) > 20) {
-//       this._bombs.push(new Explosion({
-//         cx: cx,
-//         cy: cy - 25 * i
-//       }));
-//     }
-//   }
-// },
-
-
-
-
 explode : function(cx,cy,xPos,yPos,strength) {
+  var step = g_images.wall.width;
+
   //Middle
-  console.log("xPos: ",xPos, "yPos", yPos,"strength", strength);
+  strength = 2;
+  console.log("xPos: ",xPos, "yPos", yPos, "length", wall.baseWall[0].length);
   this._bombs.push(new Explosion({
     cx : cx,
     cy : cy
   }));
   //Right
-  //if(wall.baseWall[xPos+1][yPos] === 2)
 
- // this._bombs.push(new Explosion({
- //   cx: cx+g_images.explosion.width,
- //   cy: cy
- // }))
+  if(xPos < wall.baseWall[0].length) {  
+    if(wall.baseWall[yPos][xPos+1] <=0){
+      this._bombs.push(new Explosion({
+        cx : cx+step,
+        cy : cy
+      }));      
+    }
+    if(wall.baseWall[yPos][xPos+1] === 2) wall.baseWall[yPos][xPos+1] = 0;
+  }
+  //Left
+  if(xPos > 0) {
+      if(wall.baseWall[yPos][xPos-1] <=0){
+        this._bombs.push(new Explosion({
+          cx : cx-step,
+          cy : cy
+        }));
+      }
+      if(wall.baseWall[yPos][xPos-1] === 2 ) wall.baseWall[yPos][xPos-1] = 0;
+   }
+   //Up
+  if(yPos > 0) {
+    if(wall.baseWall[yPos-1][xPos] <=0){
+      this._bombs.push(new Explosion({
+        cx : cx,
+        cy : cy-step
+      }));
+    }
+    if(wall.baseWall[yPos-1][xPos] === 2) wall.baseWall[yPos-1][xPos] = 0;
+  }
 
-
-
-
+   //Down
+   if(yPos < wall.baseWall.length) {
+    if(wall.baseWall[yPos+1][xPos] <= 0) {
+      this._bombs.push(new Explosion( {
+        cx : cx,
+        cy : cy+step
+      }))
+    }
+    if(wall.baseWall[yPos+1][xPos] === 2) wall.baseWall[yPos+1][xPos] = 0;
+   }
 },
 
 
-// OH THE HORROR
-// each for loop checks if the explosion will hit a wall or exit the canvas
-// if it does the loop is broken
-/*explode: function(cx, cy) {
-//TODO: Hreinsa þessa ósköp :)
 
-// explosion to the right
-  for (var i = 0; i < 2; i++) {
-    if (((cx + 25 * i) > g_canvas.width - 20 / 2) ||
-      (spatialManager.checkForWall((cx + 25 * i), cy))) {
-      break;
-    } else {
-      this._bombs.push(new Explosion({
-        cx: cx + 25 * i,
-        cy: cy
-      }));
-    }
-  }
-  // explosion to the left
-  for (var j = 0; j < 2; j++) {
-    if (((cx - 25 * j) < 20) ||
-      (spatialManager.checkForWall((cx - 25 * j), cy))) {
-      break;
-    } else {
-      this._bombs.push(new Explosion({
-        cx: cx - 25 * j,
-        cy: cy
-      }));
-    }
-  }
-  //down
-  for (var l = 0; l < 2; l++) {
-    if (((cy + 25 * i) > g_canvas.height - 20 / 2) ||
-      (spatialManager.checkForWall(cx, (cy + 25 * l)))) {
-      break;
-    } else {
-      this._bombs.push(new Explosion({
-        cx: cx,
-        cy: cy + 25 * l
-      }));
-    }
-  }
-  // up
-  for (var f = 0; f < 2; f++) {
-    if (((cy - 25 * i) < 20) ||
-      (spatialManager.checkForWall(cx, (cy - 25 * l)))) {
-      break;
-    } else {
-      this._bombs.push(new Explosion({
-        cx: cx,
-        cy: cy - 25 * f
-      }));
-    }
-  }
-},
-
-*/
 
 generateBomberman : function(descr) {
-	this._bombermen.push(new Bomberman(descr));
+	this._bombermen.push(new Bomberman(descr)); 
 },
 
 generateEnemy : function(descr){
@@ -222,7 +162,6 @@ addPlayer2 : function() {
 		KEY_FIRE   : 'O'.charCodeAt(0)
     }));
 },
-
 
 update: function(du) {
 
