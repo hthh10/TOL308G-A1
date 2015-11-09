@@ -74,6 +74,17 @@ Entity.prototype.findHitEntity = function () {
     );
 };
 
+Entity.prototype.getWallId = function (cx,cy) {
+	var xId = Math.floor((cx-g_playzone[0][0]) / g_sprites.wall.width);
+	var yId = Math.floor((cy-g_playzone[1][0]) / g_sprites.wall.height);
+	return [yId, xId];
+};
+
+Entity.prototype.checkForWall = function (yId,xId) {
+	if(wall.baseWall[yId][xId] > 0) return true;
+    else return false;
+};
+
 // This is just little "convenience wrapper"
 Entity.prototype.isColliding = function () {
     return this.findHitEntity();

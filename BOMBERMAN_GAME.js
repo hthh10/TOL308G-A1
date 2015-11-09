@@ -118,7 +118,7 @@ function requestPreloads() {
         onil : "Sprites/onil.png",
         Bomb : "Sprites/Bombsprite.gif",
 	    bomberman : "Sprites/bomberman.png",
-        explosion : "Sprites/Explosionsprite.gif",
+        explosion : "Sprites/Explosion.gif",
 
     };
 
