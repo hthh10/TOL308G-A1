@@ -75,13 +75,14 @@ init: function() {
 },
 
 
-dropBomb: function(cx, cy, xPos, yPos, strength) {
+dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID) {
   this._bombs.push(new Bomb({
       cx   : cx,
       cy   : cy,
       xPos : xPos,
       yPos : yPos,
-      strength : strength
+      strength : strength,
+      bombermanID : bombermanID
   }));
 },
 
@@ -97,12 +98,12 @@ explode : function(cx,cy,xPos,yPos,strength) {
   }));
 
   //Right
-  if(xPos < wall.baseWall[0].length) {  
+  if(xPos < wall.baseWall[0].length) {
     if(wall.baseWall[yPos][xPos+1] <=0){
       this._bombs.push(new Explosion({
         cx : cx+step,
         cy : cy
-      }));      
+      }));
     }
     if(wall.baseWall[yPos][xPos+1] > 1) wall.destroyBrick(yPos,xPos+1);
   }
@@ -140,7 +141,7 @@ explode : function(cx,cy,xPos,yPos,strength) {
 },
 
 generateBomberman : function(descr) {
-	this._bombermen.push(new Bomberman(descr)); 
+	this._bombermen.push(new Bomberman(descr));
 },
 
 generateEnemy : function(){
@@ -158,8 +159,12 @@ generateEnemy : function(){
     }));
 },
 
-generatePowerup : function(descr) {
-	this._powerups.push(new Powerup(descr));
+generatePowerup : function(cx,cy) {
+	this._powerups.push(new Powerup({
+    cx:cx,
+    cy:cy,
+    id: util.randRange(0,3)
+  }));
 },
 
 addPlayer2 : function() {
@@ -171,7 +176,7 @@ addPlayer2 : function() {
 		KEY_LEFT   : 'J'.charCodeAt(0),
 		KEY_RIGHT  : 'L'.charCodeAt(0),
 
-		KEY_FIRE   : 'O'.charCodeAt(0)
+		KEY_FIRE   : '9'.charCodeAt(0)
     }));
 },
 

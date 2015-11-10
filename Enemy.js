@@ -1,6 +1,6 @@
-// =======
-// ENEMIES
-// =======
+// ================
+// HARMLESS ENEMIES
+// ================
 
 "use strict";
 
@@ -48,16 +48,60 @@ Enemy.prototype.update = function(du) {
     spatialManager.register(this);
 }
 
-var NOMINAL_WALKSPEED = 4;
+var NOMINAL_WALKSPEED;
+Enemy.prototype.speed = this.NOMINAL_WALKSPEED;
 Enemy.prototype.moveEnemy = true;
 Enemy.prototype.computePosition = function () {
     //Enemy moves by default
-    if(this.moveEnemy){
-        this.cx += NOMINAL_WALKSPEED;
+    var wallId,
+        leftX = this.cx - this.getRadius(),
+        rightX = this.cx + this.getRadius(),
+        topY = this.cy - this.getRadius(),
+        bottomY = this.cy + this.getRadius();
+
+    //Enemy moves by default
+    //moves to the left
+    if(!this.moveEnemy && leftX > g_playzone[0][0]){
+        wallId = this.getWallId(leftX, this.cy);
+        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
+            this.cx -= NOMINAL_WALKSPEED;
+        }
+        else{
+            this.moveEnemy = !(this.moveEnemy);
+        }
     }
-    else{
-        this.cx -= NOMINAL_WALKSPEED;
+    //moves to the right
+    else if(this.moveEnemy && rightX < g_playzone[0][1]){
+        wallId = this.getWallId(rightX, this.cy);
+        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
+            this.cx += NOMINAL_WALKSPEED;
+        }
+        else{
+            this.moveEnemy = !(this.moveEnemy);
+        }
     }
+    //moves up
+    else if(this.moveEnemy && topY > g_playzone[1][0]){
+        wallId = this.getWallId(this.cx, topY);
+        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
+            this.cy -= NOMINAL_WALKSPEED;
+        }
+        else{
+            this.moveEnemy = !(this.moveEnemy);
+        }
+        
+    }
+    //moves down
+    else if(!this.moveEnemy && bottomY < g_playzone[1][1]){
+        wallId = this.getWallId(this.cx, bottomY);
+        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
+            this.cy += NOMINAL_WALKSPEED;
+        }
+        else{
+            this.moveEnemy = !(this.moveEnemy);
+        }
+    }
+    /*
     //if the enemy has reached a certain point, change the value of moveEnemy to false and move left
     if(this.cx > 600){
         this.moveEnemy = false;
@@ -66,6 +110,7 @@ Enemy.prototype.computePosition = function () {
     else if(this.cx < 40){
         this.moveEnemy = true;
     }
+    */
 };
 Enemy.prototype.getRadius = function() {
       return (this.sprite.width / 2) * 0.7;
