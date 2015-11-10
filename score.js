@@ -7,7 +7,9 @@ var g_score = {
     P1_score: 0,
 	P2_score: 0,
     P1_lives: 3,
-	P2_lives: undefined
+	P2_lives: undefined,
+    P1_maxBombs:2,
+  P2_maxBombs:1
 };
 
 function renderScore (ctx) {
@@ -23,7 +25,7 @@ function renderScore (ctx) {
         ctx.fillText("Press space to start!", g_canvas.width/2,g_canvas.height/16);
     }
 	/* Game over condition - To be implemented
-    if (g_score.P1_lives <= 0 && 
+    if (g_score.P1_lives <= 0 &&
 	    (g_score.P2_lives <= 0 || g_score.P2_lives === 'undefined')) {
         ctx.font="40px Arial";
         ctx.fillText("Game Over",  g_canvas.width/2,250);
@@ -50,7 +52,7 @@ function renderEdges (ctx) {
 		ctx.drawImage(g_images.wall,stepCx,stepCy);
 		stepCx += g_images.wall.width;
 	}
-	
+
 	// bottom right to top right
 	for(var i = 0; i < Math.floor((g_canvas.height-baseCy)/height); i++) {
 		ctx.drawImage(g_images.wall,stepCx,stepCy);
@@ -61,7 +63,7 @@ function renderEdges (ctx) {
 		ctx.drawImage(g_images.wall,stepCx,stepCy);
 		stepCx -= g_images.wall.width;
 	}
-	
+
 }
 
 function renderP1Score (ctx) {
