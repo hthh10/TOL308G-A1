@@ -99,7 +99,7 @@ generateBrickVal : function(level) {
 destroyBrick : function (yId, xId) {
 	if (this.baseWall[yId][xId] === 10) this.baseWall[yId][xId] = -10;
 	else if (this.baseWall[yId][xId] === 2) this.baseWall[yId][xId] = 0;
-	else {
+	else if (this.baseWall[yId][xId] > 2){
 		for (var i = 3; i<10; i++) {
 			// ATH: EFTIR AÐ CROSS REFERENCE'A OG ÚTFÆRA GENERATE
 			if (this.baseWall[yId][xId] === i) {
