@@ -35,6 +35,8 @@ Door.prototype.update = function (du) {
   this.lifeSpan -= du;
     // Unregister and check for death
 	spatialManager.unregister(this);
+	
+	if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
 // setti timer á það að geta sprengt hurðina til að koma í veg fyrir milljón spawn
 // í hverri sprengingu, koma oft tveir og deyja enn í sprengjunni
@@ -49,11 +51,11 @@ Door.prototype.update = function (du) {
 
 
 Door.prototype.getRadius = function () {
-    return 14;
+    return 4;
 };
 
 Door.prototype.takeExplosiontHit = function () {
-    this.kill();
+    // this.kill();
 };
 
 Door.prototype.render = function (ctx) {

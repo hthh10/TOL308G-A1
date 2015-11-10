@@ -186,7 +186,6 @@ function preloadDone() {
 	
 	
 	wall.init();
-	//entityManager.initLevel(g_level);
 
     main.init();
 }
