@@ -89,12 +89,16 @@ generateLevel : function(level){
 },
 
 generateBrickVal : function(level) {
-	return 3;
+	var luck = Math.random();
+	if (luck < 0.5) 
+		return 2;
+	else 
+		return 3;
 },
 
 destroyBrick : function (yId, xId) {
 	if (this.baseWall[yId][xId] === 10) this.baseWall[yId][xId] = -10;
-	else if (this.baseWall[yId][xId] === 2) this.baseWall[yId][xId] === 0;
+	else if (this.baseWall[yId][xId] === 2) this.baseWall[yId][xId] = 0;
 	else {
 		for (var i = 3; i<10; i++) {
 			// ATH: EFTIR AÐ CROSS REFERENCE'A OG ÚTFÆRA GENERATE
@@ -106,9 +110,9 @@ destroyBrick : function (yId, xId) {
 					id : i-2
 				};
 				entityManager.generatePowerup(descr);
-				this.baseWall[yId][xId] = 0;
 			}
 		}
+		this.baseWall[yId][xId] = 0;
 	}
 },
 

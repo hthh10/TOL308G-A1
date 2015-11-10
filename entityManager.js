@@ -92,7 +92,6 @@ explode : function(cx,cy,xPos,yPos,strength) {
 
   //Middle
   strength = 2;
-  console.log("xPos: ",xPos, "yPos", yPos, "length", wall.baseWall[0].length);
   this._bombs.push(new Explosion({
     cx : cx,
     cy : cy
@@ -126,18 +125,18 @@ explode : function(cx,cy,xPos,yPos,strength) {
         cy : cy-step
       }));
     }
-    if(wall.baseWall[yPos-1][xPos] > 2) wall.destroyBrick(yPos-1,xPos);
+    if(wall.baseWall[yPos-1][xPos] > 1) wall.destroyBrick(yPos-1,xPos);
   }
 
    //Down
-   if(yPos < wall.baseWall.length) {
+   if(yPos < wall.baseWall.length-1) {
     if(wall.baseWall[yPos+1][xPos] <= 0) {
       this._bombs.push(new Explosion( {
         cx : cx,
         cy : cy+step
       }))
     }
-    if(wall.baseWall[yPos+1][xPos] > 2) wall.destroyBrick(yPos+1,xPos);
+    if(wall.baseWall[yPos+1][xPos] > 1) wall.destroyBrick(yPos+1,xPos);
    }
 },
 

@@ -111,8 +111,12 @@ Bomberman.prototype.update = function (du) {
 
     // Reset position if isColliding, otherwise Register
     // athuga hvort það er sprengja því þá viljum við ekki resetta. smá shitmix
-  if (this.isColliding()) {
-    if (this.isColliding() instanceof Enemy || this.isColliding() instanceof Explosion) {
+	if (this.isColliding()) {
+		var hitEntity = this.findHitEntity();
+		if (hitEntity instanceof Powerup) {
+			hitEntity.deliverPowerup(this);
+		}
+		else if (hitEntity instanceof Enemy || hitEntity instanceof Explosion) {
 			this.reset();
 			g_score.P1_lives -= 1;
 		}
@@ -120,8 +124,8 @@ Bomberman.prototype.update = function (du) {
       // lokar svo fyrir að hann komist í gegnum hana
           // ATH HÉR GÆTI VERIÐ VANDAMÁL ÞEGAR BORÐIÐ ER FULLT AF HLUTUM SEM
           // BOMBERMAN GETUR ÓVART SKOTIST INNÍ
-    } else if (this.isColliding() instanceof Bomb && (this.isColliding().lifeSpan < 100.0)) {
-        this.isCollidingWithBomb(this.isColliding());
+    } else if (hitEntity instanceof Bomb && (hitEntity.lifeSpan < 100.0)) {
+        this.isCollidingWithBomb(hitEntity);
     } else spatialManager.register(this);
 
     };
@@ -160,20 +164,6 @@ Bomberman.prototype.computePosition = function () {
     }
 };
 
-Bomberman.prototype.getWallId = function (cx,cy) {
-	var xId = Math.floor((cx-g_playzone[0][0]) / g_sprites.wall.width);
-	var yId = Math.floor((cy-g_playzone[1][0]) / g_sprites.wall.height);
-	console.log(xId,yId);
-	return [yId, xId];
-};
-
-Bomberman.prototype.checkForWall = function (yId,xId) {
-    
-	if(wall.baseWall[yId][xId] > 0) return true;
-    else return false;
-
-};
-
 // athugar collision við sprengju og breytir hraðanum eftir því
 Bomberman.prototype.isCollidingWithBomb = function (bomba) {
   if (this.cy > bomba.cy) this.cy += NOMINAL_WALKSPEED;
@@ -189,7 +179,7 @@ Bomberman.prototype.maybeDropBomb = function () {
         // Can only drop one at a time
         //if(this.noBombs > 0) {
         //    this.noBombs -= 1;
-
+		console.log(this.noBombs);
 
         // Always drop bombs in center of the square
         // Some magic numbers: cx: 40, cy: 110 is the center of the first 

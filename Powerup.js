@@ -39,19 +39,32 @@ Powerup.prototype.lifeSpan = 4000 / NOMINAL_UPDATE_INTERVAL;
 
 Powerup.prototype.update = function (du) {
 
-    // TODO: YOUR STUFF HERE! --- Unregister and check for death
+    // Unregister and check for death
 	spatialManager.unregister(this);
 	if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 	
     this.lifeSpan -= du;
     if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
+	
+	if (this.isColliding() instanceof Explosion){
+        return entityManager.KILL_ME_NOW;
+    }
     
-    // TODO: YOUR STUFF HERE! --- (Re-)Register
+    // (Re-)Register
 	spatialManager.register(this);
 };
 
+Powerup.prototype.deliverPowerup = function (bomberman) {
+	switch (this.id) {
+		case 1:
+			bomberman.noBombs += 1;
+			break;
+	}
+	this.kill();
+};
+
 Powerup.prototype.getRadius = function () {
-    return 8;
+    return 14;
 };
 
 Powerup.prototype.takeExplosiontHit = function () {
