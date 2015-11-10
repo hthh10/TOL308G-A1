@@ -16,8 +16,9 @@
 function Bomb(descr) {
 
   // Common inherited setup logic from Entity
-  this.setup(descr);
 
+  this.setup(descr);
+  this.logBomb(1);
 
   // Make a noise when I am created (i.e. fired)
   //this.fireSound.play();
@@ -53,6 +54,7 @@ Bomb.prototype.update = function(du) {
 
   spatialManager.unregister(this);
   if (this._isDeadNow) {
+    this.logBomb(-1);
     return entityManager.KILL_ME_NOW;
     }
 
@@ -60,6 +62,7 @@ Bomb.prototype.update = function(du) {
   this.lifeSpan -= du;
   if (this.lifeSpan < 40) {
     this.configureExplosion();
+    this.logBomb(-1);
     return entityManager.KILL_ME_NOW;
 }
 
@@ -78,8 +81,15 @@ Bomb.prototype.update = function(du) {
 // sendir entitymanager upplýsingar um sprengingu
 // ekki mikil þörf fyrr en við höfum powerups
 Bomb.prototype.configureExplosion = function() {
-
   entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,this.strength);
+
+};
+
+Bomb.prototype.logBomb = function(x) {
+  console.log(g_score.P1_maxBombs);
+  if(this.bombermanID === 1) {g_score.P1_maxBombs -= x;}
+  if(this.bombermanID !== 1) {g_score.P2_maxBombs -= x;}
+    console.log(g_score.P1_maxBombs);
 };
 
 Bomb.prototype.getRadius = function() {

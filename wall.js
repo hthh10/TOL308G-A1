@@ -78,7 +78,7 @@ generateLevel : function(level){
         var cy = this.baseCy + (i*this.stepCy), cx = this.baseCx;
         for(var j = 0; j < this.baseWall[i].length; j++) {
             if(this.baseWall[i][j] === 0) {
-              if(Math.random() >= 0.65) 
+              if(Math.random() >= 0.65)
 				  this.baseWall[i][j] = this.generateBrickVal(level);
             }
 
@@ -90,9 +90,9 @@ generateLevel : function(level){
 
 generateBrickVal : function(level) {
 	var luck = Math.random();
-	if (luck < 0.5) 
+	if (luck < 0.5)
 		return 2;
-	else 
+	else
 		return 3;
 },
 
@@ -109,7 +109,7 @@ destroyBrick : function (yId, xId) {
 					cy : centerPos[1],
 					id : i-2
 				};
-				entityManager.generatePowerup(descr);
+				entityManager.generatePowerup(descr.cx,descr.cy);
 			}
 		}
 		this.baseWall[yId][xId] = 0;
@@ -119,7 +119,7 @@ destroyBrick : function (yId, xId) {
 wallIdToCxCy : function (yId, xId) {
 	var cx = g_playzone[0][0]+xId*this.stepCx+this.width/2,
 		cy = g_playzone[1][0]+yId*this.stepCy+this.height/2;
-	
+
 	return [cx, cy];
 },
 
@@ -130,11 +130,11 @@ drawWallCenteredAt : function (ctx, cx, cy, image) {
     ctx.save();
     ctx.translate(cx, cy);
     ctx.scale(this.scale, this.scale);
-    
+
     // drawImage expects "top-left" coords, so we offset our destination
     // coords accordingly, to draw our sprite centred at the origin
     ctx.drawImage(image, -w/2, -h/2);
-    
+
     ctx.restore();
 },
 

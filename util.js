@@ -42,7 +42,7 @@ isBetween: function(value, lowBound, highBound) {
 // ==========
 
 randRange: function(min, max) {
-    return (min + Math.random() * (max - min));
+    return Math.floor((min + Math.random() * (max - min)));
 },
 
 
