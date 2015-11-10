@@ -33,7 +33,6 @@ _onil : [],
 _explosions : [],
 _powerups : [],
 
-// -------------
 // Ugly var for level design
 
 
@@ -58,12 +57,12 @@ _forEachOf: function(aCategory, fn) {
 
 // A special return value, used by other objects,
 // to request the blessed release of death!
-//
+
 KILL_ME_NOW : -1,
 
 // Some things must be deferred until after initial construction
 // i.e. thing which need `this` to be defined.
-//
+
 deferredSetup : function () {
 
     this._categories = [this._bombermen, this._ballom, this._onil, this._bombs, this._explosions, this._powerups];
@@ -96,8 +95,8 @@ explode : function(cx,cy,xPos,yPos,strength) {
     cx : cx,
     cy : cy
   }));
-  //Right
 
+  //Right
   if(xPos < wall.baseWall[0].length) {  
     if(wall.baseWall[yPos][xPos+1] <=0){
       this._bombs.push(new Explosion({
@@ -140,9 +139,6 @@ explode : function(cx,cy,xPos,yPos,strength) {
    }
 },
 
-
-
-
 generateBomberman : function(descr) {
 	this._bombermen.push(new Bomberman(descr)); 
 },
@@ -151,13 +147,14 @@ generateEnemy : function(){
     this._ballom.push(new Enemy({
       cx : 40,
       cy : 350,
-      sprite : g_sprites.ballom
+      sprite : g_sprites.ballom,
+      speed : 4
     }));
-
     this._onil.push(new Enemy({
       cx : 360,
       cy : 190,
-      sprite : g_sprites.onil
+      sprite : g_sprites.onil,
+      speed : 8
     }));
 },
 
@@ -220,7 +217,7 @@ render: function(ctx) {
     }
 }
 
-}
+};
 
 // Some deferred setup which needs the object to have been created first
 entityManager.deferredSetup();
