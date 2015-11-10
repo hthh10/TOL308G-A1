@@ -85,7 +85,7 @@ dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID) {
 explode : function(cx,cy,xPos,yPos,strength) {
   var step = g_images.wall.width;
   var right = true, left = true, up = true, down = true;
-  console.log("yPos ", yPos, "xPos", xPos);
+
 
 
   //Middle
@@ -95,7 +95,6 @@ explode : function(cx,cy,xPos,yPos,strength) {
   }));
 
   for(var i = 0; i < strength; i++) {
-      console.log("er down true? ", yPos < wall.baseWall.length-1-i);
     // Right
     if(xPos < wall.baseWall[i].length-i && right) {
       if(wall.baseWall[yPos][xPos+i+1] <= 0) {
