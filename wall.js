@@ -129,7 +129,7 @@ destroyBrick : function (yId, xId) {
 	  this.baseWall[yId][xId] = -10;
 	}
 	else if (this.baseWall[yId][xId] === 2) this.baseWall[yId][xId] = 0;
-	else {
+	else if (this.baseWall[yId][xId] > 2){
 		for (var i = 3; i<10; i++) {
 			descr.id = i-2;
 			// ATH: EFTIR AÐ CROSS REFERENCE'A OG ÚTFÆRA GENERATE

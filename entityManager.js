@@ -1,15 +1,9 @@
 /*
-
 entityManager.js
-
 A module which handles arbitrary entity-management for "Bomberman"
-
-
 We create this module as a single global object, and initialise it
 with suitable 'data' and 'methods'.
-
 "Private" properties are denoted by an underscore prefix convention.
-
 */
 
 
@@ -93,62 +87,80 @@ dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID, trigger) {
 
 explode : function(cx,cy,xPos,yPos,strength) {
   var step = g_images.wall.width;
+  var right = true, left = true, up = true, down = true;
+
+
 
   //Middle
-  strength = 2;
   this._bombs.push(new Explosion({
     cx : cx,
     cy : cy
   }));
-  //Right
 
-  if(xPos < wall.baseWall[0].length) {
-    if(wall.baseWall[yPos][xPos+1] <=0){
-      this._bombs.push(new Explosion({
-        cx : cx+step,
-        cy : cy
-      }));
-    }
-    if(wall.baseWall[yPos][xPos+1] > 1) wall.destroyBrick(yPos,xPos+1);
-  }
-  //Left
-  if(xPos > 0) {
-      if(wall.baseWall[yPos][xPos-1] <=0){
+  for(var i = 0; i < strength; i++) {
+    // Right
+    if(xPos < wall.baseWall[i].length-i && right) {
+      if(wall.baseWall[yPos][xPos+i+1] <= 0) {
         this._bombs.push(new Explosion({
-          cx : cx-step,
+          cx : cx + step + (step*i),
           cy : cy
         }));
       }
-      if(wall.baseWall[yPos][xPos-1] > 1 ) wall.destroyBrick(yPos,xPos-1);
-   }
-   //Up
-  if(yPos > 0) {
-    if(wall.baseWall[yPos-1][xPos] <=0){
-      this._bombs.push(new Explosion({
-        cx : cx,
-        cy : cy-step
-      }));
-    }
-    if(wall.baseWall[yPos-1][xPos] > 1) wall.destroyBrick(yPos-1,xPos);
-  }
+      if(wall.baseWall[yPos][xPos+i+1] > 0 && right) {
+        wall.destroyBrick(yPos,xPos+i+1);
+        right = false;
 
-   //Down
-   if(yPos < wall.baseWall.length-1) {
-    if(wall.baseWall[yPos+1][xPos] <= 0) {
-      this._bombs.push(new Explosion( {
-        cx : cx,
-        cy : cy+step
-      }))
+      }
     }
-    if(wall.baseWall[yPos+1][xPos] > 1) wall.destroyBrick(yPos+1,xPos);
-   }
+    // Left
+    if(xPos > 0+i) {
+      if(wall.baseWall[yPos][xPos-i-1] <= 0 && left) {
+        this._bombs.push(new Explosion({
+          cx : cx - step - (step*i),
+          cy : cy
+        }));
+      }
+      if(wall.baseWall[yPos][xPos-i-1] > 0 && left) {
+        wall.destroyBrick(yPos,xPos-i-1);
+        left = false;
+      }
+    }
+    //Up
+    if(yPos > 0+i) {
+      if(wall.baseWall[yPos-1-i][xPos] <= 0 && up) {
+        this._bombs.push(new Explosion({
+          cx : cx,
+          cy : cy - step - (step*i)
+        }));
+      }
+      if(wall.baseWall[yPos-i-1][xPos] > 0 && up) {
+        wall.destroyBrick(yPos-i-1,xPos);
+        up = false;
+      }
+    }
+    //Down
+    if(yPos < wall.baseWall.length-1-i) {
+      if(wall.baseWall[yPos+1+i][xPos] <= 0 && down) {
+        this._bombs.push(new Explosion({
+          cx : cx,
+          cy : cy + step + (step*i)
+        }));
+      }
+      if(wall.baseWall[yPos+i+1][xPos] > 0 && down) {
+        wall.destroyBrick(yPos+i+1,xPos);
+        down = false;
+      }
+    }
+
+  } // End of loop
+
 },
 
 
 
 
 generateBomberman : function(descr) {
-	this._bombermen.push(new Bomberman(descr));
+  this._bombermen.push(new Bomberman(descr));
 },
 
 generateEnemy : function(){
@@ -165,6 +177,7 @@ generateEnemy : function(){
     }));
 },
 
+
 // tímabundið fall til að messa ekki í enemies á meðan
 // þeir eru svona mikið under construction
 generateRandomEnemy : function(cx, cy){
@@ -176,9 +189,23 @@ generateRandomEnemy : function(cx, cy){
       sprite : g_sprites.ballom
     }));
     }
-
-  console.log('enemy');
+    else {
+      this._onil.push(new Enemy({
+        cx : 360,
+        cy : 190,
+        sprite : g_sprites.onil
+      }));
+    }
 },
+
+//
+// generatePowerup : function(cx,cy) {
+//   this._powerups.push(new Powerup({
+//     cx:cx,
+//     cy:cy,
+//     id: util.randRange(0,3)
+//   }));
+// },
 
 
 
@@ -192,15 +219,15 @@ generateDoor : function(descr) {
 	this._door.push(new Door(descr));
 },
 addPlayer2 : function() {
-	this._bombermen.push(new Bomberman({
+  this._bombermen.push(new Bomberman({
         cx   : g_canvas.width-40,
         cy   : 120,
-		KEY_UP     : 'I'.charCodeAt(0),
-		KEY_DOWN   : 'K'.charCodeAt(0),
-		KEY_LEFT   : 'J'.charCodeAt(0),
-		KEY_RIGHT  : 'L'.charCodeAt(0),
+    KEY_UP     : 'I'.charCodeAt(0),
+    KEY_DOWN   : 'K'.charCodeAt(0),
+    KEY_LEFT   : 'J'.charCodeAt(0),
+    KEY_RIGHT  : 'L'.charCodeAt(0),
 
-		KEY_FIRE   : '9'.charCodeAt(0)
+    KEY_FIRE   : '9'.charCodeAt(0)
     }));
 },
 

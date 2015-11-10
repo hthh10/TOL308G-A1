@@ -116,6 +116,7 @@ function requestPreloads() {
         brick : "Sprites/brick.png",
         ballom : "Sprites/ballom.png",
         onil : "Sprites/onil.png",
+        pasu : "Sprites/pasu.png",
         Bomb : "Sprites/Bombsprite.gif",
 	    bomberman : "Sprites/bomberman.png",
         explosion : "Sprites/Explosion.gif",
@@ -138,6 +139,7 @@ function preloadDone() {
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
     g_sprites.ballom = new Sprite(g_images.ballom);
     g_sprites.onil = new Sprite(g_images.onil);
+    g_sprites.pasu = new Sprite(g_images.pasu);
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
 	g_sprites.powerups = [new Sprite(g_images.bagspace),
