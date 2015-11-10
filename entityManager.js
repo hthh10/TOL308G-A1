@@ -89,9 +89,11 @@ dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID) {
 
 explode : function(cx,cy,xPos,yPos,strength) {
   var step = g_images.wall.width;
+  var right = true, left = true, up = true, down = true;
+  console.log("yPos ", yPos, "xPos", xPos);
+
 
   //Middle
-  strength = 2;
   this._bombs.push(new Explosion({
     cx : cx,
     cy : cy
@@ -104,41 +106,66 @@ explode : function(cx,cy,xPos,yPos,strength) {
         cx : cx+step,
         cy : cy
       }));
-    }
-    if(wall.baseWall[yPos][xPos+1] > 1) wall.destroyBrick(yPos,xPos+1);
-  }
-  //Left
-  if(xPos > 0) {
-      if(wall.baseWall[yPos][xPos-1] <=0){
+  for(var i = 0; i < strength; i++) {
+      console.log("er down true? ", yPos < wall.baseWall.length-1-i);
+    // Right
+    if(xPos < wall.baseWall[i].length-i && right) {
+      if(wall.baseWall[yPos][xPos+i+1] <= 0) {
         this._bombs.push(new Explosion({
-          cx : cx-step,
+          cx : cx + step + (step*i),
           cy : cy
         }));
       }
-      if(wall.baseWall[yPos][xPos-1] > 1 ) wall.destroyBrick(yPos,xPos-1);
-   }
-   //Up
-  if(yPos > 0) {
-    if(wall.baseWall[yPos-1][xPos] <=0){
-      this._bombs.push(new Explosion({
-        cx : cx,
-        cy : cy-step
-      }));
+      if(wall.baseWall[yPos][xPos+i+1] > 0 && right) {
+        wall.destroyBrick(yPos,xPos+i+1);
+        right = false;
+        
+      }
     }
-    if(wall.baseWall[yPos-1][xPos] > 1) wall.destroyBrick(yPos-1,xPos);
-  }
+    // Left
+    if(xPos > 0+i) {
+      if(wall.baseWall[yPos][xPos-i-1] <= 0 && left) {
+        this._bombs.push(new Explosion({
+          cx : cx - step - (step*i),
+          cy : cy
+        }));
+      }
+      if(wall.baseWall[yPos][xPos-i-1] > 0 && left) {
+        wall.destroyBrick(yPos,xPos-i-1);
+        left = false;
+      }
+    }
+    //Up
+    if(yPos > 0+i) {
+      if(wall.baseWall[yPos-1-i][xPos] <= 0 && up) {
+        this._bombs.push(new Explosion({
+          cx : cx,
+          cy : cy - step - (step*i)
+        }));
+      }
+      if(wall.baseWall[yPos-i-1][xPos] > 0 && up) {
+        wall.destroyBrick(yPos-i-1,xPos);
+        up = false;
+      }
+    }
+    //Down
+    if(yPos < wall.baseWall.length-1-i) {
+      if(wall.baseWall[yPos+1+i][xPos] <= 0 && down) {
+        this._bombs.push(new Explosion({
+          cx : cx,
+          cy : cy + step + (step*i)
+        }));
+      }
+      if(wall.baseWall[yPos+i+1][xPos] > 0 && down) {
+        wall.destroyBrick(yPos+i+1,xPos);
+        down = false;
+      }
+    }
 
-   //Down
-   if(yPos < wall.baseWall.length-1) {
-    if(wall.baseWall[yPos+1][xPos] <= 0) {
-      this._bombs.push(new Explosion( {
-        cx : cx,
-        cy : cy+step
-      }))
-    }
-    if(wall.baseWall[yPos+1][xPos] > 1) wall.destroyBrick(yPos+1,xPos);
-   }
+  } // End of loop
+
 },
+  
 
 generateBomberman : function(descr) {
 	this._bombermen.push(new Bomberman(descr));
