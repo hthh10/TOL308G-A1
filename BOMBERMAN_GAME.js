@@ -114,8 +114,10 @@ function requestPreloads() {
     var requiredImages = {
         wall : "Sprites/wall.png",
         brick : "Sprites/brick.png",
-        ballom : "Sprites/ballom.png",
-        onil : "Sprites/onil.png",
+        ballomLeft : "Sprites/ballomLeft.png",
+        ballomRight : "Sprites/ballomRight.png",
+        onilLeft : "Sprites/onilLeft.png",
+        onilRight : "Sprites/onilRight.png",
         pasu : "Sprites/pasu.png",
         Bomb : "Sprites/Bombsprite.gif",
 	    bomberman : "Sprites/bomberman.png",
@@ -124,7 +126,7 @@ function requestPreloads() {
         bagspace:"Sprites/bagspace.gif",
         trigger:"Sprites/trigger.gif",
         strength:"Sprites/Strength.gif",
-        speed: "Sprites/Speed.gif"
+        speed: "Sprites/Speed.gif",
 
     };
 
@@ -138,15 +140,18 @@ function preloadDone() {
     g_sprites.brick = new Sprite(g_images.brick);
     g_sprites.wall = new Sprite(g_images.wall);
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
-    g_sprites.ballom = new Sprite(g_images.ballom);
-    g_sprites.onil = new Sprite(g_images.onil);
+    g_sprites.ballomLeft = new Sprite(g_images.ballomLeft);
+    g_sprites.ballomRight = new Sprite(g_images.ballomRight);
+    g_sprites.onilLeft = new Sprite(g_images.onilLeft);
+    g_sprites.onilRight = new Sprite(g_images.onilRight);
     g_sprites.pasu = new Sprite(g_images.pasu);
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
 	g_sprites.powerups = [new Sprite(g_images.bagspace),
 						  new Sprite(g_images.trigger),
-              new Sprite(g_images.strength),new Sprite(g_images.speed)];
-      g_sprites.door = new Sprite(g_images.door);
+                          new Sprite(g_images.strength),
+                          new Sprite(g_images.speed)];
+    g_sprites.door = new Sprite(g_images.door);
 
 	wall.init();
 	entityManager.init();

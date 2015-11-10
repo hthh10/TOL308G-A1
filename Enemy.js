@@ -17,7 +17,8 @@ function Enemy(descr) {
     //Common inherited setup logic from Entity
     this.setup(descr);
 
-    this.sprite = this.sprite || g_sprites.ballom || g_sprites.onil;
+    this.sprite = this.sprite || g_sprites.ballomLeft || g_sprites.ballomRight
+                || g_sprites.onilLeft || g_sprites.onilRight;
     this._scale = 1;
 }
 
@@ -65,6 +66,8 @@ Enemy.prototype.computePosition = function () {
           // Going right
         if (rightX < g_playzone[0][1] && this.direction === 1) {
             wallId = this.getWallId(rightX,this.cy);
+            //make ballom look right
+            this.sprite = g_sprites.ballomRight;
             if (!this.checkForWall(wallId[0],wallId[1])) {
                 this.cx += this.speed;
             }
@@ -93,6 +96,8 @@ Enemy.prototype.computePosition = function () {
         } // going left
         if(this.direction === 3 && leftX > g_playzone[0][0]) {
             wallId = this.getWallId(leftX,this.cy);
+            //make ballom look right
+            this.sprite = g_sprites.ballomLeft;
             if (!this.checkForWall(wallId[0],wallId[1])) {
                 this.cx -= this.speed;
             }
@@ -119,6 +124,7 @@ Enemy.prototype.computePosition = function () {
                     else this.direction = 1; // otherwise he goes right.
                 }
             }
+
 
 /*
 
@@ -189,9 +195,9 @@ Enemy.prototype.isCollidingWithBomb = function (bomba) {
 },
 
 Enemy.prototype.render = function(ctx){
-    var origScale = this.sprite.scale;
+    //var origScale = this.sprite.scale;
     //pass my scale into the sprite, for drawing
-    this.sprite.scale = this.scale;
+    //this.sprite.scale = this.scale;
     this.sprite.drawCentredAt(ctx, this.cx, this.cy);
-    this.sprite.scale = origScale;
+    //this.sprite.scale = origScale;
 }
