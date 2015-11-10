@@ -56,26 +56,35 @@ eatKey(Bomberman.prototype.KEY_FIRE);
 
 // GAME-SPECIFIC DIAGNOSTICS
 var g_renderSpatialDebug = false;
-var g_multiplayer = false;
+var g_multiplayerMode = false;
+var g_player2 = false;
 var g_gameStarted = false;
 var g_level = 1;
 
 var KEY_SPATIAL = keyCode('X');
 
-var KEY_STARTGAME  = keyCode(' ');
+var KEY_STORYMODE  = keyCode(' ');
+var KEY_MULTIPLAYER  = keyCode('M');
 var KEY_PLAYER2  = keyCode('O');
 var KEY_RESET = keyCode('R');
 
 function processDiagnostics() {
 
     if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
-	if (eatKey(KEY_PLAYER2) && !g_multiplayer) {
-		g_multiplayer = true;
+	if (eatKey(KEY_PLAYER2) && !g_player2) {
+		g_player2 = true;
 		entityManager.addPlayer2();
 	}
-	if (eatKey(KEY_STARTGAME)) g_gameStarted = true;
-
-    // if (eatKey(KEY_RESET)) entityManager.resetShips();
+	if (eatKey(KEY_STORYMODE) && !g_gameStarted) {
+		g_gameStarted = true;
+		startStorymode();
+	}
+	else if (eatKey(KEY_MULTIPLAYER) && !g_gameStarted) {
+		g_gameStarted = true;
+		g_player2 = true;
+		g_multiplayerMode = true;
+		startMultiplayer();
+	}
 }
 
 
@@ -94,12 +103,39 @@ function processDiagnostics() {
 // GAME-SPECIFIC RENDERING
 
 function renderSimulation(ctx) {
-
-	renderScore(ctx);
 	wall.render(ctx);
+	
+	if (!g_gameStarted) {
+		startupScreen.render(ctx);
+	}
+	else {
+		renderScore(ctx);
+	}
+	
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
+}
+
+// ==========================
+// LEVEL/GAME MODE MANAGEMENT
+// ==========================
+
+function resetManagers() {
+	entityManager.reset();
+	spatialManager.reset();
+}
+
+function startStorymode() {
+	resetManagers();
+	entityManager.initStorymode();
+	wall.initStorymode();
+}
+
+function startMultiplayer() {
+	resetManagers();
+	entityManager.initMultiplayer();
+	wall.initMultiplayer();
 }
 
 
@@ -145,9 +181,10 @@ function preloadDone() {
 	g_sprites.powerups = [new Sprite(g_images.bagspace),
 						  new Sprite(g_images.trigger),new Sprite(g_images.strength)];
       g_sprites.door = new Sprite(g_images.door);
-
+	
+	
 	wall.init();
-	entityManager.init();
+	//entityManager.initLevel(g_level);
 
     main.init();
 }

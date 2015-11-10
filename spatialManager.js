@@ -77,6 +77,12 @@ checkForWall: function(posX, posY) {	//THAT'S SOME MAGIC NUMBER RIGHT THERE
 //    }
 //    return false;
 },
+
+reset: function() {
+	this._nextSpatialID = 1;
+	this._entities = [];
+},
+
 render: function(ctx) {
 	var oldStyle = ctx.strokeStyle;
     ctx.strokeStyle = "red";

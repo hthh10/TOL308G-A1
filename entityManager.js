@@ -66,9 +66,23 @@ deferredSetup : function () {
 
 },
 
-init: function() {
-    this._generateBombermen();
-    this._generateEnemies();
+initLevel: function(level) {
+	if (level === 1) {
+		this._generateBombermen();
+		this._generateEnemies();
+	}
+	else if (level > 1) {
+		
+	}
+},
+
+initStorymode : function() {
+	this.initLevel(1);
+},
+
+initMultiplayer: function() {
+	this._generateBombermen();
+	this.addPlayer2();
 },
 
 
@@ -229,6 +243,25 @@ addPlayer2 : function() {
 
     KEY_FIRE   : '9'.charCodeAt(0)
     }));
+},
+
+// Moves all bombermen to initial position
+resetBombermen: function(du) {
+
+    for (var i = 0; i < this._bombermen.length; i++) {
+        this._bombermen[i]._moveToBeginning();
+    }
+},
+
+reset: function() {
+	this._bombs = [];
+	this._bombermen = [];
+	this._ballom = [];
+	this._onil = [];
+	this._explosions = [];
+	this._powerups = [];
+	this._door = [];
+	this.deferredSetup();
 },
 
 update: function(du) {

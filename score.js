@@ -15,7 +15,6 @@ var g_score = {
 function renderScore (ctx) {
 	renderP1Score(ctx);
 	renderP2Score(ctx);
-	renderEdges(ctx);
 
 	ctx.save();
     if (!g_gameStarted && g_score.P1_lives > 0) {
@@ -36,35 +35,7 @@ function renderScore (ctx) {
 	*/
 	ctx.restore();
 }
-function renderEdges (ctx) {
-	// Start a little off screen to make playable are larger
-	var height = g_images.wall.height, width = g_images.wall.width;
 
-	var baseCx = -0.5*width, baseCy = 1.25*height;
-	var stepCx = baseCx, stepCy = baseCy
-	// Top left to bottom left
-	for(var i = 0; i < Math.floor((g_canvas.height-baseCy)/height); i++) {
-		ctx.drawImage(g_images.wall,stepCx,stepCy);
-		stepCy += g_images.wall.height;
-	}
-	// bottom left to bottom right
-	for(var i = 0; i < g_canvas.width/g_images.wall.width; i++) {
-		ctx.drawImage(g_images.wall,stepCx,stepCy);
-		stepCx += g_images.wall.width;
-	}
-
-	// bottom right to top right
-	for(var i = 0; i < Math.floor((g_canvas.height-baseCy)/height); i++) {
-		ctx.drawImage(g_images.wall,stepCx,stepCy);
-		stepCy -= g_images.wall.height;
-	}
-	//top right to top left
-	for(var i = 0; i < g_canvas.width/g_images.wall.width; i++) {
-		ctx.drawImage(g_images.wall,stepCx,stepCy);
-		stepCx -= g_images.wall.width;
-	}
-
-}
 
 function renderP1Score (ctx) {
 	ctx.save();
@@ -81,7 +52,7 @@ function renderP2Score (ctx) {
 	ctx.font="20px Arial";
     ctx.fillStyle = "blue";
 	ctx.textAlign = "right"
-	if (!g_multiplayer) ctx.fillText("Press 'O' to start", g_canvas.width-5, 30);
+	if (!g_player2) ctx.fillText("Press 'O' to start", g_canvas.width-5, 30);
     else {
 		ctx.fillText("Lives:" + g_score.P1_lives, g_canvas.width-5, 30);
 		ctx.fillText("Score:" + g_score.P1_score, g_canvas.width-150, 30);
