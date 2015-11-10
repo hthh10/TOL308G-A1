@@ -117,11 +117,14 @@ generateBrickVal: function(level) {
 //random powerup ef við viljum hafa eitthvert þeirra algengara en annað
 selectItem: function() {
   var luck = Math.random();
-  if (luck < 0.33) {
+  if (luck < 0.20) {
     return 3;
-  } else if (0.33 < luck > 0.66) {
+  } else if (0.40 < luck < 0.60) {
     return 4;
-  } else return 5;
+  } else if (0.80 < luck < 1) {
+    return 5;
+  } else return 6;
+
 },
 
 destroyBrick : function (yId, xId) {
@@ -138,7 +141,7 @@ destroyBrick : function (yId, xId) {
 	else if (this.baseWall[yId][xId] === 2) this.baseWall[yId][xId] = 0;
 	else if (this.baseWall[yId][xId] > 2){
 		for (var i = 3; i<10; i++) {
-			descr.id = i-2;
+			descr.id = i-3;
 			// ATH: EFTIR AÐ CROSS REFERENCE'A OG ÚTFÆRA GENERATE
 			if (this.baseWall[yId][xId] === i) {
 				entityManager.generatePowerup(descr);

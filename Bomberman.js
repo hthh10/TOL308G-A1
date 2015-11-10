@@ -50,11 +50,12 @@ Bomberman.prototype.noBombs = 0;
 Bomberman.prototype.bombStrength = 1;
 Bomberman.prototype.trigger = false;
 
-
+Bomberman.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 Bomberman.prototype.reset = function () {
 
     this._isReseting = true;
     this._scaleDirn = -1;
+    this.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 
     // Unregister me from my old posistion
     // ...so that I can't be collided with while warping
@@ -92,6 +93,7 @@ Bomberman.prototype._moveToBeginning = function () {
 
 Bomberman.prototype.update = function (du) {
 
+    this.immunity -= du;
     // Handle warping
     if (this._isReseting) {
         this._updateReset(du);
@@ -119,7 +121,8 @@ Bomberman.prototype.update = function (du) {
 		if (hitEntity instanceof Powerup) {
 			hitEntity.deliverPowerup(this);
 		}
-		else if (hitEntity instanceof Enemy || hitEntity instanceof Explosion) {
+		else if ((hitEntity instanceof Enemy || hitEntity instanceof Explosion) &&
+  this.immunity < 20) {
 			this.reset();
 			g_score.P1_lives -= 1;
 		}
@@ -231,6 +234,11 @@ Bomberman.prototype.maybeDropBomb = function() {
          this.bombStrength, this._spatialID, this.trigger);
     }
   }
+};
+
+
+Bomberman.prototype.applySpeed = function () {
+  NOMINAL_WALKSPEED = 5;
 };
 
 Bomberman.prototype.getRadius = function () {

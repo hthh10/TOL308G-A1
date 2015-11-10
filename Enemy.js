@@ -27,8 +27,11 @@ Enemy.prototype = new Entity();
 Enemy.prototype.cx = 40;
 Enemy.prototype.cy = 350;
 Enemy.prototype.sprite = this.sprite;
+Enemy.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
+//spawn immunity
 
 Enemy.prototype.update = function(du) {
+    this.immunity -= du;
      // Unregister and check for death
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
@@ -40,7 +43,7 @@ Enemy.prototype.update = function(du) {
         this.isCollidingWithBomb(this.isColliding());
     }
     // if standing in fire, die!
-    if (this.isColliding() instanceof Explosion){
+    if ((this.isColliding() instanceof Explosion) && this.immunity < 10){
         //award points?
         return entityManager.KILL_ME_NOW;
     }
@@ -50,7 +53,7 @@ Enemy.prototype.update = function(du) {
 
 Enemy.prototype.speed = 2.5;
 Enemy.prototype.moveEnemy = true;
-Enemy.prototype.direction = 1; // 1 = Right, 2 = down, 3 = left, 4 = up 
+Enemy.prototype.direction = 1; // 1 = Right, 2 = down, 3 = left, 4 = up
 Enemy.prototype.computePosition = function () {
     //Enemy moves by default
     var wallId,
@@ -86,7 +89,7 @@ Enemy.prototype.computePosition = function () {
                     this.direction = 1;
                 }
                 else this.direction = 3; // otherwise he goes left.
-            }   
+            }
         } // going left
         if(this.direction === 3 && leftX > g_playzone[0][0]) {
             wallId = this.getWallId(leftX,this.cy);
@@ -99,7 +102,7 @@ Enemy.prototype.computePosition = function () {
                     this.direction = 4;
                 }
                 else this.direction = 2; // otherwise he goes up.
-                }         
+                }
 
             }
             // Going up
@@ -114,9 +117,9 @@ Enemy.prototype.computePosition = function () {
                         this.direction = 3;
                     }
                     else this.direction = 1; // otherwise he goes right.
-                }   
+                }
             }
-        
+
 /*
 
     //Enemy moves by default
@@ -146,9 +149,18 @@ Enemy.prototype.computePosition = function () {
         if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
             this.cy -= NOMINAL_WALKSPEED;
         }
+<<<<<<< HEAD
+        else{
+            this.moveEnemy = !(this.moveEnemy);
+        }
+
+    }
+    //moves down
+=======
         else this.moveEnemy = !(this.moveEnemy);
 
 //moves down
+>>>>>>> c699ea472bada2af26302ce952065e2b9f8c1bef
     else if(!this.moveEnemy && bottomY < g_playzone[1][1]){
         wallId = this.getWallId(this.cx, bottomY);
         if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
