@@ -51,9 +51,9 @@ Enemy.prototype.update = function(du) {
     spatialManager.register(this);
 }
 
-var NOMINAL_WALKSPEED;
-Enemy.prototype.speed = this.NOMINAL_WALKSPEED;
+Enemy.prototype.speed = 2.5;
 Enemy.prototype.moveEnemy = true;
+Enemy.prototype.direction = 1; // 1 = Right, 2 = down, 3 = left, 4 = up
 Enemy.prototype.computePosition = function () {
     //Enemy moves by default
     var wallId,
@@ -61,6 +61,66 @@ Enemy.prototype.computePosition = function () {
         rightX = this.cx + this.getRadius(),
         topY = this.cy - this.getRadius(),
         bottomY = this.cy + this.getRadius();
+
+          // Going right
+        if (rightX < g_playzone[0][1] && this.direction === 1) {
+            wallId = this.getWallId(rightX,this.cy);
+            if (!this.checkForWall(wallId[0],wallId[1])) {
+                this.cx += this.speed;
+            }
+            if(this.checkForWall(wallId[0],wallId[1])) {
+                if(Math.random() < 0.5) {
+                    // 50% chance of enemy going down
+                    this.direction = 2;
+                }
+                else this.direction = 4; // otherwise he goes up.
+
+            }
+        }
+        // going down.
+        if(this.direction === 2 && bottomY < g_playzone[1][1]) {
+            wallId = this.getWallId(this.cx,bottomY);
+            if (!this.checkForWall(wallId[0],wallId[1])) {
+                this.cy += this.speed;
+            }
+            if(this.checkForWall(wallId[0],wallId[1])) {
+                if(Math.random() < 0.5) {
+                    // 50% chance of enemy going right
+                    this.direction = 1;
+                }
+                else this.direction = 3; // otherwise he goes left.
+            }
+        } // going left
+        if(this.direction === 3 && leftX > g_playzone[0][0]) {
+            wallId = this.getWallId(leftX,this.cy);
+            if (!this.checkForWall(wallId[0],wallId[1])) {
+                this.cx -= this.speed;
+            }
+            if(this.checkForWall(wallId[0],wallId[1])) {
+                if(Math.random() < 0.5) {
+                    // 50% chance of enemy going down
+                    this.direction = 4;
+                }
+                else this.direction = 2; // otherwise he goes up.
+                }
+
+            }
+            // Going up
+            if(this.direction === 4 && topY > g_playzone[1][0]) {
+                wallId = this.getWallId(this.cx,topY);
+                if (!this.checkForWall(wallId[0],wallId[1])) {
+                    this.cy -= this.speed;
+                }
+                if(this.checkForWall(wallId[0],wallId[1])) {
+                    if(Math.random() < 0.5) {
+                        // 50% chance of enemy going left
+                        this.direction = 3;
+                    }
+                    else this.direction = 1; // otherwise he goes right.
+                }
+            }
+
+/*
 
     //Enemy moves by default
     //moves to the left
@@ -89,12 +149,18 @@ Enemy.prototype.computePosition = function () {
         if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
             this.cy -= NOMINAL_WALKSPEED;
         }
+<<<<<<< HEAD
         else{
             this.moveEnemy = !(this.moveEnemy);
         }
 
     }
     //moves down
+=======
+        else this.moveEnemy = !(this.moveEnemy);
+
+//moves down
+>>>>>>> c699ea472bada2af26302ce952065e2b9f8c1bef
     else if(!this.moveEnemy && bottomY < g_playzone[1][1]){
         wallId = this.getWallId(this.cx, bottomY);
         if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
@@ -108,12 +174,8 @@ Enemy.prototype.computePosition = function () {
     //if the enemy has reached a certain point, change the value of moveEnemy to false and move left
     if(this.cx > 600){
         this.moveEnemy = false;
-    }
-    //if the enemy has reached a certain point, change the value of MoveEnemy to true again and move right
-    else if(this.cx < 40){
-        this.moveEnemy = true;
-    }
-    */
+*/
+
 };
 Enemy.prototype.getRadius = function() {
       return (this.sprite.width / 2) * 0.7;

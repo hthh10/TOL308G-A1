@@ -62,9 +62,7 @@ Bomberman.prototype.reset = function () {
     spatialManager.unregister(this);
 };
 
-Bomberman.prototype.applySpeed = function () {
-  NOMINAL_WALKSPEED = 6;
-};
+
 Bomberman.prototype._updateReset = function (du) {
 
     var SHRINK_RATE = 3 / SECS_TO_NOMINALS;
@@ -236,6 +234,11 @@ Bomberman.prototype.maybeDropBomb = function() {
          this.bombStrength, this._spatialID, this.trigger);
     }
   }
+};
+
+
+Bomberman.prototype.applySpeed = function () {
+  NOMINAL_WALKSPEED = 5;
 };
 
 Bomberman.prototype.getRadius = function () {
