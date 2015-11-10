@@ -123,7 +123,8 @@ function requestPreloads() {
         door: "Sprites/Door.gif",
         bagspace:"Sprites/bagspace.gif",
         trigger:"Sprites/trigger.gif",
-        strength:"Sprites/Strength.gif"
+        strength:"Sprites/Strength.gif",
+        speed: "Sprites/Speed.gif"
 
     };
 
@@ -143,7 +144,8 @@ function preloadDone() {
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
 	g_sprites.powerups = [new Sprite(g_images.bagspace),
-						  new Sprite(g_images.trigger),new Sprite(g_images.strength)];
+						  new Sprite(g_images.trigger),
+              new Sprite(g_images.strength),new Sprite(g_images.speed)];
       g_sprites.door = new Sprite(g_images.door);
 
 	wall.init();

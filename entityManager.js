@@ -156,9 +156,6 @@ explode : function(cx,cy,xPos,yPos,strength) {
 
 },
 
-
-
-
 generateBomberman : function(descr) {
   this._bombermen.push(new Bomberman(descr));
 },
@@ -177,7 +174,6 @@ generateEnemy : function(){
     }));
 },
 
-
 // tímabundið fall til að messa ekki í enemies á meðan
 // þeir eru svona mikið under construction
 generateRandomEnemy : function(cx, cy){
@@ -191,8 +187,8 @@ generateRandomEnemy : function(cx, cy){
     }
     else {
       this._onil.push(new Enemy({
-        cx : 360,
-        cy : 190,
+        cx : cx,
+        cy : cy,
         sprite : g_sprites.onil
       }));
     }
@@ -206,10 +202,6 @@ generateRandomEnemy : function(cx, cy){
 //     id: util.randRange(0,3)
 //   }));
 // },
-
-
-
-
 
 generatePowerup : function(descr) {
 	this._powerups.push(new Powerup(descr));

@@ -24,9 +24,10 @@ function Powerup(descr) {
     // Common inherited setup logic from Entity
     this.setup(descr);
     // select a random powerup ID
-    this.id = util.randRange(0,3)
+    //this.id = util.randRange(0,3)
 
-	this.sprite = this.sprite || g_sprites.powerups[this.id] || g_sprites.powerups[this.id];
+	this.sprite = this.sprite || g_sprites.powerups[this.id] ||
+  g_sprites.powerups[this.id] || g_sprites.powerups[this.id];
     this._scale = 1;
 }
 
@@ -68,8 +69,12 @@ Powerup.prototype.deliverPowerup = function (bomberman) {
       console.log('trigger');
       break;
     case 2:
-      bomberman.bombStrength += 2;
+      bomberman.bombStrength += 1;
       console.log('str + 2');
+      break;
+    case 3:
+      bomberman.applySpeed();
+      console.log('speed');
       break;
 	}
 	this.kill();

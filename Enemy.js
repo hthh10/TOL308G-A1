@@ -27,8 +27,11 @@ Enemy.prototype = new Entity();
 Enemy.prototype.cx = 40;
 Enemy.prototype.cy = 350;
 Enemy.prototype.sprite = this.sprite;
+Enemy.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
+//spawn immunity
 
 Enemy.prototype.update = function(du) {
+    this.immunity -= du;
      // Unregister and check for death
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
@@ -40,7 +43,7 @@ Enemy.prototype.update = function(du) {
         this.isCollidingWithBomb(this.isColliding());
     }
     // if standing in fire, die!
-    if (this.isColliding() instanceof Explosion){
+    if ((this.isColliding() instanceof Explosion) && this.immunity < 10){
         //award points?
         return entityManager.KILL_ME_NOW;
     }
@@ -89,7 +92,7 @@ Enemy.prototype.computePosition = function () {
         else{
             this.moveEnemy = !(this.moveEnemy);
         }
-        
+
     }
     //moves down
     else if(!this.moveEnemy && bottomY < g_playzone[1][1]){
