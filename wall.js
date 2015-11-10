@@ -58,6 +58,7 @@ stepCx : 40,
 stepCy : 40,
 scale : 1,
 level : 1,
+doorNr : 1,
 
 // Init function to set variables that must first be defined
 init : function(){
@@ -88,28 +89,52 @@ generateLevel : function(level){
     }
 },
 
-generateBrickVal : function(level) {
-	var luck = Math.random();
-	if (luck < 0.5)
-		return 2;
-	else
-		return 3;
+generateBrickVal: function(level) {
+  var luck = Math.random();
+  // býr til eina hurð sem er falin undir steini 1 til 20
+  if (0 < wall.doorNr) {
+    if (wall.doorNr > 20 || luck < 0.05) {
+      wall.doorNr = -100;
+      return 10;
+    }
+  }
+  if (luck < 0.5) {
+    wall.doorNr += 1;
+    return 2;
+  } else {
+    wall.doorNr += 1;
+    return this.selectItem();
+  }
+},
+
+//random powerup ef við viljum hafa eitthvert þeirra algengara en annað
+selectItem: function() {
+  var luck = Math.random();
+  if (luck < 0.33) {
+    return 3;
+  } else if (0.33 < luck > 0.66) {
+    return 4;
+  } else return 5;
 },
 
 destroyBrick : function (yId, xId) {
-	if (this.baseWall[yId][xId] === 10) this.baseWall[yId][xId] = -10;
+	var centerPos = this.wallIdToCxCy(yId, xId);
+	var descr = {
+		cx : centerPos[0],
+		cy : centerPos[1]
+	};
+	// býr til hurð
+	if (this.baseWall[yId][xId] === 10) {
+	  entityManager.generateDoor(descr);
+	  this.baseWall[yId][xId] = -10;
+	}
 	else if (this.baseWall[yId][xId] === 2) this.baseWall[yId][xId] = 0;
 	else {
 		for (var i = 3; i<10; i++) {
+			descr.id = i-2;
 			// ATH: EFTIR AÐ CROSS REFERENCE'A OG ÚTFÆRA GENERATE
 			if (this.baseWall[yId][xId] === i) {
-				var centerPos = this.wallIdToCxCy(yId, xId);
-				var descr = {
-					cx : centerPos[0],
-					cy : centerPos[1],
-					id : i-2
-				};
-				entityManager.generatePowerup(descr.cx,descr.cy);
+				entityManager.generatePowerup(descr);
 			}
 		}
 		this.baseWall[yId][xId] = 0;

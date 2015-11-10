@@ -20,8 +20,11 @@ Powerup id list:
 // A generic contructor which accepts an arbitrary descriptor object
 function Powerup(descr) {
 
+
     // Common inherited setup logic from Entity
     this.setup(descr);
+    // select a random powerup ID
+    this.id = util.randRange(0,3)
 
 	this.sprite = this.sprite || g_sprites.powerups[this.id] || g_sprites.powerups[this.id];
     this._scale = 1;
@@ -56,11 +59,17 @@ Powerup.prototype.update = function (du) {
 
 Powerup.prototype.deliverPowerup = function (bomberman) {
 	switch (this.id) {
-		case 1:
+		case 0:
 			bomberman.noBombs += 1;
+      console.log('bag +1');
 			break;
+    case 1:
+      bomberman.trigger = true;
+      console.log('trigger');
+      break;
     case 2:
       bomberman.bombStrength += 2;
+      console.log('str + 2');
       break;
 	}
 	this.kill();

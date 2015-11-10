@@ -48,6 +48,7 @@ Bomberman.prototype.cx = 40;
 Bomberman.prototype.cy = 120;
 Bomberman.prototype.noBombs = 0;
 Bomberman.prototype.bombStrength = 1;
+Bomberman.prototype.trigger = false;
 
 
 Bomberman.prototype.reset = function () {
@@ -226,7 +227,8 @@ Bomberman.prototype.maybeDropBomb = function() {
       var bombCx = g_sprites.wall.width + (g_sprites.wall.width * xPos),
         bombCy = 110 + (g_sprites.wall.height * yPos);
 
-      entityManager.dropBomb(bombCx, bombCy, xPos, yPos, this.bombStrength, this._spatialID);
+      entityManager.dropBomb(bombCx, bombCy, xPos, yPos,
+         this.bombStrength, this._spatialID, this.trigger);
     }
   }
 };

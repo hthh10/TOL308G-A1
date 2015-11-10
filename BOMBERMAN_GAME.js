@@ -119,6 +119,10 @@ function requestPreloads() {
         Bomb : "Sprites/Bombsprite.gif",
 	    bomberman : "Sprites/bomberman.png",
         explosion : "Sprites/Explosion.gif",
+        door: "Sprites/Door.gif",
+        bagspace:"Sprites/bagspace.gif",
+        trigger:"Sprites/trigger.gif",
+        strength:"Sprites/Strength.gif"
 
     };
 
@@ -136,8 +140,9 @@ function preloadDone() {
     g_sprites.onil = new Sprite(g_images.onil);
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
-	g_sprites.powerups = [new Sprite(g_images.bomberman),
-						  new Sprite(g_images.Bomb),new Sprite(g_images.explosion)];
+	g_sprites.powerups = [new Sprite(g_images.bagspace),
+						  new Sprite(g_images.trigger),new Sprite(g_images.strength)];
+      g_sprites.door = new Sprite(g_images.door);
 
 	wall.init();
 	entityManager.init();

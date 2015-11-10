@@ -32,6 +32,7 @@ _ballom : [],
 _onil : [],
 _explosions : [],
 _powerups : [],
+_door : [],
 
 // -------------
 // Ugly var for level design
@@ -66,7 +67,8 @@ KILL_ME_NOW : -1,
 //
 deferredSetup : function () {
 
-    this._categories = [this._bombermen, this._ballom, this._onil, this._bombs, this._explosions, this._powerups];
+    this._categories = [this._bombermen, this._ballom, this._onil,
+       this._bombs, this._explosions, this._powerups, this._door];
 
 },
 
@@ -76,14 +78,15 @@ init: function() {
 },
 
 
-dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID) {
+dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID, trigger) {
   this._bombs.push(new Bomb({
       cx   : cx,
       cy   : cy,
       xPos : xPos,
       yPos : yPos,
       strength : strength,
-      bombermanID : bombermanID
+      bombermanID : bombermanID,
+      trigger : trigger
   }));
 },
 
@@ -162,14 +165,32 @@ generateEnemy : function(){
     }));
 },
 
-generatePowerup : function(cx,cy) {
-	this._powerups.push(new Powerup({
-    cx:cx,
-    cy:cy,
-    id: util.randRange(0,3)
-  }));
+// tímabundið fall til að messa ekki í enemies á meðan
+// þeir eru svona mikið under construction
+generateRandomEnemy : function(cx, cy){
+    var luck = Math.random();
+    if (luck<0.5) {
+    this._ballom.push(new Enemy({
+      cx : cx,
+      cy : cy,
+      sprite : g_sprites.ballom
+    }));
+    }
+
+  console.log('enemy');
 },
 
+
+
+
+
+generatePowerup : function(descr) {
+	this._powerups.push(new Powerup(descr));
+},
+
+generateDoor : function(descr) {
+	this._door.push(new Door(descr));
+},
 addPlayer2 : function() {
 	this._bombermen.push(new Bomberman({
         cx   : g_canvas.width-40,

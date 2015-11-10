@@ -46,7 +46,8 @@ Bomb.prototype.cx = 16;
 Bomb.prototype.cy = 200;
 Bomb.prototype.velX = 1;
 Bomb.prototype.velY = 1;
-
+Bomb.prototype.KEY_P1_TRIGGER   = '3'.charCodeAt(0);
+Bomb.prototype.KEY_P2_TRIGGER   = '0'.charCodeAt(0);
 // Convert times from milliseconds to "nominal" time units.
 Bomb.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
@@ -58,6 +59,7 @@ Bomb.prototype.update = function(du) {
     return entityManager.KILL_ME_NOW;
     }
 
+    this.maybeDetonate();
 
   this.lifeSpan -= du;
   if (this.lifeSpan < 40) {
@@ -79,14 +81,26 @@ Bomb.prototype.update = function(du) {
 };
 
 // sendir entitymanager upplýsingar um sprengingu
-// ekki mikil þörf fyrr en við höfum powerups
 Bomb.prototype.configureExplosion = function() {
   entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,this.strength);
 
 };
 
+Bomb.prototype.maybeDetonate = function () {
+  if (this.trigger) {
+    if (keys[this.KEY_P1_TRIGGER] && this.bombermanID === 1) {
+      this.configureExplosion();
+      this.lifeSpan -= this.lifeSpan;
+    }
+     if (keys[this.KEY_P2_TRIGGER] && this.bombermanID !== 1) {
+       this.configureExplosion();
+       this.lifeSpan -= this.lifeSpan;
+     }
+  }
+};
+
 Bomb.prototype.logBomb = function(x) {
-  console.log(g_score.P1_maxBombs);
+
   if(this.bombermanID === 1) {g_score.P1_maxBombs -= x;}
   if(this.bombermanID !== 1) {g_score.P2_maxBombs -= x;}
     console.log(g_score.P1_maxBombs);
