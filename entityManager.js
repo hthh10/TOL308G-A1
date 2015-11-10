@@ -1,15 +1,9 @@
 /*
-
 entityManager.js
-
 A module which handles arbitrary entity-management for "Bomberman"
-
-
 We create this module as a single global object, and initialise it
 with suitable 'data' and 'methods'.
-
 "Private" properties are denoted by an underscore prefix convention.
-
 */
 
 
@@ -33,6 +27,7 @@ _onil : [],
 _explosions : [],
 _powerups : [],
 
+// -------------
 // Ugly var for level design
 
 
@@ -57,12 +52,12 @@ _forEachOf: function(aCategory, fn) {
 
 // A special return value, used by other objects,
 // to request the blessed release of death!
-
+//
 KILL_ME_NOW : -1,
 
 // Some things must be deferred until after initial construction
 // i.e. thing which need `this` to be defined.
-
+//
 deferredSetup : function () {
 
     this._categories = [this._bombermen, this._ballom, this._onil, this._bombs, this._explosions, this._powerups];
@@ -99,13 +94,6 @@ explode : function(cx,cy,xPos,yPos,strength) {
     cy : cy
   }));
 
-  //Right
-  if(xPos < wall.baseWall[0].length) {
-    if(wall.baseWall[yPos][xPos+1] <=0){
-      this._bombs.push(new Explosion({
-        cx : cx+step,
-        cy : cy
-      }));
   for(var i = 0; i < strength; i++) {
       console.log("er down true? ", yPos < wall.baseWall.length-1-i);
     // Right
@@ -167,27 +155,28 @@ explode : function(cx,cy,xPos,yPos,strength) {
 },
   
 
+
+
 generateBomberman : function(descr) {
-	this._bombermen.push(new Bomberman(descr));
+  this._bombermen.push(new Bomberman(descr));
 },
 
 generateEnemy : function(){
     this._ballom.push(new Enemy({
       cx : 40,
       cy : 350,
-      sprite : g_sprites.ballom,
-      speed : 4
+      sprite : g_sprites.ballom
     }));
+
     this._onil.push(new Enemy({
       cx : 360,
       cy : 190,
-      sprite : g_sprites.onil,
-      speed : 8
+      sprite : g_sprites.onil
     }));
 },
 
 generatePowerup : function(cx,cy) {
-	this._powerups.push(new Powerup({
+  this._powerups.push(new Powerup({
     cx:cx,
     cy:cy,
     id: util.randRange(0,3)
@@ -195,15 +184,15 @@ generatePowerup : function(cx,cy) {
 },
 
 addPlayer2 : function() {
-	this._bombermen.push(new Bomberman({
+  this._bombermen.push(new Bomberman({
         cx   : g_canvas.width-40,
         cy   : 120,
-		KEY_UP     : 'I'.charCodeAt(0),
-		KEY_DOWN   : 'K'.charCodeAt(0),
-		KEY_LEFT   : 'J'.charCodeAt(0),
-		KEY_RIGHT  : 'L'.charCodeAt(0),
+    KEY_UP     : 'I'.charCodeAt(0),
+    KEY_DOWN   : 'K'.charCodeAt(0),
+    KEY_LEFT   : 'J'.charCodeAt(0),
+    KEY_RIGHT  : 'L'.charCodeAt(0),
 
-		KEY_FIRE   : '9'.charCodeAt(0)
+    KEY_FIRE   : '9'.charCodeAt(0)
     }));
 },
 
@@ -249,7 +238,7 @@ render: function(ctx) {
     }
 }
 
-};
+}
 
 // Some deferred setup which needs the object to have been created first
 entityManager.deferredSetup();
