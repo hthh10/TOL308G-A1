@@ -83,7 +83,7 @@ generateLevel : function(level){
 	this.doorNr = 1;
 	if (level === 4) return;
 	for(var i = 0; i < this.baseWall.length; i++) {
-        var cy = this.baseCy + (i*this.stepCy), 
+        var cy = this.baseCy + (i*this.stepCy),
 			cx = this.baseCx;
         for(var j = 0; j < this.baseWall[i].length; j++) {
             if(this.baseWall[i][j] === 0) {

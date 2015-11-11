@@ -32,10 +32,12 @@ Door.prototype.lifeSpan = 0;
 
 
 Door.prototype.update = function (du) {
-  this.lifeSpan -= du;
-    // Unregister and check for death
+  if (this.lifeSpan > 2) {
+    this.lifeSpan -= du;
+  }
+  // Unregister and check for death
 	spatialManager.unregister(this);
-	
+
 	if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
 // setti timer á það að geta sprengt hurðina til að koma í veg fyrir milljón spawn

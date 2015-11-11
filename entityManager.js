@@ -104,7 +104,7 @@ checkWinConditions : function() {
 			}
 		}
 		else if (g_level === 4) {
-			
+
 		}
 	}
 	else {
@@ -112,7 +112,7 @@ checkWinConditions : function() {
 			g_score.win = true;
 		}
 	}
-	
+
 },
 
 
@@ -230,17 +230,19 @@ generateEnemy : function(){
 generateRandomEnemy : function(cx, cy){
     var luck = Math.random();
     if (luck<0.5) {
-    this._ballom.push(new Enemy({
+    this._ballom.push(new Ballom({
       cx : cx,
       cy : cy,
-      sprite : g_sprites.ballom
+      sprite : g_sprites.onilLeft && g_sprites.onilRight,
+      speed : 3
     }));
-    }
+}
     else {
-      this._onil.push(new Enemy({
+      this._onil.push(new Onil({
         cx : cx,
         cy : cy,
-        sprite : g_sprites.onil
+        sprite : g_sprites.onilLeft && g_sprites.onilRight,
+        speed : 3
       }));
     }
 },

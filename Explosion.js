@@ -57,7 +57,9 @@ Explosion.prototype.update = function(du) {
     return entityManager.KILL_ME_NOW;
     }
 
-  this.immunity -= du;
+  if (this.immunity>2) {
+      this.immunity -= du;
+  }
   this.lifeSpan -= du;
   if (this.lifeSpan < 0) {
     return entityManager.KILL_ME_NOW;
@@ -85,8 +87,8 @@ Explosion.prototype.takeExplosionHit = function() {
 Explosion.prototype.updatePlayerScore = function(player) {
     //0.5 er shitmix því það bætast alltaf við tveir í einu...
   if (player._spatialID === 1) {
-    g_score.P2_score += 0.5;
-  } else g_score.P1_score += 0.5;
+    g_score.P2_score += 1;
+  } else g_score.P1_score += 1;
   this.immunity = 4000 / NOMINAL_UPDATE_INTERVAL;
 };
 
