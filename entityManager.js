@@ -67,12 +67,21 @@ deferredSetup : function () {
 },
 
 initLevel: function(level) {
+	console.log(g_level);
 	if (level === 1) {
 		this._generateBombermen();
 		this._generateEnemies();
 	}
-	else if (level > 1) {
-		
+	else if (level < 4) {
+		for (var i = 0; i<this._bombermen.length; i++) {
+			this._bombermen[i]._moveToBeginning();
+		}
+		this._door[0].kill();
+		this._generateEnemies();
+		wall.generateLevel(g_level);
+	}
+	else if (level === 4) {
+		g_score.win = true;
 	}
 },
 
@@ -83,6 +92,26 @@ initStorymode : function() {
 initMultiplayer: function() {
 	this._generateBombermen();
 	this.addPlayer2();
+},
+
+checkWinConditions : function() {
+	if (!g_multiplayerMode) {
+		if (g_level < 4) {
+			if (this._ballom.length < 1 && this._onil.length < 1) {
+				g_level += 1;
+				this.initLevel(g_level);
+			}
+		}
+		else if (g_level === 4) {
+			
+		}
+	}
+	else {
+		if (this._bombermen.length < 2) {
+			g_score.win = true;
+		}
+	}
+	
 },
 
 

@@ -49,6 +49,7 @@ Bomberman.prototype.cy = 120;
 Bomberman.prototype.noBombs = 0;
 Bomberman.prototype.bombStrength = 1;
 Bomberman.prototype.trigger = false;
+Bomberman.prototype.lives = 3;
 
 Bomberman.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 Bomberman.prototype.reset = function () {
@@ -121,11 +122,20 @@ Bomberman.prototype.update = function (du) {
 		if (hitEntity instanceof Powerup) {
 			hitEntity.deliverPowerup(this);
 		}
-		else if ((hitEntity instanceof Enemy || hitEntity instanceof Explosion) &&
-  this.immunity < 20) {
-			this.reset();
+	else if ((hitEntity instanceof Enemy || hitEntity instanceof Explosion) &&
+    this.immunity < 20) {
+		this.reset();
 		this.updatePlayerHp();
+			this.lives -= 1;
+			if (this._spatialID === 1) g_score.P1_lives -= 1;
+			else g_score.P2_lives -= 1;
+
+			if (this.lives <= 0) return entityManager.KILL_ME_NOW;
 		}
+		else if (hitEntity instanceof Door) {
+			entityManager.checkWinConditions();
+		}
+
       //athuga hvort hann collidar við sprengjuna eftir smá delay og
       // lokar svo fyrir að hann komist í gegnum hana
           // ATH HÉR GÆTI VERIÐ VANDAMÁL ÞEGAR BORÐIÐ ER FULLT AF HLUTUM SEM
