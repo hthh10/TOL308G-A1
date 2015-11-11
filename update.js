@@ -17,6 +17,8 @@ var g_prevUpdateDu = null;
 //
 var g_isUpdateOdd = false;
 
+//Add background music
+var backgroundMusic = new Audio("Sounds/BombermanBGMusic.mp3");
 
 function update(dt) {
     

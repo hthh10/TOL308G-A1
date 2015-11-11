@@ -49,6 +49,7 @@ function updateSimulation(du) {
 
 
 if (g_gameStarted) entityManager.update(du);
+
 // Prevent perpetual firing!
 eatKey(Bomberman.prototype.KEY_FIRE);
 
@@ -104,6 +105,14 @@ function processDiagnostics() {
 
 function renderSimulation(ctx) {
 	wall.render(ctx);
+
+    if(g_gameStarted){
+        backgroundMusic.play();
+    }
+
+    if(g_isUpdatePaused){
+        backgroundMusic.pause();
+    }
 	
 	if (!g_gameStarted) {
 		startupScreen.render(ctx);
@@ -152,6 +161,7 @@ function requestPreloads() {
         brick : "Sprites/brick.png",
         ballomLeft : "Sprites/ballomLeft.png",
         ballomRight : "Sprites/ballomRight.png",
+        ballomUp : "Sprites/ballomUp.png",
         onilLeft : "Sprites/onilLeft.png",
         onilRight : "Sprites/onilRight.png",
         pasu : "Sprites/pasu.png",
@@ -178,6 +188,7 @@ function preloadDone() {
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
     g_sprites.ballomLeft = new Sprite(g_images.ballomLeft);
     g_sprites.ballomRight = new Sprite(g_images.ballomRight);
+    g_sprites.ballomUp = new Sprite(g_images.ballomUp);
     g_sprites.onilLeft = new Sprite(g_images.onilLeft);
     g_sprites.onilRight = new Sprite(g_images.onilRight);
     g_sprites.pasu = new Sprite(g_images.pasu);

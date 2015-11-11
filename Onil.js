@@ -23,9 +23,12 @@ function Onil(descr) {
 Onil.prototype = new Enemy();
 
 Onil.prototype.update = function(du) {
-    this.immunity -= du;
      // Unregister and check for death
     spatialManager.unregister(this);
+
+    this.immunity -= du;
+    this.lifeSpan -= du;
+
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     //remember previous position
     this.computePosition();

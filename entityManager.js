@@ -213,7 +213,8 @@ generateEnemy : function(){
     this._ballom.push(new Ballom({
       cx : 40,
       cy : 350,
-      sprite : g_sprites.ballomRight || g_sprites.ballomLeft
+      sprite : g_sprites.ballomRight || g_sprites.ballomLeft ||
+              g_sprites.ballomUp
     }));
     /*
     this._ballom.push(new Enemy({

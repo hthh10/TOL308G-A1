@@ -26,6 +26,7 @@ Enemy.prototype = new Entity();
 Enemy.prototype.cx = 40;
 Enemy.prototype.cy = 350;
 Enemy.prototype.sprite = this.sprite;
+Enemy.prototype.lifeSpan = 1000 / NOMINAL_UPDATE_INTERVAL;
 Enemy.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 //spawn immunity
 /*
@@ -195,6 +196,12 @@ Enemy.prototype.isCollidingWithBomb = function(bomba) {
 },
 
 Enemy.prototype.render = function(ctx){
+    //var fadeThresh = Enemy.prototype.lifeSpan / 3;
+/*
+    if (this.lifeSpan < fadeThresh) {
+    ctx.globalAlpha = this.lifeSpan / fadeThresh;
+    }
+    */
     //var origScale = this.sprite.scale;
     //pass my scale into the sprite, for drawing
     //this.sprite.scale = this.scale;

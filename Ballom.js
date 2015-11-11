@@ -23,9 +23,12 @@ function Ballom(descr) {
 Ballom.prototype = new Enemy();
 
 Ballom.prototype.update = function(du) {
-    this.immunity -= du;
-     // Unregister and check for death
+    // Unregister and check for death
     spatialManager.unregister(this);
+    
+    this.immunity -= du;
+    this.lifeSpan -= du;
+
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
     //remember previous position
     this.computePosition();
@@ -137,7 +140,8 @@ Ballom.prototype.computePosition = function () {
                 // Going up
             if(this.direction === 4) {
                 wallId = this.getWallId(this.cx,topY);
-
+                //make ballom look up
+                this.sprite = g_sprites.ballomUp;
                 if (!this.checkForWall(wallId[0],wallId[1])) {
                     this.cy -= this.speed;
                 }
