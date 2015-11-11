@@ -82,7 +82,8 @@ Bomb.prototype.update = function(du) {
 
 // sendir entitymanager upplýsingar um sprengingu
 Bomb.prototype.configureExplosion = function() {
-  entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,this.strength);
+  entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,
+    this.strength, this.bombermanID);
 
 };
 

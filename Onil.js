@@ -33,7 +33,7 @@ Onil.prototype.update = function(du) {
     // if colliding with a bomb, go away
     if (this.isColliding() instanceof Bomb){
         this.isCollidingWithBomb(this.isColliding());
-        //Er mögulega frekar bjagaður kóði en hann virkar ágætlega... 
+        //Er mögulega frekar bjagaður kóði en hann virkar ágætlega...
         if(this.direction === 1){
             if(Math.random() < 0.5) this.direction = 2;
             else this.direction = 3;

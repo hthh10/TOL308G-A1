@@ -40,7 +40,7 @@ Enemy.prototype.update = function(du) {
     // if colliding with a bomb, go away
     if (this.isColliding() instanceof Bomb){
         this.isCollidingWithBomb(this.isColliding());
-        //Er mögulega frekar bjagaður kóði en hann virkar ágætlega... 
+        //Er mögulega frekar bjagaður kóði en hann virkar ágætlega...
         if(this.direction === 1){
             if(Math.random() < 0.5) this.direction = 2;
             else this.direction = 3;
@@ -106,7 +106,7 @@ Enemy.prototype.computePosition = function () {
             else this.direction = 3;
         }
 
-        
+
 
         else {
             // Going right
@@ -133,7 +133,7 @@ Enemy.prototype.computePosition = function () {
                     else this.direction = 3; // otherwise he goes left.
                 }
             }
-        
+
 
          // going left
             if(this.direction === 3) {
@@ -160,16 +160,38 @@ Enemy.prototype.computePosition = function () {
             }
         };
         */
-  
+
 Enemy.prototype.getRadius = function() {
       return (this.sprite.width / 2) * 0.7;
 };
 // athugar collision við sprengju og breytir hraðanum eftir því
-Enemy.prototype.isCollidingWithBomb = function (bomba) {
-  if (this.cy > bomba.cy)   this.moveEnemy = true;
-  if (this.cy < bomba.cy)   this.moveEnemy = false;
-  if (this.cx > bomba.cx)   this.moveEnemy = true;
-  if (this.cx < bomba.cx)   this.moveEnemy = false;
+Enemy.prototype.isCollidingWithBomb = function(bomba) {
+
+  var leftX = this.cx - this.getRadius(),
+    rightX = this.cx + this.getRadius(),
+    topY = this.cy - this.getRadius(),
+    bottomY = this.cy + this.getRadius();
+
+  if (this.cy > bomba.cy && bottomY >= g_playzone[1][1]) {
+    if (Math.random() < 0.5) this.direction = 2;
+    else this.direction = 4;
+    this.cy -= this.speed;
+  }
+  if (this.cy < bomba.cy && topY <= g_playzone[1][0]) {
+    if (Math.random() < 0.5) this.direction = 1;
+    else this.direction = 3;
+    this.cy += this.speed;
+  }
+  if (this.cx > bomba.cx && rightX >= g_playzone[0][1]) {
+    if (Math.random() < 0.5) this.direction = 2;
+    else this.direction = 4;
+    this.cx -= this.speed;
+  }
+  if (this.cx < bomba.cx && leftX <= g_playzone[0][0]) {
+    if (Math.random() < 0.5) this.direction = 2;
+    else this.direction = 4;
+    this.cx += this.speed;
+  }
 },
 
 Enemy.prototype.render = function(ctx){

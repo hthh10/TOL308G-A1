@@ -28,12 +28,12 @@ Door.prototype = new Entity();
 // Initial, inheritable, default values
 Door.prototype.cx = 0;
 Door.prototype.cy = 0;
-Door.prototype.lifeSpan = 0;
+Door.prototype.immunity = 0;
 
 
 Door.prototype.update = function (du) {
-  if (this.lifeSpan > 2) {
-    this.lifeSpan -= du;
+  if (this.immunity > 2) {
+    this.immunity -= du;
   }
   // Unregister and check for death
 	spatialManager.unregister(this);
@@ -42,8 +42,8 @@ Door.prototype.update = function (du) {
 
 // setti timer á það að geta sprengt hurðina til að koma í veg fyrir milljón spawn
 // í hverri sprengingu, koma oft tveir og deyja enn í sprengjunni
-	if (this.isColliding() instanceof Explosion && this.lifeSpan < 10){
-    this.lifeSpan = this.lifeSpan + (3500/ NOMINAL_UPDATE_INTERVAL);
+	if (this.isColliding() instanceof Explosion && this.immunity < 10){
+    this.immunity += (3500/ NOMINAL_UPDATE_INTERVAL);
     entityManager.generateRandomEnemy(this.cx, this.cy);
     }
 
