@@ -66,7 +66,7 @@ Onil.prototype.update = function(du) {
 */
     }
     // if standing in fire, die!
-    if ((this.isColliding() instanceof Explosion) && this.immunity < 10){
+    if ((this.isColliding() instanceof Explosion) && this.immunity < 20){
         //award points?
         return entityManager.KILL_ME_NOW;
     }
@@ -111,7 +111,7 @@ Onil.prototype.computePosition = function () {
             else this.direction = 3;
         }
 
-        
+
 
         else {
             // Going right
@@ -138,7 +138,7 @@ Onil.prototype.computePosition = function () {
                     else this.direction = 3; // otherwise he goes left.
                 }
             }
-        
+
 
          // going left
             if(this.direction === 3) {
@@ -165,58 +165,8 @@ Onil.prototype.computePosition = function () {
             }
         };
 
-/*
-
-    //Enemy moves by default
-    //moves to the left
-    if(!this.moveEnemy && leftX > g_playzone[0][0]){
-        wallId = this.getWallId(leftX, this.cy);
-        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
-            this.cx -= NOMINAL_WALKSPEED;
-        }
-        else{
-            this.moveEnemy = !(this.moveEnemy);
-        }
-    }
-    //moves to the right
-    else if(this.moveEnemy && rightX < g_playzone[0][1]){
-        wallId = this.getWallId(rightX, this.cy);
-        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
-            this.cx += NOMINAL_WALKSPEED;
-        }
-        else{
-            this.moveEnemy = !(this.moveEnemy);
-        }
-    }
-    //moves up
-    else if(this.moveEnemy && topY > g_playzone[1][0]){
-        wallId = this.getWallId(this.cx, topY);
-        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
-            this.cy -= NOMINAL_WALKSPEED;
-        }
-<<<<<<< HEAD
-        else{
-            this.moveEnemy = !(this.moveEnemy);
-        }
-
-    }
-    //moves down
-=======
-        else this.moveEnemy = !(this.moveEnemy);
-
-//moves down
->>>>>>> c699ea472bada2af26302ce952065e2b9f8c1bef
-    else if(!this.moveEnemy && bottomY < g_playzone[1][1]){
-        wallId = this.getWallId(this.cx, bottomY);
-        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
-            this.cy += NOMINAL_WALKSPEED;
-=======
->>>>>>> origin/master
-        }
-        */
-  
 Onil.prototype.getRadius = function() {
-      return (this.sprite.width / 2) * 0.7;
+    return (this.sprite.width / 2) * 0.7;
 };
 // athugar collision við sprengju og breytir hraðanum eftir því
 Onil.prototype.isCollidingWithBomb = function (bomba) {

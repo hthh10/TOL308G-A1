@@ -48,6 +48,7 @@ Explosion.prototype.velY = 1;
 
 // Convert times from milliseconds to "nominal" time units.
 Explosion.prototype.lifeSpan = 1000 / NOMINAL_UPDATE_INTERVAL;
+Explosion.prototype.immunity = 0 / NOMINAL_UPDATE_INTERVAL;
 
 Explosion.prototype.update = function(du) {
 
@@ -56,32 +57,21 @@ Explosion.prototype.update = function(du) {
     return entityManager.KILL_ME_NOW;
     }
 
-
+  this.immunity -= du;
   this.lifeSpan -= du;
   if (this.lifeSpan < 0) {
     return entityManager.KILL_ME_NOW;
 }
 
-
-  this.wrapPosition();
-
-  // TODO? NO, ACTUALLY, I JUST DID THIS BIT FOR YOU! :-)
-  //
-  // Handle collisions
-  //
-  // var hitEntity = this.findHitEntity();
-  // if (hitEntity && !(hitEntity instanceof Bomb)) {
-  //   var canTakeHit = hitEntity.takeExplosionHit;
-  //   if (canTakeHit) canTakeHit.call(hitEntity);
-  //   return entityManager.KILL_ME_NOW;
-  // }
-
-
+  if (this.isColliding()) {
+    var hitEntity = this.findHitEntity();
+  if ((hitEntity instanceof Bomberman) && this.immunity < 20) {
+    this.updatePlayerScore(hitEntity);
+  }
+}
 
   spatialManager.register(this);
 };
-
-
 
 Explosion.prototype.getRadius = function() {
     return g_images.explosion.width/2;
@@ -89,9 +79,15 @@ Explosion.prototype.getRadius = function() {
 
 Explosion.prototype.takeExplosionHit = function() {
   this.kill();
+};
 
-  // Make a noise when I am zapped by another bullet
-  //this.zappedSound.play();
+// distributes points
+Explosion.prototype.updatePlayerScore = function(player) {
+    //0.5 er shitmix því það bætast alltaf við tveir í einu...
+  if (player._spatialID === 1) {
+    g_score.P2_score += 0.5;
+  } else g_score.P1_score += 0.5;
+  this.immunity = 4000 / NOMINAL_UPDATE_INTERVAL;
 };
 
 Explosion.prototype.render = function(ctx) {

@@ -103,7 +103,6 @@ Bomb.prototype.logBomb = function(x) {
 
   if(this.bombermanID === 1) {g_score.P1_maxBombs -= x;}
   if(this.bombermanID !== 1) {g_score.P2_maxBombs -= x;}
-    console.log(g_score.P1_maxBombs);
 };
 
 Bomb.prototype.getRadius = function() {
