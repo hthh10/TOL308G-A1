@@ -47,7 +47,7 @@ Explosion.prototype.velX = 1;
 Explosion.prototype.velY = 1;
 
 // Convert times from milliseconds to "nominal" time units.
-Explosion.prototype.lifeSpan = 1000 / NOMINAL_UPDATE_INTERVAL;
+Explosion.prototype.lifeSpan = 800 / NOMINAL_UPDATE_INTERVAL;
 Explosion.prototype.immunity = 0 / NOMINAL_UPDATE_INTERVAL;
 
 Explosion.prototype.update = function(du) {
@@ -55,22 +55,22 @@ Explosion.prototype.update = function(du) {
   spatialManager.unregister(this);
   if (this._isDeadNow) {
     return entityManager.KILL_ME_NOW;
-    }
-
-  if (this.immunity>2) {
-      this.immunity -= du;
   }
+
+  this.immunity -= du;
   this.lifeSpan -= du;
+
   if (this.lifeSpan < 0) {
     return entityManager.KILL_ME_NOW;
-}
+  }
 
   if (this.isColliding()) {
     var hitEntity = this.findHitEntity();
-  if ((hitEntity instanceof Bomberman) && this.immunity < 20) {
-    this.updatePlayerScore(hitEntity);
+    if ((hitEntity instanceof Bomberman || hitEntity instanceof Enemy) &&
+      this.immunity < 20) {
+      this.updatePlayerScore(hitEntity);
+    }
   }
-}
 
   spatialManager.register(this);
 };
@@ -83,13 +83,25 @@ Explosion.prototype.takeExplosionHit = function() {
   this.kill();
 };
 
-// distributes points
-Explosion.prototype.updatePlayerScore = function(player) {
-    //0.5 er shitmix því það bætast alltaf við tveir í einu...
-  if (player._spatialID === 1) {
-    g_score.P2_score += 1;
-  } else g_score.P1_score += 1;
-  this.immunity = 4000 / NOMINAL_UPDATE_INTERVAL;
+// distributes points, player gets a point for killing enemies and the enemy
+// gets a point if the player dies
+Explosion.prototype.updatePlayerScore = function(hitEntity) {
+  if (hitEntity instanceof Bomberman) {
+    if (this.bombermanID === 1 && this.immunity > -5.0) {
+      g_score.P2_score += 1;
+    } else if (this.bombermanID > 1 && this.immunity > -5.0) {
+      g_score.P1_score += 1;
+    }
+    this.immunity = 4000 / NOMINAL_UPDATE_INTERVAL;
+  } else if (hitEntity instanceof Enemy) {
+    if (this.bombermanID === 1 && this.immunity > -5.0) {
+      g_score.P1_score += 1;
+      console.log(this.immunity);
+    } else if (this.bombermanID > 1 && this.immunity > -5.0) {
+      g_score.P2_score += 1;
+    }
+    this.immunity = 4000 / NOMINAL_UPDATE_INTERVAL;
+  }
 };
 
 Explosion.prototype.render = function(ctx) {

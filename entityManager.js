@@ -129,7 +129,7 @@ dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID, trigger) {
 },
 
 
-explode : function(cx,cy,xPos,yPos,strength) {
+explode : function(cx,cy,xPos,yPos,strength, bombermanID) {
   var step = g_images.wall.width;
   var right = true, left = true, up = true, down = true;
 
@@ -138,7 +138,8 @@ explode : function(cx,cy,xPos,yPos,strength) {
   //Middle
   this._bombs.push(new Explosion({
     cx : cx,
-    cy : cy
+    cy : cy,
+    bombermanID : bombermanID
   }));
 
   for(var i = 0; i < strength; i++) {
@@ -147,7 +148,8 @@ explode : function(cx,cy,xPos,yPos,strength) {
       if(wall.baseWall[yPos][xPos+i+1] <= 0) {
         this._bombs.push(new Explosion({
           cx : cx + step + (step*i),
-          cy : cy
+          cy : cy,
+          bombermanID : bombermanID
         }));
       }
       if(wall.baseWall[yPos][xPos+i+1] > 0 && right) {
@@ -161,7 +163,8 @@ explode : function(cx,cy,xPos,yPos,strength) {
       if(wall.baseWall[yPos][xPos-i-1] <= 0 && left) {
         this._bombs.push(new Explosion({
           cx : cx - step - (step*i),
-          cy : cy
+          cy : cy,
+          bombermanID : bombermanID
         }));
       }
       if(wall.baseWall[yPos][xPos-i-1] > 0 && left) {
@@ -174,7 +177,8 @@ explode : function(cx,cy,xPos,yPos,strength) {
       if(wall.baseWall[yPos-1-i][xPos] <= 0 && up) {
         this._bombs.push(new Explosion({
           cx : cx,
-          cy : cy - step - (step*i)
+          cy : cy - step - (step*i),
+          bombermanID : bombermanID
         }));
       }
       if(wall.baseWall[yPos-i-1][xPos] > 0 && up) {
@@ -187,7 +191,8 @@ explode : function(cx,cy,xPos,yPos,strength) {
       if(wall.baseWall[yPos+1+i][xPos] <= 0 && down) {
         this._bombs.push(new Explosion({
           cx : cx,
-          cy : cy + step + (step*i)
+          cy : cy + step + (step*i),
+          bombermanID : bombermanID
         }));
       }
       if(wall.baseWall[yPos+i+1][xPos] > 0 && down) {
