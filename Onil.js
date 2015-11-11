@@ -12,23 +12,15 @@
 */
 
 //A generic constructor which accepts an arbitrary descriptor object
+
 function Onil(descr) {
 
     //Common inherited setup logic from Entity
     this.setup(descr);
-
-    this.sprite = this.sprite || g_sprites.onilLeft || g_sprites.onilRight;
     this._scale = 1;
 }
 
-Onil.prototype = new Entity();
-
-// Initial, inheritable, default values
-Onil.prototype.cx = 40;
-Onil.prototype.cy = 350;
-Onil.prototype.sprite = this.sprite;
-Onil.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
-//spawn immunity
+Onil.prototype = new Enemy();
 
 Onil.prototype.update = function(du) {
     this.immunity -= du;
@@ -58,12 +50,6 @@ Onil.prototype.update = function(du) {
             if(Math.random() < 0.5) this.direction = 1;
             else this.direction = 2;
         }
-        /*
-        if(Math.random() < 0.5) this.direction = 2;
-        else this.direction = 4;
-        if(Math.random() < 0.5) this.direction = 1;
-        else this.direction = 3;
-*/
     }
     // if standing in fire, die!
     if ((this.isColliding() instanceof Explosion) && this.immunity < 20){
@@ -74,9 +60,6 @@ Onil.prototype.update = function(du) {
     spatialManager.register(this);
 }
 
-Onil.prototype.speed = 3;
-Onil.prototype.moveEnemy = true;
-Onil.prototype.direction = 2; // 1 = Right, 2 = down, 3 = left, 4 = up
 Onil.prototype.computePosition = function () {
     //Enemy moves by default
     var wallId,
@@ -164,22 +147,3 @@ Onil.prototype.computePosition = function () {
                 }
             }
         };
-
-Onil.prototype.getRadius = function() {
-    return (this.sprite.width / 2) * 0.7;
-};
-// athugar collision við sprengju og breytir hraðanum eftir því
-Onil.prototype.isCollidingWithBomb = function (bomba) {
-  if (this.cy > bomba.cy)   this.moveEnemy = true;
-  if (this.cy < bomba.cy)   this.moveEnemy = false;
-  if (this.cx > bomba.cx)   this.moveEnemy = true;
-  if (this.cx < bomba.cx)   this.moveEnemy = false;
-},
-
-Onil.prototype.render = function(ctx){
-    //var origScale = this.sprite.scale;
-    //pass my scale into the sprite, for drawing
-    //this.sprite.scale = this.scale;
-    this.sprite.drawCentredAt(ctx, this.cx, this.cy);
-    //this.sprite.scale = origScale;
-}

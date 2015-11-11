@@ -12,17 +12,24 @@
 */
 
 //A generic constructor which accepts an arbitrary descriptor object
-
-function Ballom(descr) {
+function Enemy(descr) {
 
     //Common inherited setup logic from Entity
     this.setup(descr);
+    this.sprite = this.sprite;
     this._scale = 1;
 }
 
-Ballom.prototype = new Enemy();
+Enemy.prototype = new Entity();
 
-Ballom.prototype.update = function(du) {
+// Initial, inheritable, default values
+Enemy.prototype.cx = 40;
+Enemy.prototype.cy = 350;
+Enemy.prototype.sprite = this.sprite;
+Enemy.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
+//spawn immunity
+/*
+Enemy.prototype.update = function(du) {
     this.immunity -= du;
      // Unregister and check for death
     spatialManager.unregister(this);
@@ -50,17 +57,22 @@ Ballom.prototype.update = function(du) {
             if(Math.random() < 0.5) this.direction = 1;
             else this.direction = 2;
         }
+
     }
     // if standing in fire, die!
-    if ((this.isColliding() instanceof Explosion) && this.immunity < 20){
+    if ((this.isColliding() instanceof Explosion) && this.immunity < 10){
         //award points?
         return entityManager.KILL_ME_NOW;
     }
 
     spatialManager.register(this);
 }
-
-Ballom.prototype.computePosition = function () {
+*/
+Enemy.prototype.speed = 1.5;
+Enemy.prototype.moveEnemy = true;
+Enemy.prototype.direction = 2; // 1 = Right, 2 = down, 3 = left, 4 = up
+/*
+Enemy.prototype.computePosition = function () {
     //Enemy moves by default
     var wallId,
         leftX = this.cx - this.getRadius(),
@@ -94,7 +106,7 @@ Ballom.prototype.computePosition = function () {
             else this.direction = 3;
         }
 
-
+        
 
         else {
             // Going right
@@ -121,7 +133,7 @@ Ballom.prototype.computePosition = function () {
                     else this.direction = 3; // otherwise he goes left.
                 }
             }
-
+        
 
          // going left
             if(this.direction === 3) {
@@ -147,3 +159,23 @@ Ballom.prototype.computePosition = function () {
                 }
             }
         };
+        */
+  
+Enemy.prototype.getRadius = function() {
+      return (this.sprite.width / 2) * 0.7;
+};
+// athugar collision við sprengju og breytir hraðanum eftir því
+Enemy.prototype.isCollidingWithBomb = function (bomba) {
+  if (this.cy > bomba.cy)   this.moveEnemy = true;
+  if (this.cy < bomba.cy)   this.moveEnemy = false;
+  if (this.cx > bomba.cx)   this.moveEnemy = true;
+  if (this.cx < bomba.cx)   this.moveEnemy = false;
+},
+
+Enemy.prototype.render = function(ctx){
+    //var origScale = this.sprite.scale;
+    //pass my scale into the sprite, for drawing
+    //this.sprite.scale = this.scale;
+    this.sprite.drawCentredAt(ctx, this.cx, this.cy);
+    //this.sprite.scale = origScale;
+}

@@ -220,7 +220,8 @@ generateEnemy : function(){
     this._onil.push(new Onil({
       cx : 360,
       cy : 190,
-      sprite : g_sprites.onilLeft && g_sprites.onilRight
+      sprite : g_sprites.onilLeft && g_sprites.onilRight,
+      speed : 3
     }));
 },
 
