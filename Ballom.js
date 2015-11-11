@@ -3,7 +3,6 @@
 // ================
 
 "use strict";
-
 /* jshint browser: true, devel: true, globalstrict: true */
 
 /*
@@ -68,7 +67,12 @@ Ballom.prototype.computePosition = function () {
         topY = this.cy - this.getRadius(),
         bottomY = this.cy + this.getRadius();
 
-        var upId, downId, leftId, rightId;
+        var downId = this.getWallId(this.cx,bottomY);
+        var upId = this.getWallId(this.cx,topY)
+        var rightId = this.getWallId(rightX,this.cy);
+        var leftId = this.getWallId(leftX,this.cy);
+
+        var shouldITurn = (Math.random() < 0.01) ? true : false;
 
         // playzone rules - If the enemy hits the edges of the playfield
         // he is kindly asked to go away.
@@ -101,6 +105,14 @@ Ballom.prototype.computePosition = function () {
             if (this.direction === 1) {
 
                 wallId = this.getWallId(rightX,this.cy);
+
+                if(!this.checkForWall(downId[0],downId[1]) && shouldITurn) {
+                    this.direction = 2;
+                }
+                if(!this.checkForWall(upId[0],upId[1]) && shouldITurn) {
+                    this.direction = 4;
+                }
+
                 //make ballom look right
                 this.sprite = g_sprites.ballomRight;
                 // going forward logic. Check if the next block is a wall
@@ -110,10 +122,13 @@ Ballom.prototype.computePosition = function () {
                     else this.direction = 4; // otherwise he goes up.
                 }
             }
-        }
+        
             // going down.
             if(this.direction === 2) {
                 wallId = this.getWallId(this.cx,bottomY);
+
+                if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3; 
+                if(!this.checkForWall(rightId[0],rightId[1]) && shouldITurn) this.direction = 1;
 
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cy += this.speed;
                 else{
@@ -128,6 +143,9 @@ Ballom.prototype.computePosition = function () {
                 wallId = this.getWallId(leftX,this.cy);
                 //make ballom look left
                 this.sprite = g_sprites.ballomLeft;
+
+                if(!this.checkForWall(upId[0],upId[1]) && shouldITurn) this.direction = 4; 
+                if(!this.checkForWall(downId[0],downId[1]) && shouldITurn) this.direction = 2;
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cx -= this.speed;
                 else{
                     if(Math.random() < 0.5) this.direction = 4; // 50% chance of enemy going down
@@ -138,6 +156,9 @@ Ballom.prototype.computePosition = function () {
             if(this.direction === 4) {
                 wallId = this.getWallId(this.cx,topY);
 
+                if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3; 
+                if(!this.checkForWall(rightId[0],rightId[1]) && shouldITurn) this.direction = 1;
+
                 if (!this.checkForWall(wallId[0],wallId[1])) {
                     this.cy -= this.speed;
                 }
@@ -146,4 +167,5 @@ Ballom.prototype.computePosition = function () {
                     else this.direction = 1; // otherwise he goes right.
                 }
             }
+        }
         };

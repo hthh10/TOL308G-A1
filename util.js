@@ -80,7 +80,9 @@ wrappedDistSq: function(x1, y1, x2, y2, xWrap, yWrap) {
 clearCanvas: function (ctx) {
     var prevfillStyle = ctx.fillStyle;
     ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillRect(0,0, ctx.canvas.width,g_playzone[1][0]);
+    ctx.fillStyle = "#006000";
+    ctx.fillRect(0,g_playzone[1][0], ctx.canvas.width, ctx.canvas.height);
     ctx.fillStyle = prevfillStyle;
 },
 

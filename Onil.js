@@ -88,7 +88,7 @@ Onil.prototype.computePosition = function () {
             if(Math.random() < 0.5) this.direction = 1;
             else this.direction = 3;
         }
-        else if(topY <= g_playzone[1][0]) {
+        else if(topY <= g_playzone[1][0] +5) {
             this.cy += this.speed;
             if(Math.random() < 0.5) this.direction = 1;
             else this.direction = 3;
