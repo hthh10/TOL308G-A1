@@ -68,6 +68,7 @@ function renderP1Score (ctx) {
 	ctx.textAlign = "left";
     ctx.fillText("Lives:" + g_score.P1_lives, 5, 30);
 	ctx.fillText("Score:" + g_score.P1_score, 150, 30);
+	ctx.fillText("Level: " + g_level, 280,30);
 	ctx.restore();
 }
 

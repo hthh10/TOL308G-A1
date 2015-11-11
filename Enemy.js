@@ -163,7 +163,7 @@ Enemy.prototype.computePosition = function () {
         */
 
 Enemy.prototype.getRadius = function() {
-      return (this.sprite.width / 2) * 0.7;
+      return (this.sprite.width / 2) * 1;
 };
 // athugar collision við sprengju og breytir hraðanum eftir því
 Enemy.prototype.isCollidingWithBomb = function(bomba) {
