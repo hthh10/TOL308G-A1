@@ -1,4 +1,4 @@
-/*
+﻿/*
 entityManager.js
 A module which handles arbitrary entity-management for "Bomberman"
 We create this module as a single global object, and initialise it
@@ -24,6 +24,7 @@ _bombs : [],
 _bombermen : [],
 _ballom : [],
 _onil : [],
+_pasu : [],
 _explosions : [],
 _powerups : [],
 _door : [],
@@ -62,7 +63,7 @@ KILL_ME_NOW : -1,
 deferredSetup : function () {
 
     this._categories = [this._bombermen, this._ballom, this._onil,
-       this._bombs, this._explosions, this._powerups, this._door];
+       this._bombs, this._explosions, this._powerups, this._door, this._pasu];
 
 },
 
@@ -207,14 +208,23 @@ generateEnemy : function(){
     this._ballom.push(new Enemy({
       cx : 40,
       cy : 350,
-      sprite : g_sprites.ballom
+      sprite : g_sprites.ballomRight && g_sprites.ballomLeft,
+      speed : 2.5
     }));
-
+    this._ballom.push(new Enemy({
+      cx : 360,
+      cy : 190,
+      sprite : g_sprites.ballomRight && g_sprites.ballomLeft,
+      speed : 2.5
+    }));
+/*
     this._onil.push(new Enemy({
       cx : 360,
       cy : 190,
-      sprite : g_sprites.onil
+      sprite : g_sprites.onilLeft && g_sprites.onilRight,
+      speed : 5
     }));
+*/
 },
 
 // tímabundið fall til að messa ekki í enemies á meðan
