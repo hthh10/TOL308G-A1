@@ -7,7 +7,7 @@ var g_score = {
     P1_score: 0,
 	P2_score: 0,
     P1_lives: 3,
-	P2_lives: undefined,
+	P2_lives: 3,
     P1_maxBombs:2,
   P2_maxBombs:1
 };
@@ -54,8 +54,8 @@ function renderP2Score (ctx) {
 	ctx.textAlign = "right"
 	if (!g_player2) ctx.fillText("Press 'O' to start", g_canvas.width-5, 30);
     else {
-		ctx.fillText("Lives:" + g_score.P1_lives, g_canvas.width-5, 30);
-		ctx.fillText("Score:" + g_score.P1_score, g_canvas.width-150, 30);
+		ctx.fillText("Lives:" + g_score.P2_lives, g_canvas.width-5, 30);
+		ctx.fillText("Score:" + g_score.P2_score, g_canvas.width-150, 30);
 	}
 	ctx.restore();
 }

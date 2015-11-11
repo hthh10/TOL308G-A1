@@ -124,7 +124,7 @@ Bomberman.prototype.update = function (du) {
 		else if ((hitEntity instanceof Enemy || hitEntity instanceof Explosion) &&
   this.immunity < 20) {
 			this.reset();
-			g_score.P1_lives -= 1;
+		this.updatePlayerHp();
 		}
       //athuga hvort hann collidar við sprengjuna eftir smá delay og
       // lokar svo fyrir að hann komist í gegnum hana
@@ -220,7 +220,6 @@ Bomberman.prototype.maybeDropBomb = function() {
   if (keys[this.KEY_FIRE]) {
     // Can only drop one at a time
     if (this.checkBombBag() > 0) {
-      console.log(this.checkBombBag());
       // Always drop bombs in center of the square
       // Some magic numbers: cx: 40, cy: 110 is the center of the first
       var baseCx = g_playzone[0][0],
@@ -236,9 +235,14 @@ Bomberman.prototype.maybeDropBomb = function() {
   }
 };
 
+// finds out who got hurt and removes one hp
+Bomberman.prototype.updatePlayerHp = function () {
+  if(this._spatialID === 1) {g_score.P1_lives -= 1;}
+  if(this._spatialID !== 1) {g_score.P2_lives -= 1;}
+};
 
 Bomberman.prototype.applySpeed = function () {
-  NOMINAL_WALKSPEED = 5;
+  NOMINAL_WALKSPEED = 4;
 };
 
 Bomberman.prototype.getRadius = function () {

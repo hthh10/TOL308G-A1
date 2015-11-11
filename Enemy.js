@@ -43,7 +43,7 @@ Enemy.prototype.update = function(du) {
         this.isCollidingWithBomb(this.isColliding());
     }
     // if standing in fire, die!
-    if ((this.isColliding() instanceof Explosion) && this.immunity < 10){
+    if ((this.isColliding() instanceof Explosion) && this.immunity < 20){
         //award points?
         return entityManager.KILL_ME_NOW;
     }
@@ -149,18 +149,13 @@ Enemy.prototype.computePosition = function () {
         if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
             this.cy -= NOMINAL_WALKSPEED;
         }
-<<<<<<< HEAD
+
         else{
             this.moveEnemy = !(this.moveEnemy);
         }
 
     }
     //moves down
-=======
-        else this.moveEnemy = !(this.moveEnemy);
-
-//moves down
->>>>>>> c699ea472bada2af26302ce952065e2b9f8c1bef
     else if(!this.moveEnemy && bottomY < g_playzone[1][1]){
         wallId = this.getWallId(this.cx, bottomY);
         if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
