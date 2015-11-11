@@ -26,8 +26,7 @@ function Powerup(descr) {
     // select a random powerup ID
     //this.id = util.randRange(0,3)
 
-	this.sprite = this.sprite || g_sprites.powerups[this.id] ||
-  g_sprites.powerups[this.id] || g_sprites.powerups[this.id];
+	this.sprite = this.sprite || g_sprites.powerups[this.id];
     this._scale = 1;
 }
 

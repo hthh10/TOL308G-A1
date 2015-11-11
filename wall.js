@@ -67,7 +67,14 @@ init : function(){
 	this.wallImg = g_images.wall;
 	this.width  = this.brickImg.width;
 	this.height = this.brickImg.height;
-	this.generateLevel(this.level);
+},
+
+initMultiplayer : function() {
+	this.generateLevel(1);
+},
+
+initStorymode : function() {
+	this.generateLevel(1);
 },
 
 
@@ -166,7 +173,38 @@ drawWallCenteredAt : function (ctx, cx, cy, image) {
     ctx.restore();
 },
 
+renderEdges : function(ctx) {
+	// Start a little off screen to make playable are larger
+	var height = g_images.wall.height, width = g_images.wall.width;
+
+	var baseCx = -0.5*width, baseCy = 1.25*height;
+	var stepCx = baseCx, stepCy = baseCy
+	// Top left to bottom left
+	for(var i = 0; i < Math.floor((g_canvas.height-baseCy)/height); i++) {
+		ctx.drawImage(g_images.wall,stepCx,stepCy);
+		stepCy += g_images.wall.height;
+	}
+	// bottom left to bottom right
+	for(var i = 0; i < g_canvas.width/g_images.wall.width; i++) {
+		ctx.drawImage(g_images.wall,stepCx,stepCy);
+		stepCx += g_images.wall.width;
+	}
+
+	// bottom right to top right
+	for(var i = 0; i < Math.floor((g_canvas.height-baseCy)/height); i++) {
+		ctx.drawImage(g_images.wall,stepCx,stepCy);
+		stepCy -= g_images.wall.height;
+	}
+	//top right to top left
+	for(var i = 0; i < g_canvas.width/g_images.wall.width; i++) {
+		ctx.drawImage(g_images.wall,stepCx,stepCy);
+		stepCx -= g_images.wall.width;
+	}
+
+},
+
 render : function(ctx){
+	this.renderEdges(ctx);
 	for (var i = 0; i<this.baseWall.length; i++){
         for (var j = 0; j<this.baseWall[i].length; j++){
 			// Render rigid walls

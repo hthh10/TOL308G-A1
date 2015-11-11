@@ -1,4 +1,4 @@
-/*
+﻿/*
 entityManager.js
 A module which handles arbitrary entity-management for "Bomberman"
 We create this module as a single global object, and initialise it
@@ -42,11 +42,7 @@ _generateBombermen : function() {
 _generateEnemies : function() {
     this.generateEnemy();
 },
-/*
-_generateChasingEnemies : function() {
-  this.generateChasingEnemy();
-},
-*/
+
 
 _forEachOf: function(aCategory, fn) {
     for (var i = 0; i < aCategory.length; ++i) {
@@ -66,15 +62,57 @@ KILL_ME_NOW : -1,
 //
 deferredSetup : function () {
 
-    this._categories = [this._bombermen, this._ballom, this._onil, this._pasu,
-       this._bombs, this._explosions, this._powerups, this._door];
+    this._categories = [this._bombermen, this._ballom, this._onil,
+       this._bombs, this._explosions, this._powerups, this._door, this._pasu];
 
 },
 
-init: function() {
-    this._generateBombermen();
-    this._generateEnemies();
-    //this._generateChasingEnemies();
+initLevel: function(level) {
+	console.log(g_level);
+	if (level === 1) {
+		this._generateBombermen();
+		this._generateEnemies();
+	}
+	else if (level < 4) {
+		for (var i = 0; i<this._bombermen.length; i++) {
+			this._bombermen[i]._moveToBeginning();
+		}
+		this._door[0].kill();
+		this._generateEnemies();
+		wall.generateLevel(g_level);
+	}
+	else if (level === 4) {
+		g_score.win = true;
+	}
+},
+
+initStorymode : function() {
+	this.initLevel(1);
+},
+
+initMultiplayer: function() {
+	this._generateBombermen();
+	this.addPlayer2();
+},
+
+checkWinConditions : function() {
+	if (!g_multiplayerMode) {
+		if (g_level < 4) {
+			if (this._ballom.length < 1 && this._onil.length < 1) {
+				g_level += 1;
+				this.initLevel(g_level);
+			}
+		}
+		else if (g_level === 4) {
+			
+		}
+	}
+	else {
+		if (this._bombermen.length < 2) {
+			g_score.win = true;
+		}
+	}
+	
 },
 
 
@@ -208,11 +246,6 @@ generateRandomEnemy : function(cx, cy){
       }));
     }
 },
-/*
-generateChasingEnemy : function(descr){
-  this._pasu.push(new ChasingEnemy(descr));
-},
-*/
 
 //
 // generatePowerup : function(cx,cy) {
@@ -241,6 +274,25 @@ addPlayer2 : function() {
 
     KEY_FIRE   : '9'.charCodeAt(0)
     }));
+},
+
+// Moves all bombermen to initial position
+resetBombermen: function(du) {
+
+    for (var i = 0; i < this._bombermen.length; i++) {
+        this._bombermen[i]._moveToBeginning();
+    }
+},
+
+reset: function() {
+	this._bombs = [];
+	this._bombermen = [];
+	this._ballom = [];
+	this._onil = [];
+	this._explosions = [];
+	this._powerups = [];
+	this._door = [];
+	this.deferredSetup();
 },
 
 update: function(du) {
