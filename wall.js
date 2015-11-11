@@ -57,7 +57,6 @@ baseCy : 110,
 stepCx : 40,
 stepCy : 40,
 scale : 1,
-level : 1,
 doorNr : 1,
 
 // Init function to set variables that must first be defined
@@ -81,9 +80,11 @@ initStorymode : function() {
 generateLevel : function(level){
 //TODO: Magic numbers for position of wall/rock. Higly dependent on the size of Wall sprite
 	this.baseWall = this.baseWallReset;
+	this.doorNr = 1;
 	if (level === 4) return;
 	for(var i = 0; i < this.baseWall.length; i++) {
-        var cy = this.baseCy + (i*this.stepCy), cx = this.baseCx;
+        var cy = this.baseCy + (i*this.stepCy), 
+			cx = this.baseCx;
         for(var j = 0; j < this.baseWall[i].length; j++) {
             if(this.baseWall[i][j] === 0) {
               if(Math.random() >= 0.65)

@@ -190,7 +190,6 @@ function preloadDone() {
     g_sprites.door = new Sprite(g_images.door);
 	
 	wall.init();
-	//entityManager.initLevel(g_level);
 
     main.init();
 }
