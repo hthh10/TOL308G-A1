@@ -125,7 +125,6 @@ Bomberman.prototype.update = function (du) {
 	else if ((hitEntity instanceof Enemy || hitEntity instanceof Explosion) &&
     this.immunity < 20) {
 		this.reset();
-		this.updatePlayerHp();
 			this.lives -= 1;
 			if (this._spatialID === 1) g_score.P1_lives -= 1;
 			else g_score.P2_lives -= 1;
@@ -243,12 +242,6 @@ Bomberman.prototype.maybeDropBomb = function() {
          this.bombStrength, this._spatialID, this.trigger);
     }
   }
-};
-
-// finds out who got hurt and removes one hp
-Bomberman.prototype.updatePlayerHp = function () {
-  if(this._spatialID === 1) {g_score.P1_lives -= 1;}
-  if(this._spatialID !== 1) {g_score.P2_lives -= 1;}
 };
 
 Bomberman.prototype.applySpeed = function () {

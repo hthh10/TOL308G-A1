@@ -80,12 +80,14 @@ Explosion.prototype.getRadius = function() {
 Explosion.prototype.takeExplosionHit = function() {
   this.kill();
 };
+
 // distributes points
-Explosion.prototype.updatePlayerScore = function (player) {
-
-  if(player._spatialID === 1) {g_score.P2_score = g_score.P2_score + 1;this.immunity = 4000 / NOMINAL_UPDATE_INTERVAL;}
-  if(player._spatialID !== 1) {g_score.P1_score += 1;this.immunity = 4000 / NOMINAL_UPDATE_INTERVAL;}
-
+Explosion.prototype.updatePlayerScore = function(player) {
+    //0.5 er shitmix því það bætast alltaf við tveir í einu...
+  if (player._spatialID === 1) {
+    g_score.P2_score += 0.5;
+  } else g_score.P1_score += 0.5;
+  this.immunity = 4000 / NOMINAL_UPDATE_INTERVAL;
 };
 
 Explosion.prototype.render = function(ctx) {
