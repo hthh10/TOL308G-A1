@@ -205,26 +205,23 @@ generateBomberman : function(descr) {
 },
 
 generateEnemy : function(){
-    this._ballom.push(new Enemy({
+    this._ballom.push(new Ballom({
       cx : 40,
       cy : 350,
-      sprite : g_sprites.ballomRight && g_sprites.ballomLeft,
-      speed : 2.5
+      sprite : g_sprites.ballomRight || g_sprites.ballomLeft
     }));
+    /*
     this._ballom.push(new Enemy({
       cx : 360,
       cy : 190,
-      sprite : g_sprites.ballomRight && g_sprites.ballomLeft,
-      speed : 2.5
-    }));
-/*
-    this._onil.push(new Enemy({
-      cx : 360,
-      cy : 190,
-      sprite : g_sprites.onilLeft && g_sprites.onilRight,
-      speed : 5
+      sprite : g_sprites.ballomRight || g_sprites.ballomLeft
     }));
 */
+    this._onil.push(new Onil({
+      cx : 360,
+      cy : 190,
+      sprite : g_sprites.onilLeft && g_sprites.onilRight
+    }));
 },
 
 // tímabundið fall til að messa ekki í enemies á meðan

@@ -12,26 +12,25 @@
 */
 
 //A generic constructor which accepts an arbitrary descriptor object
-function Enemy(descr) {
+function Ballom(descr) {
 
     //Common inherited setup logic from Entity
     this.setup(descr);
 
-    this.sprite = this.sprite || g_sprites.ballomLeft || g_sprites.ballomRight
-                || g_sprites.onilLeft || g_sprites.onilRight;
+    this.sprite = this.sprite || g_sprites.ballomLeft || g_sprites.ballomRight;
     this._scale = 1;
 }
 
-Enemy.prototype = new Entity();
+Ballom.prototype = new Entity();
 
 // Initial, inheritable, default values
-Enemy.prototype.cx = 40;
-Enemy.prototype.cy = 350;
-Enemy.prototype.sprite = this.sprite;
-Enemy.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
+Ballom.prototype.cx = 40;
+Ballom.prototype.cy = 350;
+Ballom.prototype.sprite = this.sprite;
+Ballom.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 //spawn immunity
 
-Enemy.prototype.update = function(du) {
+Ballom.prototype.update = function(du) {
     this.immunity -= du;
      // Unregister and check for death
     spatialManager.unregister(this);
@@ -39,9 +38,32 @@ Enemy.prototype.update = function(du) {
     //remember previous position
     this.computePosition();
 
-    // if colliding with a bomb turn around
+    // if colliding with a bomb, go away
     if (this.isColliding() instanceof Bomb){
         this.isCollidingWithBomb(this.isColliding());
+        //Er mögulega frekar bjagaður kóði en hann virkar ágætlega... 
+        if(this.direction === 1){
+            if(Math.random() < 0.5) this.direction = 2;
+            else this.direction = 3;
+        }
+        if(this.direction === 2){
+            if(Math.random() < 0.5) this.direction = 3;
+            else this.direction = 4;
+        }
+        if(this.direction === 3){
+            if(Math.random() < 0.5) this.direction = 4;
+            else this.direction = 1;
+        }
+        if(this.direction === 4){
+            if(Math.random() < 0.5) this.direction = 1;
+            else this.direction = 2;
+        }
+        /*
+        if(Math.random() < 0.5) this.direction = 2;
+        else this.direction = 4;
+        if(Math.random() < 0.5) this.direction = 1;
+        else this.direction = 3;
+*/
     }
     // if standing in fire, die!
     if ((this.isColliding() instanceof Explosion) && this.immunity < 10){
@@ -52,33 +74,16 @@ Enemy.prototype.update = function(du) {
     spatialManager.register(this);
 }
 
-Enemy.prototype.speed = 1.5;
-Enemy.prototype.moveEnemy = true;
-Enemy.prototype.direction = 2; // 1 = Right, 2 = down, 3 = left, 4 = up
-Enemy.prototype.computePosition = function () {
+Ballom.prototype.speed = 1.5;
+Ballom.prototype.moveEnemy = true;
+Ballom.prototype.direction = 2; // 1 = Right, 2 = down, 3 = left, 4 = up
+Ballom.prototype.computePosition = function () {
     //Enemy moves by default
     var wallId,
         leftX = this.cx - this.getRadius(),
         rightX = this.cx + this.getRadius(),
         topY = this.cy - this.getRadius(),
         bottomY = this.cy + this.getRadius();
-
-          // Going right
-        if (rightX < g_playzone[0][1] && this.direction === 1) {
-            wallId = this.getWallId(rightX,this.cy);
-            //make ballom look right
-            this.sprite = g_sprites.ballomRight;
-            if (!this.checkForWall(wallId[0],wallId[1])) {
-                this.cx += this.speed;
-            }
-            if(this.checkForWall(wallId[0],wallId[1])) {
-                if(Math.random() < 0.5) {
-                    // 50% chance of enemy going down
-                    this.direction = 2;
-                }
-                else this.direction = 4; // otherwise he goes up.
-            }
-        }
 
         var upId, downId, leftId, rightId;
 
@@ -113,28 +118,14 @@ Enemy.prototype.computePosition = function () {
             if (this.direction === 1) {
 
                 wallId = this.getWallId(rightX,this.cy);
-
+                //make ballom look right
+                this.sprite = g_sprites.ballomRight;
                 // going forward logic. Check if the next block is a wall
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cx += this.speed;
                 else{ // if there is a wall
                     if(Math.random() < 0.5) this.direction = 2; // 50% chance of going up
                     else this.direction = 4; // otherwise he goes up.
                 }
-            }
-        } // going left
-        if(this.direction === 3 && leftX > g_playzone[0][0]) {
-            wallId = this.getWallId(leftX,this.cy);
-            //make ballom look right
-            this.sprite = g_sprites.ballomLeft;
-            if (!this.checkForWall(wallId[0],wallId[1])) {
-                this.cx -= this.speed;
-            }
-            if(this.checkForWall(wallId[0],wallId[1])) {
-                if(Math.random() < 0.5) {
-                    // 50% chance of enemy going down
-                    this.direction = 4;
-                }
-                else this.direction = 2; // otherwise he goes up.
             }
         }
             // going down.
@@ -152,7 +143,8 @@ Enemy.prototype.computePosition = function () {
          // going left
             if(this.direction === 3) {
                 wallId = this.getWallId(leftX,this.cy);
-
+                //make ballom look left
+                this.sprite = g_sprites.ballomLeft;
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cx -= this.speed;
                 else{
                     if(Math.random() < 0.5) this.direction = 4; // 50% chance of enemy going down
@@ -172,69 +164,19 @@ Enemy.prototype.computePosition = function () {
                 }
             }
         };
-
-/*
-
-    //Enemy moves by default
-    //moves to the left
-    if(!this.moveEnemy && leftX > g_playzone[0][0]){
-        wallId = this.getWallId(leftX, this.cy);
-        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
-            this.cx -= NOMINAL_WALKSPEED;
-        }
-        else{
-            this.moveEnemy = !(this.moveEnemy);
-        }
-    }
-    //moves to the right
-    else if(this.moveEnemy && rightX < g_playzone[0][1]){
-        wallId = this.getWallId(rightX, this.cy);
-        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
-            this.cx += NOMINAL_WALKSPEED;
-        }
-        else{
-            this.moveEnemy = !(this.moveEnemy);
-        }
-    }
-    //moves up
-    else if(this.moveEnemy && topY > g_playzone[1][0]){
-        wallId = this.getWallId(this.cx, topY);
-        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
-            this.cy -= NOMINAL_WALKSPEED;
-        }
-<<<<<<< HEAD
-        else{
-            this.moveEnemy = !(this.moveEnemy);
-        }
-
-    }
-    //moves down
-=======
-        else this.moveEnemy = !(this.moveEnemy);
-
-//moves down
->>>>>>> c699ea472bada2af26302ce952065e2b9f8c1bef
-    else if(!this.moveEnemy && bottomY < g_playzone[1][1]){
-        wallId = this.getWallId(this.cx, bottomY);
-        if(!this.checkForWall(wallId[0], wallId[1], wallId[2])){
-            this.cy += NOMINAL_WALKSPEED;
-=======
->>>>>>> origin/master
-        }
-        */
   
-Enemy.prototype.getRadius = function() {
+Ballom.prototype.getRadius = function() {
       return (this.sprite.width / 2) * 0.7;
 };
 // athugar collision við sprengju og breytir hraðanum eftir því
-Enemy.prototype.isCollidingWithBomb = function (bomba) {
+Ballom.prototype.isCollidingWithBomb = function (bomba) {
   // if (this.cy > bomba.cy)   this.moveEnemy = true;
   // if (this.cy < bomba.cy)   this.moveEnemy = false;
   if (this.cx > bomba.cx)   this.moveEnemy = true;
   if (this.cx < bomba.cx)   this.moveEnemy = false;
 },
 
-Enemy.prototype.render = function(ctx){
+Ballom.prototype.render = function(ctx){
     //var origScale = this.sprite.scale;
     //pass my scale into the sprite, for drawing
     //this.sprite.scale = this.scale;

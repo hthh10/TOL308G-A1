@@ -122,7 +122,7 @@ Bomberman.prototype.update = function (du) {
 		if (hitEntity instanceof Powerup) {
 			hitEntity.deliverPowerup(this);
 		}
-	else if ((hitEntity instanceof Enemy || hitEntity instanceof Explosion) &&
+	else if ((hitEntity instanceof Ballom || hitEntity instanceof Onil || hitEntity instanceof Explosion) &&
   this.immunity < 20) {
 			this.reset();
 			this.lives -= 1;
