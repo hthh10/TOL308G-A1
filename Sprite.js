@@ -45,6 +45,22 @@ Sprite.prototype.drawCentredAt = function (ctx, cx, cy, rotation) {
     ctx.restore();
 };  
 
+Sprite.prototype.animate = function (ctx, cx,cy,width,height,spritePosX,spritePosY) {
+
+    
+    ctx.save();
+    ctx.translate(cx, cy);
+    //ctx.rotate(rotation);
+    //ctx.scale(this.scale, this.scale);
+    ctx.drawImage(this.image,spritePosX,spritePosY,width,height, 
+                  -width,-height,width*2,height*2);
+
+
+    
+    ctx.restore();
+
+}
+
 Sprite.prototype.drawWrappedCentredAt = function (ctx, cx, cy, rotation) {
     
     // Get "screen width"

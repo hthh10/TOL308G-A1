@@ -50,6 +50,40 @@ Bomberman.prototype.noBombs = 0;
 Bomberman.prototype.bombStrength = 1;
 Bomberman.prototype.trigger = false;
 Bomberman.prototype.lives = 3;
+
+// Sprite sheet properties
+Bomberman.prototype.width = 14; 
+Bomberman.prototype.height = 19;
+
+Bomberman.prototype.downFrameLimit = 2; // 3 rammar. 0,1,2
+Bomberman.prototype.currentdownFrame = 0;
+Bomberman.prototype.downStartX = 0;
+Bomberman.prototype.downStartY = 0;
+
+
+Bomberman.prototype.rightFrameLimit = 2;
+Bomberman.prototype.currentrightFrame = 0;
+Bomberman.prototype.rightStartX = 41;
+Bomberman.prototype.rightStartY = 0;
+
+Bomberman.prototype.upFrameLimit = 2;
+Bomberman.prototype.currentupFrame = 0;
+Bomberman.prototype.upStartX = 0;
+Bomberman.prototype.upStartY = 20
+
+Bomberman.prototype.leftFrameLimit = 2;
+Bomberman.prototype.currentleftFrame = 0;
+Bomberman.prototype.leftStartX = 42;
+Bomberman.prototype.leftStartY = 20;
+
+Bomberman.prototype.spritePosX = 0;
+Bomberman.prototype.spritePosY = 0;
+
+
+
+
+
+
 var moveLeftRight = new Audio("Sounds/Bomberman SFX (1).wav");
 var moveUpDown = new Audio("Sounds/Bomberman SFX (2).wav");
 var dropBomb = new Audio("Sounds/Bomberman SFX (3).wav");
@@ -154,6 +188,7 @@ var NOMINAL_WALKSPEED = 1.5;
 
 Bomberman.prototype.computePosition = function () {
 
+
 	// Variables for position logic
   moveUpDown.loop = false;
 
@@ -162,25 +197,53 @@ Bomberman.prototype.computePosition = function () {
 		rightX = this.cx+this.getRadius(),
 		topY = this.cy-this.getRadius(),
 		bottomY = this.cy+this.getRadius();
-    moveLeftRight.loop = false;
+    
 
 	if (keys[this.KEY_UP] && topY > g_playzone[1][0]) {
       wallId = this.getWallId(this.cx,topY);
 		  if (!this.checkForWall(wallId[0],wallId[1])) {
+
         if(moveUpDown.currentTime > 0.3) {
           moveUpDown.currentTime = 0;
         }
+        if(this.currentupFrame === 0) {
+          this.spritePosX = this.upStartX;
+          this.spritePosY = this.upStartY;
+        }
+        if(this.currentupFrame < this.upFrameLimit) {
+           ++this.currentupFrame;
+           this.spritePosX += this.width;
+        }
+        else {
+          this.spritePosX = this.upStartX;
+          this.currentupFrame = 0;
+        } 
         moveUpDown.play();
         this.cy -= NOMINAL_WALKSPEED;
+
       }
 			
   }
   if (keys[this.KEY_DOWN] && bottomY < g_playzone[1][1]) {
       wallId = this.getWallId(this.cx,bottomY);
   		if (!this.checkForWall(wallId[0],wallId[1])) {
+
+
         if(moveUpDown.currentTime > 0.3) {
           moveUpDown.currentTime = 0;
         }
+        if(this.currentdownFrame === 0) {
+          this.spritePosX = this.downStartX;
+          this.spritePosY = this.downStartY;
+        }
+        if(this.currentdownFrame < this.downFrameLimit) {
+           ++this.currentdownFrame;
+           this.spritePosX += this.width;
+        }
+        else {
+          this.spritePosX = this.downStartX;
+          this.currentdownFrame = 0;
+        } 
         moveUpDown.play();
         this.cy += NOMINAL_WALKSPEED;
       }
@@ -192,6 +255,18 @@ Bomberman.prototype.computePosition = function () {
         if(moveLeftRight.currentTime > 0.3) {
           moveLeftRight.currentTime = 0;
         }
+        if(this.currentleftFrame === 0) {
+          this.spritePosX = this.leftStartX;
+          this.spritePosY = this.leftStartY;
+        }
+        if(this.currentleftFrame < this.leftFrameLimit) {
+           ++this.currentleftFrame;
+           this.spritePosX += this.width;
+        }
+        else {
+          this.spritePosX = this.leftStartX;
+          this.currentleftFrame = 0;
+        } 
         moveLeftRight.play();      
         this.cx -= NOMINAL_WALKSPEED;
       }
@@ -203,12 +278,25 @@ Bomberman.prototype.computePosition = function () {
         if(moveLeftRight.currentTime > 0.3) {
           moveLeftRight.currentTime = 0;
         }
+        if(this.currentrightFrame === 0) {
+          this.spritePosX = this.rightStartX;
+          this.spritePosY = this.rightStartY;
+        }
+        if(this.currentrightFrame < this.rightFrameLimit) {
+           ++this.currentrightFrame;
+           this.spritePosX += this.width;
+        }
+        else {
+          this.spritePosX = this.rightStartX;
+          this.currentrightFrame = 0;
+        } 
         moveLeftRight.play();  
         this.cx += NOMINAL_WALKSPEED;
       }
 			
   }
 };
+
 
 // athugar collision við sprengju og breytir hraðanum eftir því
 Bomberman.prototype.isCollidingWithBomb = function(bomba) {
@@ -280,7 +368,7 @@ Bomberman.prototype.applySpeed = function () {
 };
 
 Bomberman.prototype.getRadius = function () {
-    return (this.sprite.width / 2) * 0.8;
+    return this.width;
 };
 
 Bomberman.prototype.takeBombHit = function () {
@@ -296,6 +384,7 @@ Bomberman.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
-    this.sprite.drawCentredAt(ctx, this.cx, this.cy);
+    this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,this.spritePosX,this.spritePosY);
+    //this.sprite.drawCentredAt(ctx, this.cx, this.cy);
     this.sprite.scale = origScale;
 };

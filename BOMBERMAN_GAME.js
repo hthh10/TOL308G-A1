@@ -166,7 +166,7 @@ function requestPreloads() {
         onilRight : "Sprites/onilRight.png",
         pasu : "Sprites/pasu.png",
         Bomb : "Sprites/Bombsprite.gif",
-	    bomberman : "Sprites/bomberman.png",
+	    bomberman : "Sprites/Spritesheet.png",
         explosion : "Sprites/Explosion.gif",
         door: "Sprites/Door.gif",
         bagspace:"Sprites/bagspace.gif",
