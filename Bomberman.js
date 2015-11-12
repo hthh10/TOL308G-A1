@@ -50,6 +50,9 @@ Bomberman.prototype.noBombs = 0;
 Bomberman.prototype.bombStrength = 1;
 Bomberman.prototype.trigger = false;
 Bomberman.prototype.lives = 3;
+var moveLeftRight = new Audio("Sounds/Bomberman SFX (1).wav");
+var moveUpDown = new Audio("Sounds/Bomberman SFX (2).wav");
+var dropBomb = new Audio("Sounds/Bomberman SFX (3).wav");
 
 Bomberman.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 Bomberman.prototype.reset = function () {
@@ -146,38 +149,65 @@ Bomberman.prototype.update = function (du) {
 
     };
 
-var NOMINAL_WALKSPEED = 2.5;
+var NOMINAL_WALKSPEED = 1.5;
 
 
 Bomberman.prototype.computePosition = function () {
 
 	// Variables for position logic
+  moveUpDown.loop = false;
+
 	var wallId,
 		leftX = this.cx-this.getRadius(),
 		rightX = this.cx+this.getRadius(),
 		topY = this.cy-this.getRadius(),
 		bottomY = this.cy+this.getRadius();
+    moveLeftRight.loop = false;
 
 	if (keys[this.KEY_UP] && topY > g_playzone[1][0]) {
-        wallId = this.getWallId(this.cx,topY);
-		if (!this.checkForWall(wallId[0],wallId[1]))
-			this.cy -= NOMINAL_WALKSPEED;
-    }
-    if (keys[this.KEY_DOWN] && bottomY < g_playzone[1][1]) {
-        wallId = this.getWallId(this.cx,bottomY);
-		if (!this.checkForWall(wallId[0],wallId[1]))
-			this.cy += NOMINAL_WALKSPEED;
-    }
-    if (keys[this.KEY_LEFT] && leftX > g_playzone[0][0]) {
-        wallId = this.getWallId(leftX,this.cy);
-		if (!this.checkForWall(wallId[0],wallId[1]))
-			this.cx -= NOMINAL_WALKSPEED;
-    }
-    if (keys[this.KEY_RIGHT] && rightX < g_playzone[0][1]) {
-        wallId = this.getWallId(rightX,this.cy);
-		if (!this.checkForWall(wallId[0],wallId[1]))
-			this.cx += NOMINAL_WALKSPEED;
-    }
+      wallId = this.getWallId(this.cx,topY);
+		  if (!this.checkForWall(wallId[0],wallId[1])) {
+        if(moveUpDown.currentTime > 0.3) {
+          moveUpDown.currentTime = 0;
+        }
+        moveUpDown.play();
+        this.cy -= NOMINAL_WALKSPEED;
+      }
+			
+  }
+  if (keys[this.KEY_DOWN] && bottomY < g_playzone[1][1]) {
+      wallId = this.getWallId(this.cx,bottomY);
+  		if (!this.checkForWall(wallId[0],wallId[1])) {
+        if(moveUpDown.currentTime > 0.3) {
+          moveUpDown.currentTime = 0;
+        }
+        moveUpDown.play();
+        this.cy += NOMINAL_WALKSPEED;
+      }
+  			
+  }
+  if (keys[this.KEY_LEFT] && leftX > g_playzone[0][0]) {
+      wallId = this.getWallId(leftX,this.cy);
+		  if (!this.checkForWall(wallId[0],wallId[1])) {
+        if(moveLeftRight.currentTime > 0.3) {
+          moveLeftRight.currentTime = 0;
+        }
+        moveLeftRight.play();      
+        this.cx -= NOMINAL_WALKSPEED;
+      }
+		
+  }
+  if (keys[this.KEY_RIGHT] && rightX < g_playzone[0][1]) {
+      wallId = this.getWallId(rightX,this.cy);
+  		if (!this.checkForWall(wallId[0],wallId[1])) {
+        if(moveLeftRight.currentTime > 0.3) {
+          moveLeftRight.currentTime = 0;
+        }
+        moveLeftRight.play();  
+        this.cx += NOMINAL_WALKSPEED;
+      }
+			
+  }
 };
 
 // athugar collision við sprengju og breytir hraðanum eftir því
@@ -215,7 +245,6 @@ Bomberman.prototype.isCollidingWithBomb = function(bomba) {
 Bomberman.prototype.checkBombBag = function() {
   if (this._spatialID === 1) {
      g_score.P1_maxBombs += this.noBombs;
-     this.noBombs = 0;
     return g_score.P1_maxBombs;
   }
   //krefst breytinga ef við bætum við fleiri playerum
@@ -229,6 +258,8 @@ Bomberman.prototype.maybeDropBomb = function() {
   if (keys[this.KEY_FIRE]) {
     // Can only drop one at a time
     if (this.checkBombBag() > 0) {
+      dropBomb.currentTime = 0; // Resets the sounds to 0 sec. Allowing "overlapping".
+      dropBomb.play();
       // Always drop bombs in center of the square
       // Some magic numbers: cx: 40, cy: 110 is the center of the first
       var baseCx = g_playzone[0][0],
@@ -245,7 +276,7 @@ Bomberman.prototype.maybeDropBomb = function() {
 };
 
 Bomberman.prototype.applySpeed = function () {
-  NOMINAL_WALKSPEED = 4;
+  NOMINAL_WALKSPEED = 3;
 };
 
 Bomberman.prototype.getRadius = function () {

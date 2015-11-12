@@ -8,7 +8,7 @@ var g_score = {
 	P2_score: 0,
     P1_lives: 3,
 	P2_lives: 3,
-    P1_maxBombs:2,
+    P1_maxBombs:1,
 	P2_maxBombs:1,
 	win: false
 };

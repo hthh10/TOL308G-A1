@@ -48,6 +48,8 @@ Bomb.prototype.velX = 1;
 Bomb.prototype.velY = 1;
 Bomb.prototype.KEY_P1_TRIGGER   = '3'.charCodeAt(0);
 Bomb.prototype.KEY_P2_TRIGGER   = '0'.charCodeAt(0);
+Bomb.prototype.explodeSound = new Audio("Sounds/Explosion.wav");
+//Bomb.prototype.explodeSound.src = "Sounds/Explosion.wav";
 // Convert times from milliseconds to "nominal" time units.
 Bomb.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
@@ -83,7 +85,7 @@ Bomb.prototype.update = function(du) {
 // sendir entitymanager upplýsingar um sprengingu
 Bomb.prototype.configureExplosion = function() {
   entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,
-    this.strength, this.bombermanID);
+    this.strength, this.bombermanID,this.explodeSound);
 
 };
 

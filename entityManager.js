@@ -129,12 +129,12 @@ dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID, trigger) {
 },
 
 
-explode : function(cx,cy,xPos,yPos,strength, bombermanID) {
+explode : function(cx,cy,xPos,yPos,strength, bombermanID,explodeSound) {
   var step = g_images.wall.width;
   var right = true, left = true, up = true, down = true;
 
-
-
+  if(explodeSound.currentTime > 0.5) explodeSound.currentTime = 0;
+  explodeSound.play();
   //Middle
   this._bombs.push(new Explosion({
     cx : cx,
