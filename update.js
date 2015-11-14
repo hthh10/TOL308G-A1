@@ -54,6 +54,7 @@ function update(dt) {
 //
 var KEY_PAUSE = 'P'.charCodeAt(0);
 var KEY_STEP  = 'O'.charCodeAt(0);
+var KEY_MUTE = 'M'.charCodeAt(0);
 
 var g_isUpdatePaused = false;
 

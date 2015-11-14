@@ -193,7 +193,7 @@ Enemy.prototype.isCollidingWithBomb = function(bomba) {
     else this.direction = 4;
     this.cx += this.speed;
   }
-},
+};
 
 Enemy.prototype.render = function(ctx){
     //var fadeThresh = Enemy.prototype.lifeSpan / 3;
@@ -207,4 +207,4 @@ Enemy.prototype.render = function(ctx){
     //this.sprite.scale = this.scale;
     this.sprite.drawCentredAt(ctx, this.cx, this.cy);
     //this.sprite.scale = origScale;
-}
+};
