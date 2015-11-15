@@ -46,7 +46,7 @@ Bomberman.prototype.KEY_FIRE   = 'E'.charCodeAt(0);
 
 Bomberman.prototype.cx = 40;
 Bomberman.prototype.cy = 120;
-Bomberman.prototype.noBombs = 0;
+Bomberman.prototype.noBombs = 1;
 Bomberman.prototype.bombStrength = 1;
 Bomberman.prototype.trigger = false;
 Bomberman.prototype.lives = 3;
@@ -393,6 +393,10 @@ Bomberman.prototype.checkBombBag = function() {
 
 Bomberman.prototype.maybeDropBomb = function() {
   if (keys[this.KEY_FIRE]) {
+	  // Don't drop bomb if there is one already in the square
+	  var hitEntity = spatialManager.findEntityInRange(this.cx, this.cy, 1);
+	  if (hitEntity instanceof Bomb) return;
+	  
     // Can only drop one at a time
     if (this.checkBombBag() > 0) {
       dropBomb.currentTime = 0; // Resets the sounds to 0 sec. Allowing "overlapping".

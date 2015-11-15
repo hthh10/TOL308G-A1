@@ -56,7 +56,6 @@ Bomb.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 var eatBomb = new Audio("Sounds/Eat Bomb.wav");
 
 Bomb.prototype.update = function(du) {
-
   spatialManager.unregister(this);
   if (this._isDeadNow) {
     this.logBomb(-1);
@@ -71,9 +70,6 @@ Bomb.prototype.update = function(du) {
     this.logBomb(-1);
     return entityManager.KILL_ME_NOW;
 }
-
-
-  this.wrapPosition();
 
   // ef sprengjan verður fyrir sprengingu springur hún
   if (this.isColliding() && (this.isColliding() instanceof Explosion)) {
@@ -91,8 +87,9 @@ Bomb.prototype.update = function(du) {
 
 // sendir entitymanager upplýsingar um sprengingu
 Bomb.prototype.configureExplosion = function() {
-  entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,
-    this.strength, this.bombermanID,this.explodeSound);
+	this.kill();
+	entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,
+		this.strength, this.bombermanID,this.explodeSound);
 
 };
 

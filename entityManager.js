@@ -138,6 +138,25 @@ dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID, trigger) {
   }));
 },
 
+checkForBomb : function(cx,cy) {
+	for (var i = 0; i < this._bombs.length; i++) {
+		if (this._bombs[i]._isDeadNow) {} // Do nothing if bomb is dead
+		else if (this._bombs[i].cx === cx && this._bombs[i].cy === cy) {
+			this._bombs[i].configureExplosion();
+			return true;
+		}
+	}
+	return false;
+},
+
+checkForExplosion : function(cx,cy) {
+	var hitEntity = spatialManager.findEntityInRange(cx, cy, 1);
+	if (hitEntity instanceof Explosion) {
+		hitEntity.kill();
+		return true;
+	}
+	return false;
+},
 
 explode : function(cx,cy,xPos,yPos,strength, bombermanID,explodeSound) {
   var step = g_images.wall.width;
@@ -146,7 +165,7 @@ explode : function(cx,cy,xPos,yPos,strength, bombermanID,explodeSound) {
   if(explodeSound.currentTime > 0.5) explodeSound.currentTime = 0;
   explodeSound.play();
   //Middle
-  this._bombs.push(new Explosion({
+  this._explosions.push(new Explosion({
     cx : cx,
     cy : cy,
     bombermanID : bombermanID
@@ -155,57 +174,72 @@ explode : function(cx,cy,xPos,yPos,strength, bombermanID,explodeSound) {
   for(var i = 0; i < strength; i++) {
     // Right
     if(xPos < wall.baseWall[i].length-i && right) {
-      if(wall.baseWall[yPos][xPos+i+1] <= 0) {
-        this._bombs.push(new Explosion({
+	  this.checkForExplosion(cx + step + (step*i),cy);
+	  if (this.checkForBomb(cx + step + (step*i),cy)) {
+		  right = false;
+	  }
+      else if(wall.baseWall[yPos][xPos+i+1] <= 0) {
+        this._explosions.push(new Explosion({
           cx : cx + step + (step*i),
           cy : cy,
           bombermanID : bombermanID
         }));
       }
-      if(wall.baseWall[yPos][xPos+i+1] > 0 && right) {
+      else if(wall.baseWall[yPos][xPos+i+1] > 0 && right) {
         wall.destroyBrick(yPos,xPos+i+1);
         right = false;
-
       }
     }
     // Left
     if(xPos > 0+i) {
-      if(wall.baseWall[yPos][xPos-i-1] <= 0 && left) {
-        this._bombs.push(new Explosion({
+	  this.checkForExplosion(cx - step - (step*i),cy);
+	  if (this.checkForBomb(cx - step - (step*i),cy)) {
+		  left = false;
+	  }
+      else if(wall.baseWall[yPos][xPos-i-1] <= 0 && left) {
+        this._explosions.push(new Explosion({
           cx : cx - step - (step*i),
           cy : cy,
           bombermanID : bombermanID
         }));
       }
-      if(wall.baseWall[yPos][xPos-i-1] > 0 && left) {
+      else if(wall.baseWall[yPos][xPos-i-1] > 0 && left) {
         wall.destroyBrick(yPos,xPos-i-1);
         left = false;
       }
     }
     //Up
     if(yPos > 0+i) {
-      if(wall.baseWall[yPos-1-i][xPos] <= 0 && up) {
-        this._bombs.push(new Explosion({
+      this.checkForExplosion(cx,cy - step - (step*i));
+	  if (this.checkForBomb(cx,cy - step - (step*i))) {
+		  up = false;
+	  }
+	  else if(wall.baseWall[yPos-1-i][xPos] <= 0 && up) {
+        this._explosions.push(new Explosion({
           cx : cx,
           cy : cy - step - (step*i),
           bombermanID : bombermanID
         }));
       }
-      if(wall.baseWall[yPos-i-1][xPos] > 0 && up) {
+      else if(wall.baseWall[yPos-i-1][xPos] > 0 && up) {
         wall.destroyBrick(yPos-i-1,xPos);
         up = false;
       }
     }
     //Down
     if(yPos < wall.baseWall.length-1-i) {
-      if(wall.baseWall[yPos+1+i][xPos] <= 0 && down) {
-        this._bombs.push(new Explosion({
+	  this.checkForExplosion(cx,cy + step + (step*i));
+	  if (this.checkForBomb(cx,cy + step + (step*i))) {
+		  down = false;
+	  }
+      else if(wall.baseWall[yPos+1+i][xPos] <= 0 && down) {
+        this._explosions.push(new Explosion({
           cx : cx,
           cy : cy + step + (step*i),
           bombermanID : bombermanID
         }));
       }
-      if(wall.baseWall[yPos+i+1][xPos] > 0 && down) {
+      else if(wall.baseWall[yPos+i+1][xPos] > 0 && down) {
         wall.destroyBrick(yPos+i+1,xPos);
         down = false;
       }
@@ -300,7 +334,7 @@ addPlayer2 : function() {
 },
 
 // Moves all bombermen to initial position
-resetBombermen: function(du) {
+resetBombermen: function() {
     for (var i = 0; i < this._bombermen.length; i++) {
         this._bombermen[i]._moveToBeginning();
     }
@@ -318,7 +352,6 @@ reset: function() {
 },
 
 update: function(du) {
-
     for (var c = 0; c < this._categories.length; ++c) {
 
         var aCategory = this._categories[c];

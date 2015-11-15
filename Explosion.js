@@ -70,6 +70,8 @@ Explosion.prototype.update = function(du) {
       this.immunity < 20) {
       this.updatePlayerScore(hitEntity);
     }
+	else if (hitEntity instanceof Explosion)
+		return entityManager.KILL_ME_NOW;
   }
 
   spatialManager.register(this);
