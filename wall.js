@@ -57,7 +57,6 @@ baseCy : 110,
 stepCx : 40,
 stepCy : 40,
 scale : 1,
-doorNr : 1,
 
 // Init function to set variables that must first be defined
 init : function(){
@@ -80,7 +79,6 @@ initStorymode : function() {
 generateLevel : function(level){
 //TODO: Magic numbers for position of wall/rock. Higly dependent on the size of Wall sprite
 	this.baseWall = this.baseWallReset;
-	this.doorNr = 1;
 	if (level === 4) return;
 	for(var i = 0; i < this.baseWall.length; i++) {
         var cy = this.baseCy + (i*this.stepCy),
@@ -95,24 +93,27 @@ generateLevel : function(level){
 
         }
     }
+	this.generateDoorBrick();
+},
+
+generateDoorBrick : function() {
+	var yId, xId, wallVal;
+	while (true) {
+		yId = Math.floor(Math.random()*this.baseWall.length);
+		xId = Math.floor(Math.random()*this.baseWall[0].length);
+		wallVal = this.baseWall[yId][xId];
+		// Generates door brick if legal wall position. May overwrite powerups.
+		if (wallVal != -1 && wallVal != 1) {
+			this.baseWall[yId][xId] = 10;
+			return;
+		}
+	}
 },
 
 generateBrickVal: function(level) {
   var luck = Math.random();
-  // býr til eina hurð sem er falin undir steini 1 til 20
-  if (0 < wall.doorNr) {
-    if (wall.doorNr > 20 || luck < 0.05) {
-      wall.doorNr = -100;
-      return 10;
-    }
-  }
-  if (luck < 0.5) {
-    wall.doorNr += 1;
-    return 2;
-  } else {
-    wall.doorNr += 1;
-    return this.selectItem();
-  }
+  if (luck < 0.5) return 2;
+  else return this.selectItem();
 },
 
 //random powerup ef við viljum hafa eitthvert þeirra algengara en annað

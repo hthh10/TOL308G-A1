@@ -50,6 +50,7 @@ Bomberman.prototype.noBombs = 0;
 Bomberman.prototype.bombStrength = 1;
 Bomberman.prototype.trigger = false;
 Bomberman.prototype.lives = 3;
+Bomberman.prototype.walkspeed = 1.5;
 
 // Sprite sheet properties
 /*
@@ -188,119 +189,161 @@ Bomberman.prototype.update = function (du) {
 
     };
 
-var NOMINAL_WALKSPEED = 1.5;
-
 
 Bomberman.prototype.computePosition = function () {
-
+	// Sound loop
+	moveUpDown.loop = false;
 
 	// Variables for position logic
-  moveUpDown.loop = false;
-
-	var wallId,
+	var wallIdLeft,
+		wallIdRight,
+		wallIdTop,
+		wallIdBottom,
 		leftX = this.cx-this.getRadius(),
 		rightX = this.cx+this.getRadius(),
 		topY = this.cy-this.getRadius(),
 		bottomY = this.cy+this.getRadius();
 
-	if (keys[this.KEY_UP] && topY > g_playzone[1][0]) {
-      wallId = this.getWallId(this.cx,topY);
-		if (!this.checkForWall(wallId[0],wallId[1])) {
-        if(moveUpDown.currentTime > 0.3) {
-          moveUpDown.currentTime = 0;
-        }
-        if(this.currentupFrame === 0) {
-          this.spritePosX = this.upStartX;
-          this.spritePosY = this.upStartY;
-        }
-        if(this.currentupFrame < this.upFrameLimit) {
-           ++this.currentupFrame;
-           this.spritePosX += this.width;
-        }
+	if (keys[this.KEY_UP]) {
+		var newTopY = topY - this.walkspeed;
+		
+		// If newTopY is out of bounds, fix it
+		if (newTopY < g_playzone[1][0]){
+			this.cy = g_playzone[1][0]+this.getRadius();
+		}
+		else {
+			wallIdLeft = this.getWallId(leftX,newTopY);
+			wallIdRight = this.getWallId(rightX,newTopY);
+			if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
+				 !this.checkForWall(wallIdRight[0],wallIdRight[1])) {
+				this.cy -= this.walkspeed;
+			}
+		}
+		
+		// Animation
+		if(moveUpDown.currentTime > 0.3) {
+			moveUpDown.currentTime = 0;
+		}
+		if(this.currentupFrame === 0) {
+			this.spritePosX = this.upStartX;
+			this.spritePosY = this.upStartY;
+		}
+		if(this.currentupFrame < this.upFrameLimit) {
+			++this.currentupFrame;
+			this.spritePosX += this.width;
+		}
     
-        else {
-          this.spritePosX = this.upStartX;
-          this.currentupFrame = 0;
-        } 
-        moveUpDown.play();
-        this.cy -= NOMINAL_WALKSPEED;
-
-      }
-	}	
+		else {
+			this.spritePosX = this.upStartX;
+			this.currentupFrame = 0;
+		}
+		moveUpDown.play();
+	}
   
 
-  if (keys[this.KEY_DOWN] && bottomY < g_playzone[1][1]) {
-      wallId = this.getWallId(this.cx,bottomY);
-  		if (!this.checkForWall(wallId[0],wallId[1])) {
-
-
-        if(moveUpDown.currentTime > 0.3) {
-          moveUpDown.currentTime = 0;
-        }
-
-        if(this.currentdownFrame === 0) {
-          this.spritePosX = this.downStartX;
-          this.spritePosY = this.downStartY;
-        }
-        if(this.currentdownFrame < this.downFrameLimit){
-            ++this.currentdownFrame;
-            this.spritePosX += this.width;
-        }
-        else {
-          this.spritePosX = this.downStartX;
-          this.currentdownFrame = 0;
-        } 
-        moveUpDown.play();
-        this.cy += NOMINAL_WALKSPEED;
-      }
-  }
-  			
-  if (keys[this.KEY_LEFT] && leftX > g_playzone[0][0]) {
-      wallId = this.getWallId(leftX,this.cy);
-		  if (!this.checkForWall(wallId[0],wallId[1])) {
-        if(moveLeftRight.currentTime > 0.3) {
-          moveLeftRight.currentTime = 0;
-        }
-        if(this.currentleftFrame === 0) {
-          this.spritePosX = this.leftStartX;
-          this.spritePosY = this.leftStartY;
-        }
-        if(this.currentleftFrame < this.leftFrameLimit) {
-           ++this.currentleftFrame;
-           this.spritePosX += this.width;
-        }
-        else {
-          this.spritePosX = this.leftStartX;
-          this.currentleftFrame = 0;
-        } 
-        moveLeftRight.play();      
-        this.cx -= NOMINAL_WALKSPEED;
-      }
+	if (keys[this.KEY_DOWN] && bottomY < g_playzone[1][1]) {
+		var newBottomY = bottomY + this.walkspeed;
 		
-  }
-  if (keys[this.KEY_RIGHT] && rightX < g_playzone[0][1]) {
-      wallId = this.getWallId(rightX,this.cy);
-  		if (!this.checkForWall(wallId[0],wallId[1])) {
-        if(moveLeftRight.currentTime > 0.3) {
-          moveLeftRight.currentTime = 0;
-        }
-        if(this.currentrightFrame === 0) {
-          this.spritePosX = this.rightStartX;
-          this.spritePosY = this.rightStartY;
-        }
-        if(this.currentrightFrame < this.rightFrameLimit) {
-           ++this.currentrightFrame;
-           this.spritePosX += this.width;
-        }
-        else {
-          this.spritePosX = this.rightStartX;
-          this.currentrightFrame = 0;
-        } 
-        moveLeftRight.play();  
-        this.cx += NOMINAL_WALKSPEED;
-      }
-			
-  }
+		// If newBottomY is out of bounds, fix it
+		if (newBottomY > g_playzone[1][1]){
+			this.cy = g_playzone[1][1]-this.getRadius()-1;
+		}
+		else {
+			wallIdLeft = this.getWallId(leftX,newBottomY);
+			wallIdRight = this.getWallId(rightX,newBottomY);
+			if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
+				 !this.checkForWall(wallIdRight[0],wallIdRight[1])) {
+				this.cy += this.walkspeed;
+			}
+		}
+			// ANIMATION
+			if(moveUpDown.currentTime > 0.3) {
+				moveUpDown.currentTime = 0;
+			}
+
+			if(this.currentdownFrame === 0) {
+				this.spritePosX = this.downStartX;
+				this.spritePosY = this.downStartY;
+			}
+			if(this.currentdownFrame < this.downFrameLimit){
+				++this.currentdownFrame;
+				this.spritePosX += this.width;
+			}
+			else {
+				this.spritePosX = this.downStartX;
+				this.currentdownFrame = 0;
+			} 
+			moveUpDown.play();
+	}
+  			
+	if (keys[this.KEY_LEFT]) {
+		var newLeftX = leftX - this.walkspeed;
+		
+		// If newTopY is out of bounds, fix it
+		if (newLeftX < g_playzone[0][0]){
+			this.cx = g_playzone[0][0]+this.getRadius();
+		}
+		else {
+			wallIdTop = this.getWallId(newLeftX,topY);
+			wallIdBottom = this.getWallId(newLeftX,bottomY);
+			if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
+				 !this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
+				this.cx -= this.walkspeed;
+			}
+		}
+			// ANIMATION
+			if(moveLeftRight.currentTime > 0.3) {
+				moveLeftRight.currentTime = 0;
+			}
+			if(this.currentleftFrame === 0) {
+				this.spritePosX = this.leftStartX;
+				this.spritePosY = this.leftStartY;
+			}
+			if(this.currentleftFrame < this.leftFrameLimit) {
+				++this.currentleftFrame;
+				this.spritePosX += this.width;
+			}
+			else {
+				this.spritePosX = this.leftStartX;
+				this.currentleftFrame = 0;
+			} 
+			moveLeftRight.play();      
+	}
+	
+	if (keys[this.KEY_RIGHT]) {
+		var newRightX = rightX + this.walkspeed;
+		
+		// If newTopY is out of bounds, fix it
+		if (newRightX > g_playzone[0][1]){
+			this.cx = g_playzone[0][1]-this.getRadius()-1;
+		}
+		else {
+			wallIdTop = this.getWallId(newRightX,topY);
+			wallIdBottom = this.getWallId(newRightX,bottomY);
+			if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
+				 !this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
+				this.cx += this.walkspeed;
+			}
+		}
+		
+			// ANIMATION
+			if(moveLeftRight.currentTime > 0.3) {
+				moveLeftRight.currentTime = 0;
+			}
+			if(this.currentrightFrame === 0) {
+				this.spritePosX = this.rightStartX;
+				this.spritePosY = this.rightStartY;
+			}
+			if(this.currentrightFrame < this.rightFrameLimit) {
+				++this.currentrightFrame;
+				this.spritePosX += this.width;
+			}
+			else {
+				this.spritePosX = this.rightStartX;
+				this.currentrightFrame = 0;
+			} 
+			moveLeftRight.play();  
+		}		
 };
 
 
@@ -316,22 +359,22 @@ Bomberman.prototype.isCollidingWithBomb = function(bomba) {
   if (this.cy > bomba.cy && bottomY < g_playzone[1][1]) {
     wallId = this.getWallId(this.cx, bottomY);
     if (!this.checkForWall(wallId[0], wallId[1]))
-      this.cy += NOMINAL_WALKSPEED;
+      this.cy += this.walkspeed;
   }
   if (this.cy < bomba.cy && topY > g_playzone[1][0]) {
     wallId = this.getWallId(this.cx, topY);
     if (!this.checkForWall(wallId[0], wallId[1]))
-      this.cy -= NOMINAL_WALKSPEED;
+      this.cy -= this.walkspeed;
   }
   if (this.cx > bomba.cx && rightX < g_playzone[0][1]) {
     wallId = this.getWallId(rightX, this.cy);
     if (!this.checkForWall(wallId[0], wallId[1]))
-      this.cx += NOMINAL_WALKSPEED;
+      this.cx += this.walkspeed;
   }
   if (this.cx < bomba.cx && leftX > g_playzone[0][0]) {
     wallId = this.getWallId(leftX, this.cy);
     if (!this.checkForWall(wallId[0], wallId[1]))
-      this.cx -= NOMINAL_WALKSPEED;
+      this.cx -= this.walkspeed;
   }
 };
 
@@ -370,11 +413,11 @@ Bomberman.prototype.maybeDropBomb = function() {
 };
 
 Bomberman.prototype.applySpeed = function () {
-  NOMINAL_WALKSPEED = 3;
+  this.walkspeed = 3;
 };
 
 Bomberman.prototype.getRadius = function () {
-    return this.width;
+    return this.width*0.8;
 };
 
 Bomberman.prototype.takeBombHit = function () {
