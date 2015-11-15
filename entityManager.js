@@ -24,7 +24,7 @@ _bombs : [],
 _bombermen : [],
 _ballom : [],
 _onil : [],
-_pasu : [],
+_pakupaku : [],
 _explosions : [],
 _powerups : [],
 _door : [],
@@ -63,7 +63,7 @@ KILL_ME_NOW : -1,
 deferredSetup : function () {
 
     this._categories = [this._bombermen, this._ballom, this._onil,
-       this._bombs, this._explosions, this._powerups, this._door, this._pasu];
+       this._bombs, this._explosions, this._powerups, this._door, this._pakupaku];
 
 },
 
@@ -228,6 +228,13 @@ generateEnemy : function(){
       cy : 190,
       sprite : g_sprites.onilLeft && g_sprites.onilRight,
       speed : 3
+    }));
+
+    this._pakupaku.push(new Pakupaku({
+      cx : 600,
+      cy : 150,
+      sprite : g_sprites.pakupaku,
+      speed : 2.2
     }));
 },
 

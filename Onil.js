@@ -1,6 +1,6 @@
-// ================
-// HARMLESS ENEMIES
-// ================
+// ====
+// ONIL
+// ====
 
 "use strict";
 
@@ -11,8 +11,10 @@
 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 */
 
-//A generic constructor which accepts an arbitrary descriptor object
+//Onil is an enemy that is more dangerous than Ballom because it travels
+//double the speed of Bomberman. 
 
+//A generic constructor which accepts an arbitrary descriptor object
 function Onil(descr) {
 
     //Common inherited setup logic from Entity
@@ -20,48 +22,8 @@ function Onil(descr) {
     this._scale = 1;
 }
 
+//Onil is an enemy so it inherits from the Enemy function
 Onil.prototype = new Enemy();
-
-Onil.prototype.update = function(du) {
-     // Unregister and check for death
-    spatialManager.unregister(this);
-
-    this.immunity -= du;
-    this.lifeSpan -= du;
-
-    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
-    //remember previous position
-    this.computePosition();
-
-    // if colliding with a bomb, go away
-    if (this.isColliding() instanceof Bomb){
-        this.isCollidingWithBomb(this.isColliding());
-        //Er mögulega frekar bjagaður kóði en hann virkar ágætlega...
-        if(this.direction === 1){
-            if(Math.random() < 0.5) this.direction = 2;
-            else this.direction = 3;
-        }
-        if(this.direction === 2){
-            if(Math.random() < 0.5) this.direction = 3;
-            else this.direction = 4;
-        }
-        if(this.direction === 3){
-            if(Math.random() < 0.5) this.direction = 4;
-            else this.direction = 1;
-        }
-        if(this.direction === 4){
-            if(Math.random() < 0.5) this.direction = 1;
-            else this.direction = 2;
-        }
-    }
-    // if standing in fire, die!
-    if ((this.isColliding() instanceof Explosion) && this.immunity < 20){
-        //award points?
-        return entityManager.KILL_ME_NOW;
-    }
-
-    spatialManager.register(this);
-}
 
 Onil.prototype.computePosition = function () {
     //Enemy moves by default
@@ -104,7 +66,7 @@ Onil.prototype.computePosition = function () {
             if (this.direction === 1) {
 
                 wallId = this.getWallId(rightX,this.cy);
-                //make ballom look right
+                //make onil look right
                 this.sprite = g_sprites.onilRight;
                 // going forward logic. Check if the next block is a wall
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cx += this.speed;
@@ -129,7 +91,7 @@ Onil.prototype.computePosition = function () {
          // going left
             if(this.direction === 3) {
                 wallId = this.getWallId(leftX,this.cy);
-                //make ballom look left
+                //make onil look left
                 this.sprite = g_sprites.onilLeft;
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cx -= this.speed;
                 else{

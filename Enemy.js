@@ -29,7 +29,7 @@ Enemy.prototype.sprite = this.sprite;
 Enemy.prototype.lifeSpan = 1000 / NOMINAL_UPDATE_INTERVAL;
 Enemy.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 //spawn immunity
-/*
+
 Enemy.prototype.update = function(du) {
     this.immunity -= du;
      // Unregister and check for death
@@ -68,7 +68,7 @@ Enemy.prototype.update = function(du) {
 
     spatialManager.register(this);
 }
-*/
+
 Enemy.prototype.speed = 1.5;
 Enemy.prototype.moveEnemy = true;
 Enemy.prototype.direction = 2; // 1 = Right, 2 = down, 3 = left, 4 = up

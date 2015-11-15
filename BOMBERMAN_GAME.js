@@ -164,7 +164,7 @@ function requestPreloads() {
         ballomUp : "Sprites/ballomUp.png",
         onilLeft : "Sprites/onilLeft.png",
         onilRight : "Sprites/onilRight.png",
-        pasu : "Sprites/pasu.png",
+        pakupaku : "Sprites/pakupaku.gif",
         Bomb : "Sprites/Bombsprite.gif",
 	    bomberman : "Sprites/bombermanSpritesheet.png",
         explosion : "Sprites/Explosion.gif",
@@ -191,7 +191,7 @@ function preloadDone() {
     g_sprites.ballomUp = new Sprite(g_images.ballomUp);
     g_sprites.onilLeft = new Sprite(g_images.onilLeft);
     g_sprites.onilRight = new Sprite(g_images.onilRight);
-    g_sprites.pasu = new Sprite(g_images.pasu);
+    g_sprites.pakupaku = new Sprite(g_images.pakupaku);
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
 	g_sprites.powerups = [new Sprite(g_images.bagspace),

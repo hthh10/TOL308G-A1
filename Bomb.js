@@ -53,6 +53,8 @@ Bomb.prototype.explodeSound = new Audio("Sounds/Explosion.wav");
 // Convert times from milliseconds to "nominal" time units.
 Bomb.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
+var eatBomb = new Audio("Sounds/Eat Bomb.wav");
+
 Bomb.prototype.update = function(du) {
 
   spatialManager.unregister(this);
@@ -77,6 +79,11 @@ Bomb.prototype.update = function(du) {
   if (this.isColliding() && (this.isColliding() instanceof Explosion)) {
       this.configureExplosion();
     }
+
+  if (this.isColliding() instanceof Pakupaku){
+    eatBomb.play();
+    this.kill();
+  }
 
 
   spatialManager.register(this);
