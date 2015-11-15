@@ -67,6 +67,12 @@ deferredSetup : function () {
 
 },
 
+clearEntityType : function (aCategory) {
+	for (var i = 0; i < aCategory.length; ++i) {
+		aCategory[i].kill();
+	}
+},
+
 initLevel: function(level) {
 	console.log(g_level);
 	if (level === 1) {
@@ -74,16 +80,20 @@ initLevel: function(level) {
 		this._generateEnemies();
 	}
 	else if (level < 4) {
-		for (var i = 0; i<this._bombermen.length; i++) {
-			this._bombermen[i]._moveToBeginning();
-		}
+		this.resetBombermen();
+		// Clear relevant entities
 		this._door[0].kill();
+		this.clearEntityType(this._bombs);
+		this.clearEntityType(this._explosions);
+		this.clearEntityType(this._powerups);
+		
+		// Generate new level
 		this._generateEnemies();
 		wall.generateLevel(g_level);
 	}
 	else if (level === 4) {
 		g_score.win = true;
-	}
+	}	
 },
 
 initStorymode : function() {
@@ -291,7 +301,6 @@ addPlayer2 : function() {
 
 // Moves all bombermen to initial position
 resetBombermen: function(du) {
-
     for (var i = 0; i < this._bombermen.length; i++) {
         this._bombermen[i]._moveToBeginning();
     }
