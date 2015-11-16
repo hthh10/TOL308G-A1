@@ -172,7 +172,11 @@ Bomberman.prototype.update = function (du) {
 			if (this._spatialID === 1) g_score.P1_lives -= 1;
 			else g_score.P2_lives -= 1;
 
-			if (this.lives <= 0) return entityManager.KILL_ME_NOW;
+			if (this.lives <= 0) 
+			{
+				entityManager.checkLoseConditions();
+				return entityManager.KILL_ME_NOW;
+			}
 		}
 		else if (hitEntity instanceof Door) {
 			entityManager.checkWinConditions();

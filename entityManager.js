@@ -78,6 +78,7 @@ initLevel: function(level) {
 	if (level === 1) {
 		this._generateBombermen();
 		this._generateEnemies();
+		wall.initStorymode();
 	}
 	else if (level < 4) {
 		this.resetBombermen();
@@ -93,6 +94,7 @@ initLevel: function(level) {
 	}
 	else if (level === 4) {
 		g_score.win = true;
+		g_gameOver = true;
 	}	
 },
 
@@ -103,6 +105,7 @@ initStorymode : function() {
 initMultiplayer: function() {
 	this._generateBombermen();
 	this.addPlayer2();
+	wall.initMultiplayer();
 },
 
 checkWinConditions : function() {
@@ -120,9 +123,16 @@ checkWinConditions : function() {
 	else {
 		if (this._bombermen.length < 2) {
 			g_score.win = true;
+			g_gameOver = true;
 		}
 	}
 
+},
+
+checkLoseConditions : function() {
+	if (g_score.P1_lives <= 0 && g_score.P2_lives <= 0) {
+		g_gameOver = true;
+	}
 },
 
 
@@ -321,6 +331,7 @@ generateDoor : function(descr) {
 	this._door.push(new Door(descr));
 },
 addPlayer2 : function() {
+  g_score.P2_lives = 3;
   this._bombermen.push(new Bomberman({
         cx   : g_canvas.width-40,
         cy   : 120,
@@ -348,6 +359,7 @@ reset: function() {
 	this._explosions = [];
 	this._powerups = [];
 	this._door = [];
+	this._pakupaku = [];
 	this.deferredSetup();
 },
 

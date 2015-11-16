@@ -47,7 +47,6 @@ baseWall : [[-1,-1,0,0,0,0,0,0,0,0,0,0,0,-1,-1],
             [ 0, 1,0,1,0,1,0,1,0,1,0,1,0, 1, 0],
             [ 0, 0,0,0,0,0,0,0,0,0,0,0,0, 0, 0],
             ],
-baseWallReset : [],
 brickImg : [],
 wallImg : [],
 width  : [],
@@ -60,7 +59,6 @@ scale : 1,
 
 // Init function to set variables that must first be defined
 init : function(){
-	this.baseWallReset = this.baseWall;
 	this.brickImg = g_images.brick;
 	this.wallImg = g_images.wall;
 	this.width  = this.brickImg.width;
@@ -75,10 +73,27 @@ initStorymode : function() {
 	this.generateLevel(1);
 },
 
+resetWall : function(){
+	this.baseWall = 
+		   [[-1,-1,0,0,0,0,0,0,0,0,0,0,0,-1,-1],
+            [-1, 1,0,1,0,1,0,1,0,1,0,1,0, 1,-1],
+            [ 0, 0,0,0,0,0,0,0,-1,-1,0,0,0,0,0],
+            [ 0, 1,0,1,0,1,0,1,0,1,0,1,0, 1, 0],
+            [ 0, 0,0,0,0,0,0,0,0,0,0,0,0, 0, 0],
+            [ 0, 1,0,1,0,1,0,1,0,1,0,1,0, 1, 0],
+            [-1,-1,0,0,0,0,0,0,0,0,0,0,0, 0, 0],
+            [ 0, 1,0,1,0,1,0,1,0,1,0,1,0, 1, 0],
+            [ 0, 0,0,0,0,0,0,0,0,0,0,0,0, 0, 0],
+            [ 0, 1,0,1,0,1,0,1,0,1,0,1,0, 1, 0],
+            [ 0, 0,0,0,0,0,0,0,0,0,0,0,0, 0, 0],
+            [ 0, 1,0,1,0,1,0,1,0,1,0,1,0, 1, 0],
+            [ 0, 0,0,0,0,0,0,0,0,0,0,0,0, 0, 0],
+            ];
+},
 
 generateLevel : function(level){
 //TODO: Magic numbers for position of wall/rock. Higly dependent on the size of Wall sprite
-	this.baseWall = this.baseWallReset;
+	this.resetWall();
 	if (level === 4) return;
 	for(var i = 0; i < this.baseWall.length; i++) {
         var cy = this.baseCy + (i*this.stepCy),
