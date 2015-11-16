@@ -38,25 +38,20 @@ Enemy.prototype.update = function(du) {
     //remember previous position
     this.computePosition();
 
-    // if colliding with a bomb, go away
+    //If colliding with a bomb, go the opposite way you came from
     if (this.isColliding() instanceof Bomb){
         this.isCollidingWithBomb(this.isColliding());
-        //Er mögulega frekar bjagaður kóði en hann virkar ágætlega...
         if(this.direction === 1){
-            if(Math.random() < 0.5) this.direction = 2;
-            else this.direction = 3;
+            this.direction = 3;
         }
         if(this.direction === 2){
-            if(Math.random() < 0.5) this.direction = 3;
-            else this.direction = 4;
+            this.direction = 4;
         }
         if(this.direction === 3){
-            if(Math.random() < 0.5) this.direction = 4;
-            else this.direction = 1;
+            this.direction = 1;
         }
         if(this.direction === 4){
-            if(Math.random() < 0.5) this.direction = 1;
-            else this.direction = 2;
+            this.direction = 2;
         }
 
     }
