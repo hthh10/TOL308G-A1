@@ -46,7 +46,7 @@ Bomberman.prototype.KEY_FIRE   = 'E'.charCodeAt(0);
 
 Bomberman.prototype.cx = 40;
 Bomberman.prototype.cy = 120;
-Bomberman.prototype.noBombs = 1;
+Bomberman.prototype.noBombs = 0;
 Bomberman.prototype.bombStrength = 1;
 Bomberman.prototype.trigger = false;
 Bomberman.prototype.lives = 3;
@@ -54,7 +54,7 @@ Bomberman.prototype.walkspeed = 1.5;
 
 // Sprite sheet properties
 /*
-Bomberman.prototype.width = 14; 
+Bomberman.prototype.width = 14;
 Bomberman.prototype.height = 19;
 */
 
@@ -206,7 +206,7 @@ Bomberman.prototype.computePosition = function () {
 
 	if (keys[this.KEY_UP]) {
 		var newTopY = topY - this.walkspeed;
-		
+
 		// If newTopY is out of bounds, fix it
 		if (newTopY < g_playzone[1][0]){
 			this.cy = g_playzone[1][0]+this.getRadius();
@@ -219,7 +219,7 @@ Bomberman.prototype.computePosition = function () {
 				this.cy -= this.walkspeed;
 			}
 		}
-		
+
 		// Animation
 		if(moveUpDown.currentTime > 0.3) {
 			moveUpDown.currentTime = 0;
@@ -232,18 +232,18 @@ Bomberman.prototype.computePosition = function () {
 			++this.currentupFrame;
 			this.spritePosX += this.width;
 		}
-    
+
 		else {
 			this.spritePosX = this.upStartX;
 			this.currentupFrame = 0;
 		}
 		moveUpDown.play();
 	}
-  
+
 
 	if (keys[this.KEY_DOWN] && bottomY < g_playzone[1][1]) {
 		var newBottomY = bottomY + this.walkspeed;
-		
+
 		// If newBottomY is out of bounds, fix it
 		if (newBottomY > g_playzone[1][1]){
 			this.cy = g_playzone[1][1]-this.getRadius()-1;
@@ -272,13 +272,13 @@ Bomberman.prototype.computePosition = function () {
 			else {
 				this.spritePosX = this.downStartX;
 				this.currentdownFrame = 0;
-			} 
+			}
 			moveUpDown.play();
 	}
-  			
+
 	if (keys[this.KEY_LEFT]) {
 		var newLeftX = leftX - this.walkspeed;
-		
+
 		// If newTopY is out of bounds, fix it
 		if (newLeftX < g_playzone[0][0]){
 			this.cx = g_playzone[0][0]+this.getRadius();
@@ -306,13 +306,13 @@ Bomberman.prototype.computePosition = function () {
 			else {
 				this.spritePosX = this.leftStartX;
 				this.currentleftFrame = 0;
-			} 
-			moveLeftRight.play();      
+			}
+			moveLeftRight.play();
 	}
-	
+
 	if (keys[this.KEY_RIGHT]) {
 		var newRightX = rightX + this.walkspeed;
-		
+
 		// If newTopY is out of bounds, fix it
 		if (newRightX > g_playzone[0][1]){
 			this.cx = g_playzone[0][1]-this.getRadius()-1;
@@ -325,7 +325,7 @@ Bomberman.prototype.computePosition = function () {
 				this.cx += this.walkspeed;
 			}
 		}
-		
+
 			// ANIMATION
 			if(moveLeftRight.currentTime > 0.3) {
 				moveLeftRight.currentTime = 0;
@@ -341,9 +341,9 @@ Bomberman.prototype.computePosition = function () {
 			else {
 				this.spritePosX = this.rightStartX;
 				this.currentrightFrame = 0;
-			} 
-			moveLeftRight.play();  
-		}		
+			}
+			moveLeftRight.play();
+		}
 };
 
 
@@ -382,11 +382,13 @@ Bomberman.prototype.isCollidingWithBomb = function(bomba) {
 Bomberman.prototype.checkBombBag = function() {
   if (this._spatialID === 1) {
      g_score.P1_maxBombs += this.noBombs;
+     this.noBombs = 0;
     return g_score.P1_maxBombs;
   }
   //krefst breytinga ef við bætum við fleiri playerum
-  if (this._spatialID !== 1) {
+  if (this._spatialID > 1) {
     g_score.P2_maxBombs += this.noBombs;
+    this.noBombs = 0;
     return g_score.P2_maxBombs;
   }
 };
@@ -396,7 +398,7 @@ Bomberman.prototype.maybeDropBomb = function() {
 	  // Don't drop bomb if there is one already in the square
 	  var hitEntity = spatialManager.findEntityInRange(this.cx, this.cy, 1);
 	  if (hitEntity instanceof Bomb) return;
-	  
+
     // Can only drop one at a time
     if (this.checkBombBag() > 0) {
       dropBomb.currentTime = 0; // Resets the sounds to 0 sec. Allowing "overlapping".

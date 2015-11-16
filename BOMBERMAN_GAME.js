@@ -113,14 +113,14 @@ function renderSimulation(ctx) {
     if(g_isUpdatePaused){
         backgroundMusic.pause();
     }
-	
+
 	if (!g_gameStarted) {
 		startupScreen.render(ctx);
 	}
 	else {
 		renderScore(ctx);
 	}
-	
+
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -173,6 +173,7 @@ function requestPreloads() {
         trigger:"Sprites/trigger.gif",
         strength:"Sprites/Strength.gif",
         speed: "Sprites/Speed.gif",
+        evilbomberman: "Sprites/EvilbombermanSpritesheet.gif"
 
     };
 
@@ -199,7 +200,8 @@ function preloadDone() {
                           new Sprite(g_images.strength),
                           new Sprite(g_images.speed)];
     g_sprites.door = new Sprite(g_images.door);
-	
+    g_sprites.evilbomberman = new Sprite(g_images.evilbomberman);
+
 	wall.init();
 
     main.init();

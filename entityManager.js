@@ -28,6 +28,7 @@ _pakupaku : [],
 _explosions : [],
 _powerups : [],
 _door : [],
+_evilbomberman: [],
 
 // -------------
 // Ugly var for level design
@@ -63,7 +64,7 @@ KILL_ME_NOW : -1,
 deferredSetup : function () {
 
     this._categories = [this._bombermen, this._ballom, this._onil,
-       this._bombs, this._explosions, this._powerups, this._door, this._pakupaku];
+       this._bombs, this._explosions, this._powerups, this._door, this._pakupaku, this._evilbomberman];
 
 },
 
@@ -86,14 +87,14 @@ initLevel: function(level) {
 		this.clearEntityType(this._bombs);
 		this.clearEntityType(this._explosions);
 		this.clearEntityType(this._powerups);
-		
+
 		// Generate new level
 		this._generateEnemies();
 		wall.generateLevel(g_level);
 	}
 	else if (level === 4) {
 		g_score.win = true;
-	}	
+	}
 },
 
 initStorymode : function() {
@@ -279,6 +280,13 @@ generateEnemy : function(){
       cy : 150,
       sprite : g_sprites.pakupaku,
       speed : 2.2
+    }));
+
+    this._evilbomberman.push(new Evilbomberman({
+      cx : 590,
+      cy : 590,
+      sprite : g_sprites.evilbomberman,
+      speed : 1.8
     }));
 },
 
