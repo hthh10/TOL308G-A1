@@ -84,6 +84,7 @@ Bomberman.prototype.rightStartY = 68;
 
 Bomberman.prototype.spritePosX = 0;
 Bomberman.prototype.spritePosY = 0;
+Bomberman.prototype.direction = 1; // 0 = right, 1 = down, 2 = left, 3 = up
 
 
 
@@ -195,8 +196,6 @@ Bomberman.prototype.update = function (du) {
 
 
 Bomberman.prototype.computePosition = function () {
-	// Sound loop
-	moveUpDown.loop = false;
 
 	// Variables for position logic
 	var wallIdLeft,
@@ -225,6 +224,11 @@ Bomberman.prototype.computePosition = function () {
 		}
 
 		// Animation
+ 
+    if(this.direction !== 3) { 
+      this.direction = 3;
+      this.currentupFrame = 0;
+    }
 		if(moveUpDown.currentTime > 0.3) {
 			moveUpDown.currentTime = 0;
 		}
@@ -261,6 +265,11 @@ Bomberman.prototype.computePosition = function () {
 			}
 		}
 			// ANIMATION
+
+      if(this.direction !== 1) { 
+        this.direction = 1;
+        this.currentdownFrame = 0;
+    } 
 			if(moveUpDown.currentTime > 0.3) {
 				moveUpDown.currentTime = 0;
 			}
@@ -296,6 +305,11 @@ Bomberman.prototype.computePosition = function () {
 			}
 		}
 			// ANIMATION
+      if(this.direction !== 2 ) { 
+        this.direction = 2;
+        this.currentleftFrame = 0;
+      }
+
 			if(moveLeftRight.currentTime > 0.3) {
 				moveLeftRight.currentTime = 0;
 			}
@@ -331,6 +345,12 @@ Bomberman.prototype.computePosition = function () {
 		}
 
 			// ANIMATION
+
+      // reset the variables to new direction
+      if(this.direction !== 0) {  
+        this.direction = 0;
+        this.currentrightFrame = 0;
+      }
 			if(moveLeftRight.currentTime > 0.3) {
 				moveLeftRight.currentTime = 0;
 			}
