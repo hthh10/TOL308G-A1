@@ -62,7 +62,7 @@ Enemy.prototype.moveEnemy = true;
 Enemy.prototype.direction = 2; // 1 = Right, 2 = down, 3 = left, 4 = up
 
 Enemy.prototype.getRadius = function() {
-    return this.width*0.8;
+    return this.width*0.9;
 };
 // athugar collision við sprengju og breytir hraðanum eftir því
 Enemy.prototype.isCollidingWithBomb = function(bomba) {
@@ -93,6 +93,86 @@ Enemy.prototype.isCollidingWithBomb = function(bomba) {
     this.cx += this.speed;
   }
 };
+
+Enemy.prototype.canMoveUp = function(leftX, rightX, topY, bottomY) {
+	var wallIdLeft,
+		wallIdRight,
+		wallIdTop,
+		wallIdBottom;
+	// If topY is out of bounds, fix it
+	if (topY < g_playzone[1][0]){
+		return false;
+	}
+	else {
+		wallIdLeft = this.getWallId(leftX,topY);
+		wallIdRight = this.getWallId(rightX,topY);
+		if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
+			!this.checkForWall(wallIdRight[0],wallIdRight[1])) {
+			return true;
+		}
+		return false;
+	}
+},
+
+Enemy.prototype.canMoveDown = function(leftX, rightX, topY, bottomY) {
+	var wallIdLeft,
+		wallIdRight,
+		wallIdTop,
+		wallIdBottom;
+	// If BottomY is out of bounds, fix it
+	if (bottomY > g_playzone[1][1]){
+		return false;
+	}
+	else {
+		wallIdLeft = this.getWallId(leftX,bottomY);
+		wallIdRight = this.getWallId(rightX,bottomY);
+		if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
+			!this.checkForWall(wallIdRight[0],wallIdRight[1])) {
+			return true;
+		}
+		return false;
+	}
+},
+
+Enemy.prototype.canMoveLeft = function(leftX, rightX, topY, bottomY) {
+	var wallIdLeft,
+		wallIdRight,
+		wallIdTop,
+		wallIdBottom;
+	// If leftX is out of bounds, fix it
+	if (leftX < g_playzone[0][0]){
+		return false;
+	}
+	else {
+		wallIdTop = this.getWallId(leftX,topY);
+		wallIdBottom = this.getWallId(leftX,bottomY);
+		if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
+			!this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
+			return true;
+		}
+		return false;
+	}
+},
+
+Enemy.prototype.canMoveRight = function(leftX, rightX, topY, bottomY) {
+	var wallIdLeft,
+		wallIdRight,
+		wallIdTop,
+		wallIdBottom;
+	// If rightX is out of bounds, fix it
+	if (rightX > g_playzone[0][1]){
+		return false;
+	}
+	else {
+		wallIdTop = this.getWallId(rightX,topY);
+		wallIdBottom = this.getWallId(rightX,bottomY);
+		if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
+			!this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
+			return true;
+		}
+		return false;
+	}
+},
 
 Enemy.prototype.render = function(ctx){
 

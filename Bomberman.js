@@ -51,6 +51,7 @@ Bomberman.prototype.bombStrength = 1;
 Bomberman.prototype.trigger = false;
 Bomberman.prototype.lives = 3;
 Bomberman.prototype.walkspeed = 1.5;
+Bomberman.prototype.wallPass = false;
 
 // Sprite sheet properties
 /*
@@ -199,37 +200,17 @@ Bomberman.prototype.update = function (du) {
 
     };
 
-
 Bomberman.prototype.computePosition = function () {
-
 	// Variables for position logic
-	var wallIdLeft,
-		wallIdRight,
-		wallIdTop,
-		wallIdBottom,
-		leftX = this.cx-this.getRadius(),
+	var leftX = this.cx-this.getRadius(),
 		rightX = this.cx+this.getRadius(),
 		topY = this.cy-this.getRadius(),
 		bottomY = this.cy+this.getRadius();
 
 	if (keys[this.KEY_UP]) {
-		var newTopY = topY - this.walkspeed;
-
-		// If newTopY is out of bounds, fix it
-		if (newTopY < g_playzone[1][0]){
-			this.cy = g_playzone[1][0]+this.getRadius();
-		}
-		else {
-			wallIdLeft = this.getWallId(leftX,newTopY);
-			wallIdRight = this.getWallId(rightX,newTopY);
-			if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
-				 !this.checkForWall(wallIdRight[0],wallIdRight[1])) {
-				this.cy -= this.walkspeed;
-			}
-		}
+		this.maybeMoveUp(leftX, rightX, topY - this.walkspeed, bottomY);
 
 		// Animation
-
     if(this.direction !== 3) {
       this.direction = 3;
       this.currentupFrame = 0;
@@ -254,23 +235,10 @@ Bomberman.prototype.computePosition = function () {
 	}
 
 
-	if (keys[this.KEY_DOWN] && bottomY < g_playzone[1][1]) {
-		var newBottomY = bottomY + this.walkspeed;
+	if (keys[this.KEY_DOWN]) {
+		this.maybeMoveDown(leftX, rightX, topY, bottomY + this.walkspeed);
 
-		// If newBottomY is out of bounds, fix it
-		if (newBottomY > g_playzone[1][1]){
-			this.cy = g_playzone[1][1]-this.getRadius()-1;
-		}
-		else {
-			wallIdLeft = this.getWallId(leftX,newBottomY);
-			wallIdRight = this.getWallId(rightX,newBottomY);
-			if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
-				 !this.checkForWall(wallIdRight[0],wallIdRight[1])) {
-				this.cy += this.walkspeed;
-			}
-		}
-			// ANIMATION
-
+		// ANIMATION
       if(this.direction !== 1) {
         this.direction = 1;
         this.currentdownFrame = 0;
@@ -295,21 +263,9 @@ Bomberman.prototype.computePosition = function () {
 	}
 
 	if (keys[this.KEY_LEFT]) {
-		var newLeftX = leftX - this.walkspeed;
-
-		// If newTopY is out of bounds, fix it
-		if (newLeftX < g_playzone[0][0]){
-			this.cx = g_playzone[0][0]+this.getRadius();
-		}
-		else {
-			wallIdTop = this.getWallId(newLeftX,topY);
-			wallIdBottom = this.getWallId(newLeftX,bottomY);
-			if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
-				 !this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
-				this.cx -= this.walkspeed;
-			}
-		}
-			// ANIMATION
+		this.maybeMoveLeft(leftX - this.walkspeed, rightX, topY, bottomY);
+		
+		// ANIMATION
       if(this.direction !== 2 ) {
         this.direction = 2;
         this.currentleftFrame = 0;
@@ -334,22 +290,9 @@ Bomberman.prototype.computePosition = function () {
 	}
 
 	if (keys[this.KEY_RIGHT]) {
-		var newRightX = rightX + this.walkspeed;
+		this.maybeMoveRight(leftX, rightX + this.walkspeed, topY, bottomY);
 
-		// If newTopY is out of bounds, fix it
-		if (newRightX > g_playzone[0][1]){
-			this.cx = g_playzone[0][1]-this.getRadius()-1;
-		}
-		else {
-			wallIdTop = this.getWallId(newRightX,topY);
-			wallIdBottom = this.getWallId(newRightX,bottomY);
-			if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
-				 !this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
-				this.cx += this.walkspeed;
-			}
-		}
-
-			// ANIMATION
+		// ANIMATION
 
       // reset the variables to new direction
       if(this.direction !== 0) {
@@ -374,6 +317,82 @@ Bomberman.prototype.computePosition = function () {
 			moveLeftRight.play();
 		}
 };
+
+Bomberman.prototype.maybeMoveUp = function(leftX, rightX, topY, bottomY) {
+	var wallIdLeft,
+		wallIdRight,
+		wallIdTop,
+		wallIdBottom;
+	// If topY is out of bounds, fix it
+	if (topY < g_playzone[1][0]){
+		this.cy = g_playzone[1][0]+this.getRadius();
+	}
+	else {
+		wallIdLeft = this.getWallId(leftX,topY);
+		wallIdRight = this.getWallId(rightX,topY);
+		if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
+			!this.checkForWall(wallIdRight[0],wallIdRight[1])) {
+			this.cy -= this.walkspeed;
+		}
+	}
+},
+
+Bomberman.prototype.maybeMoveDown = function(leftX, rightX, topY, bottomY) {
+	var wallIdLeft,
+		wallIdRight,
+		wallIdTop,
+		wallIdBottom;
+	// If BottomY is out of bounds, fix it
+	if (bottomY > g_playzone[1][1]){
+		this.cy = g_playzone[1][1]-this.getRadius()-1;
+	}
+	else {
+		wallIdLeft = this.getWallId(leftX,bottomY);
+		wallIdRight = this.getWallId(rightX,bottomY);
+		if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
+			!this.checkForWall(wallIdRight[0],wallIdRight[1])) {
+			this.cy += this.walkspeed;
+		}
+	}
+},
+
+Bomberman.prototype.maybeMoveLeft = function(leftX, rightX, topY, bottomY) {
+	var wallIdLeft,
+		wallIdRight,
+		wallIdTop,
+		wallIdBottom;
+	// If leftX is out of bounds, fix it
+	if (leftX < g_playzone[0][0]){
+		this.cx = g_playzone[0][0]+this.getRadius();
+	}
+	else {
+		wallIdTop = this.getWallId(leftX,topY);
+		wallIdBottom = this.getWallId(leftX,bottomY);
+		if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
+			!this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
+			this.cx -= this.walkspeed;
+		}
+	}
+},
+
+Bomberman.prototype.maybeMoveRight = function(leftX, rightX, topY, bottomY) {
+	var wallIdLeft,
+		wallIdRight,
+		wallIdTop,
+		wallIdBottom;
+	// If rightX is out of bounds, fix it
+	if (rightX > g_playzone[0][1]){
+		this.cx = g_playzone[0][1]-this.getRadius()-1;
+	}
+	else {
+		wallIdTop = this.getWallId(rightX,topY);
+		wallIdBottom = this.getWallId(rightX,bottomY);
+		if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
+			!this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
+			this.cx += this.walkspeed;
+		}
+	}
+},
 
 
 // athugar collision við sprengju og breytir hraðanum eftir því
