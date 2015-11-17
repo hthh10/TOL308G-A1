@@ -347,25 +347,25 @@ generateEnemy : function(){
 
 // tímabundið fall til að messa ekki í enemies á meðan
 // þeir eru svona mikið under construction
-generateRandomEnemy : function(cx, cy){
-    var luck = Math.random();
-    if (luck<0.5) {
+generateRandomEnemy: function(cx, cy) {
+  var luck = Math.random();
+  if (luck < 0.5) {
     this._enemies.push(new Ballom({
-      cx : cx,
-      cy : cy,
-      sprite : g_sprites.ballom,
-      deathsheet:g_sprites.deadBallom,
-      speed : 3
+      cx: cx,
+      cy: cy,
+      sprite: g_sprites.ballom,
+      deathsheet: g_sprites.deadBallom,
+      speed: 3
     }));
-}
-    else {
-      this._enemies.push(new Onil({
-        cx : cx,
-        cy : cy,
-        sprite : g_sprites.onil,
-        speed : 3
-      }));
-    }
+  } else {
+    this._enemies.push(new Onil({
+      cx: cx,
+      cy: cy,
+      sprite: g_sprites.onil,
+      deathsheet: g_sprites.deadOnil,
+      speed: 3
+    }));
+  }
 },
 
 generateDeadBomberman : function(cx,cy) {

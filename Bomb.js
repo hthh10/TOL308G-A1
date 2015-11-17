@@ -18,6 +18,7 @@ function Bomb(descr) {
   // Common inherited setup logic from Entity
 
   this.setup(descr);
+  this.sprite = g_sprites.bomb;
   this.logBomb(1);
 
   // Make a noise when I am created (i.e. fired)
@@ -34,12 +35,6 @@ function Bomb(descr) {
 Bomb.prototype = new Entity();
 
 
-// HACKED-IN AUDIO (no preloading)
-// Bomb.prototype.fireSound = new Audio(
-//   "sounds/bulletFire.ogg");
-// Bomb.prototype.zappedSound = new Audio(
-//   "sounds/bulletZapped.ogg");
-
 // Initial, inheritable, default values
 Bomb.prototype.rotation = 0;
 Bomb.prototype.cx = 16;
@@ -50,39 +45,70 @@ Bomb.prototype.KEY_P1_TRIGGER   = '3'.charCodeAt(0);
 Bomb.prototype.KEY_P2_TRIGGER   = '0'.charCodeAt(0);
 Bomb.prototype.explodeSound = new Audio("Sounds/Explosion.wav");
 //Bomb.prototype.explodeSound.src = "Sounds/Explosion.wav";
-// Convert times from milliseconds to "nominal" time units.
+Bomb.prototype.width = 19;
+Bomb.prototype.height = 22;
+
+// animation stuff
+Bomb.prototype.spritePosX = 179.5;
+Bomb.prototype.spritePosY = 90;
+Bomb.prototype.SlideWidth = 30;
+Bomb.prototype.counter = 0;
+Bomb.prototype.interval = 300;
 Bomb.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
 var eatBomb = new Audio("Sounds/Eat Bomb.wav");
 
 Bomb.prototype.update = function(du) {
+
   spatialManager.unregister(this);
   if (this._isDeadNow) {
     this.logBomb(-1);
     return entityManager.KILL_ME_NOW;
-    }
+  }
 
-    this.maybeDetonate();
-
+  this.maybeDetonate();
+  this.animate();
   this.lifeSpan -= du;
   if (this.lifeSpan < 40) {
     this.configureExplosion();
     this.logBomb(-1);
     return entityManager.KILL_ME_NOW;
-}
+  }
 
   // ef sprengjan verður fyrir sprengingu springur hún
   if (this.isColliding() && (this.isColliding() instanceof Explosion)) {
-      this.configureExplosion();
-    }
+    this.configureExplosion();
+  }
 
-  if (this.isColliding() instanceof Pakupaku){
+  if (this.isColliding() instanceof Pakupaku) {
     eatBomb.play();
     this.kill();
   }
-
-
   spatialManager.register(this);
+};
+
+
+Bomb.prototype.animate = function() {
+  var i = this.interval;
+  var hradi = 150;
+
+  if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 1) {
+    this.spritePosX += this.SlideWidth;
+    this.counter += 1;
+    this.interval += hradi;
+  } else if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 2) {
+    this.spritePosX += this.SlideWidth;
+    this.counter += 1;
+    this.interval += hradi;
+  } else if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 3) {
+    this.spritePosX -= this.SlideWidth;
+    this.counter += 1;
+    this.interval += hradi;
+  } else if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 4) {
+    this.spritePosX -= this.SlideWidth;
+    this.counter = 0;
+    this.interval += hradi;
+  }
 };
 
 // sendir entitymanager upplýsingar um sprengingu
@@ -124,16 +150,12 @@ Bomb.prototype.takeBombHit = function() {
 };
 
 Bomb.prototype.render = function(ctx) {
-
   var fadeThresh = Bomb.prototype.lifeSpan / 3;
 
-  // if (this.lifeSpan < fadeThresh) {
-  //   ctx.globalAlpha = this.lifeSpan / fadeThresh;
-  // }
-
-  g_sprites.bomb.drawWrappedCentredAt(
-    ctx, this.cx, this.cy
-  );
+this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,this.spritePosX,this.spritePosY);
+  // g_sprites.bomb.drawWrappedCentredAt(
+  //   ctx, this.cx, this.cy
+  // );
 
   ctx.globalAlpha = 1;
 };

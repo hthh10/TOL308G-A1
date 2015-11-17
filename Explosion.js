@@ -98,7 +98,6 @@ Explosion.prototype.updatePlayerScore = function(hitEntity) {
   } else if (hitEntity instanceof Enemy) {
     if (this.bombermanID === 1 && this.immunity > -5.0) {
       g_score.P1_score += 1;
-      console.log(this.immunity);
     } else if (this.bombermanID > 1 && this.immunity > -5.0) {
       g_score.P2_score += 1;
     }
