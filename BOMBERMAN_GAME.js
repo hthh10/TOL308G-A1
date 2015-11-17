@@ -48,7 +48,7 @@ function updateSimulation(du) {
     processDiagnostics();
 
 
-if (g_gameStarted) entityManager.update(du);
+if (g_gameStarted)entityManager.update(du);
 
 // Prevent perpetual firing!
 eatKey(Bomberman.prototype.KEY_FIRE);
@@ -158,7 +158,7 @@ function requestPreloads() {
 
     var requiredImages = {
         wall : "Sprites/wall.png",
-        brick : "Sprites/brick.png",
+        brick : "Sprites/Spritesheet.png",
         ballomLeft : "Sprites/ballomLeft.png",
         ballomRight : "Sprites/ballomRight.png",
         ballomUp : "Sprites/ballomUp.png",
@@ -173,7 +173,8 @@ function requestPreloads() {
         trigger:"Sprites/trigger.gif",
         strength:"Sprites/Strength.gif",
         speed: "Sprites/Speed.gif",
-        evilbomberman: "Sprites/EvilbombermanSpritesheet.gif"
+        evilbomberman: "Sprites/EvilbombermanSpritesheet.gif",
+        Brickdeath: "Sprites/Spritesheet.png",
 
     };
 
@@ -201,6 +202,7 @@ function preloadDone() {
                           new Sprite(g_images.speed)];
     g_sprites.door = new Sprite(g_images.door);
     g_sprites.evilbomberman = new Sprite(g_images.evilbomberman);
+    g_sprites.Brickdeath = new Sprite(g_images.Brickdeath);
 
 	wall.init();
 

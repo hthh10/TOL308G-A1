@@ -61,10 +61,10 @@ scale : 1,
 // Init function to set variables that must first be defined
 init : function(){
 	this.baseWallReset = this.baseWall;
-	this.brickImg = g_images.brick;
 	this.wallImg = g_images.wall;
-	this.width  = this.brickImg.width;
-	this.height = this.brickImg.height;
+	this.sprite = g_sprites.brick;
+	this.width  = this.wallImg.width;
+	this.height = this.wallImg.height;
 },
 
 initMultiplayer : function() {
@@ -140,7 +140,7 @@ destroyBrick : function (yId, xId) {
 	  entityManager.generateDoor(descr);
 	  this.baseWall[yId][xId] = -10;
 	}
-	else if (this.baseWall[yId][xId] === 2) this.baseWall[yId][xId] = 0;
+	else if (this.baseWall[yId][xId] === 2) this.baseWall[yId][xId] = -2;
 	else if (this.baseWall[yId][xId] > 2){
 		for (var i = 3; i<10; i++) {
 			descr.id = i-3;
@@ -216,10 +216,20 @@ render : function(ctx){
             }
 			// Render breakable walls
 			else if (this.baseWall[i][j] > 1){
-				this.drawWallCenteredAt(ctx,this.baseCx+j*this.stepCx,
-				this.baseCy+i*this.stepCy, this.brickImg);
+				this.sprite.animate(ctx,this.baseCx+j*this.stepCx,
+				this.baseCy+i*this.stepCy,19,20,15.5,238);
             }
+						else if (this.baseWall[i][j] === -2){
+							entityManager.killBrick(this.baseCx+j*this.stepCx,
+							this.baseCy+i*this.stepCy,19,20);
+							this.baseWall[i][j] = -1;
+			        }
+
         }
     }
-}
+},
+
+
+
+
 }

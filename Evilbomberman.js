@@ -112,7 +112,7 @@ Evilbomberman.prototype.update = function(du) {
 
 Evilbomberman.prototype.maybeDropBomb = function() {
   if ((this.canDropBomb && this.Bombinterval < 1000 / NOMINAL_UPDATE_INTERVAL) ||
-    Math.random() < 0.01) {
+    Math.random() < 0.005) {
 
     // Don't drop bomb if there is one already in the square
     var hitEntity = spatialManager.findEntityInRange(this.cx, this.cy, 1);
@@ -138,7 +138,6 @@ Evilbomberman.prototype.computePosition = function() {
   var bmanY = spatialManager.findBomberman().posY;
   var bmanXprox = this.cx - bmanX;
   var bmanYprox = this.cy - bmanY;
-  console.log(bmanYprox);
   //Enemy moves by default
   var wallId,
     leftX = this.cx - this.getRadius(),
@@ -180,10 +179,10 @@ Evilbomberman.prototype.computePosition = function() {
 
       wallId = this.getWallId(rightX, this.cy);
 
-      if (!this.checkForWall(downId[0], downId[1]) && shouldITurn)  {
+      if (bmanYprox < 0 && !this.checkForWall(downId[0], downId[1]) && shouldITurn)  {
         this.direction = 2;
       }
-      if (!this.checkForWall(upId[0], upId[1]) && shouldITurn) {
+      if (bmanYprox > 0 && !this.checkForWall(upId[0], upId[1]) && shouldITurn) {
         this.direction = 4;
       }
       // going forward logic. Check if the next block is a wall
@@ -210,8 +209,10 @@ Evilbomberman.prototype.computePosition = function() {
     if (this.direction === 2) {
       wallId = this.getWallId(this.cx, bottomY);
 
-      if (!this.checkForWall(leftId[0], leftId[1]) && shouldITurn) this.direction = 3;
-      if (!this.checkForWall(rightId[0], rightId[1]) && shouldITurn) this.direction = 1;
+      if (bmanXprox > 0 && !this.checkForWall(leftId[0], leftId[1]) &&
+       shouldITurn) this.direction = 3;
+      if (bmanXprox < 0 && !this.checkForWall(rightId[0], rightId[1]) &&
+       shouldITurn) this.direction = 1;
 
       if (!this.checkForWall(wallId[0], wallId[1])) this.cy += this.speed;
       else {
@@ -237,8 +238,10 @@ Evilbomberman.prototype.computePosition = function() {
     if (this.direction === 3) {
       wallId = this.getWallId(leftX, this.cy);
 
-      if (!this.checkForWall(upId[0], upId[1]) && shouldITurn) this.direction = 4;
-      if (!this.checkForWall(downId[0], downId[1]) && shouldITurn) this.direction = 2;
+      if (bmanYprox > 0 && !this.checkForWall(upId[0], upId[1]) &&
+       shouldITurn) this.direction = 4;
+      if (bmanYprox < 0 && !this.checkForWall(downId[0], downId[1]) &&
+       shouldITurn) this.direction = 2;
       if (!this.checkForWall(wallId[0], wallId[1])) this.cx -= this.speed;
       else {
         if (bmanYprox > 0 && Math.random() < 0.8) this.direction = 4; // 80% chance of enemy going up
@@ -261,8 +264,8 @@ Evilbomberman.prototype.computePosition = function() {
     if (this.direction === 4) {
       wallId = this.getWallId(this.cx, topY);
 
-      if (!this.checkForWall(leftId[0], leftId[1]) && shouldITurn) this.direction = 3;
-      if (!this.checkForWall(rightId[0], rightId[1]) && shouldITurn) this.direction = 1;
+      if (bmanXprox > 0 && !this.checkForWall(leftId[0], leftId[1]) && shouldITurn) this.direction = 3;
+      if (bmanXprox < 0 && !this.checkForWall(rightId[0], rightId[1]) && shouldITurn) this.direction = 1;
 
       if (!this.checkForWall(wallId[0], wallId[1])) {
         this.cy -= this.speed;

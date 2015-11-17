@@ -29,7 +29,7 @@ _explosions : [],
 _powerups : [],
 _door : [],
 _evilbomberman: [],
-
+_brickdeath: [],
 // -------------
 // Ugly var for level design
 
@@ -64,7 +64,9 @@ KILL_ME_NOW : -1,
 deferredSetup : function () {
 
     this._categories = [this._bombermen, this._ballom, this._onil,
-       this._bombs, this._explosions, this._powerups, this._door, this._pakupaku, this._evilbomberman];
+       this._bombs, this._explosions, this._powerups, this._door,
+        this._pakupaku, this._evilbomberman, this._brickdeath];
+
 
 },
 
@@ -126,6 +128,14 @@ checkWinConditions : function() {
 
 },
 
+killBrick : function(cx, cy, width, height) {
+  this._brickdeath.push(new Brickdeath({
+    cx   : cx,
+    cy   : cy,
+    width : width,
+    height : height
+    }));
+},
 
 dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID, trigger) {
   this._bombs.push(new Bomb({
@@ -401,6 +411,5 @@ render: function(ctx) {
 }
 
 }
-
 // Some deferred setup which needs the object to have been created first
 entityManager.deferredSetup();
