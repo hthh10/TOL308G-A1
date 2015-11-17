@@ -29,7 +29,7 @@ _explosions : [],
 _powerups : [],
 _door : [],
 _evilbomberman: [],
-_brickdeath: [],
+_spritedeath: [],
 
 // -------------
 // Ugly var for level design
@@ -64,7 +64,7 @@ deferredSetup : function () {
 
     this._categories = [this._bombermen, this._ballom, this._onil,
        this._bombs, this._explosions, this._powerups, this._door,
-        this._pakupaku, this._evilbomberman, this._brickdeath];
+        this._pakupaku, this._evilbomberman, this._spritedeath];
 
 },
 
@@ -81,7 +81,7 @@ initLevel: function(level) {
 		this._generateEnemies();
 		wall.initStorymode();
 	}
-  
+
   if (level === 2){
     this.resetBombermen();
     // Clear relevant entities
@@ -89,7 +89,7 @@ initLevel: function(level) {
     this.clearEntityType(this._bombs);
     this.clearEntityType(this._explosions);
     this.clearEntityType(this._powerups);
-    
+
     // Generate new level
     wall.generateLevel(g_level);
     this._generateEnemies();
@@ -101,7 +101,7 @@ initLevel: function(level) {
     this.clearEntityType(this._bombs);
     this.clearEntityType(this._explosions);
     this.clearEntityType(this._powerups);
-    
+
     // Generate new level
     wall.generateLevel(g_level);
     this._generateEnemies();
@@ -162,12 +162,18 @@ checkWinConditions : function() {
 	}
 },
 
-killBrick : function(cx, cy, width, height) {
-  this._brickdeath.push(new Brickdeath({
+killSprite : function(cx, cy, width, height, spritePosX,spritePosY,
+  nrDeathSlides, deathSlideWidth, sprite) {
+  this._spritedeath.push(new Spritedeath({
     cx   : cx,
     cy   : cy,
     width : width,
-    height : height
+    height : height,
+    spritePosX : spritePosX,
+    spritePosY : spritePosY,
+    sprite : sprite,
+    nrDeathSlides : nrDeathSlides,
+    deathSlideWidth : deathSlideWidth
     }));
 },
 
@@ -310,7 +316,8 @@ generateEnemy : function(){
     this._ballom.push(new Ballom({
       cx : 40,
       cy : 350,
-      sprite : g_sprites.ballom
+      sprite : g_sprites.ballom,
+      deathsheet:g_sprites.deadBallom
     }));
     this._ballom.push(new Ballom({
       cx : 360,
@@ -350,7 +357,8 @@ generateRandomEnemy : function(cx, cy){
     this._ballom.push(new Ballom({
       cx : cx,
       cy : cy,
-      sprite : g_sprites.onilLeft && g_sprites.onilRight,
+      sprite : g_sprites.ballom,
+      deathsheet:g_sprites.deadBallom,
       speed : 3
     }));
 }
@@ -358,20 +366,20 @@ generateRandomEnemy : function(cx, cy){
       this._onil.push(new Onil({
         cx : cx,
         cy : cy,
-        sprite : g_sprites.onilLeft && g_sprites.onilRight,
+        sprite : g_sprites.onil,
         speed : 3
       }));
     }
 },
 
-//
-// generatePowerup : function(cx,cy) {
-//   this._powerups.push(new Powerup({
-//     cx:cx,
-//     cy:cy,
-//     id: util.randRange(0,3)
-//   }));
-// },
+generateDeadBomberman : function(cx,cy) {
+  this._bombermen.push(new Bomberman({
+        cx   : cx,
+        cy   : cy,
+        isDead: true,
+        sprite: g_sprites.deadBomberman
+    }));
+},
 
 generatePowerup : function(descr) {
 	this._powerups.push(new Powerup(descr));

@@ -21,7 +21,7 @@ function Bomberman(descr) {
     this.rememberResets();
 
     // Default sprite, if not otherwise specified
-    this.sprite = this.sprite || g_sprites.bomberman;
+    this.sprite = this.sprite || g_sprites.bomberman || g_sprites.deadBomberman;
 
     // Set normal drawing scale, and warp state off
     this._scale = 1;
@@ -87,8 +87,11 @@ Bomberman.prototype.spritePosY = 0;
 Bomberman.prototype.direction = 1; // 0 = right, 1 = down, 2 = left, 3 = up
 
 
-
-
+//Death animation stuff
+Bomberman.prototype.deadSpritePosX = 58;
+Bomberman.prototype.deadSpritePosY = 32;
+Bomberman.prototype.deathSlideWidth = 29;
+Bomberman.prototype.nrDeathSlides = 7;
 
 
 var moveLeftRight = new Audio("Sounds/Bomberman SFX (1).wav");
@@ -136,8 +139,9 @@ Bomberman.prototype._moveToBeginning = function () {
     this.cy = this.reset_cy;
 };
 
-Bomberman.prototype.update = function (du) {
 
+Bomberman.prototype.update = function (du) {
+    this.respawan -= du;
     this.immunity -= du;
     // Handle warping
     if (this._isReseting) {
@@ -155,7 +159,6 @@ Bomberman.prototype.update = function (du) {
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
 	this.computePosition();
-
     // Handle firing
     this.maybeDropBomb();
 
@@ -172,8 +175,10 @@ Bomberman.prototype.update = function (du) {
 			this.lives -= 1;
 			if (this._spatialID === 1) g_score.P1_lives -= 1;
 			else g_score.P2_lives -= 1;
-
-			if (this.lives <= 0) 
+      entityManager.killSprite(this.cx,this.cy,this.width,
+        this.height,this.deadSpritePosX,this.deadSpritePosY,
+        this.nrDeathSlides, this.deathSlideWidth, g_sprites.deadBomberman);
+			if (this.lives <= 0)
 			{
 				entityManager.checkLoseConditions();
 				return entityManager.KILL_ME_NOW;
@@ -466,4 +471,5 @@ Bomberman.prototype.render = function (ctx) {
     this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,this.spritePosX,this.spritePosY);
     //this.sprite.drawCentredAt(ctx, this.cx, this.cy);
     this.sprite.scale = origScale;
+
 };

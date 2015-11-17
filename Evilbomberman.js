@@ -65,13 +65,25 @@ Evilbomberman.prototype.spritePosY = 0;
 Evilbomberman.prototype.Bombinterval = 5000 / NOMINAL_UPDATE_INTERVAL;
 Evilbomberman.prototype.canDropBomb = true;
 Evilbomberman.prototype.lives = 3;
+Evilbomberman.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
+//Death animation stuff
+
+Evilbomberman.prototype.deadSpritePosX = 58;
+Evilbomberman.prototype.deadSpritePosY = 32;
+Evilbomberman.prototype.deathSlideWidth = 29;
+Evilbomberman.prototype.nrDeathSlides = 7;
 
 
 Evilbomberman.prototype.update = function(du) {
   if (this.lives < 1) {
+    entityManager.killSprite(this.cx, this.cy, this.width,
+      this.height, this.deadSpritePosX, this.deadSpritePosY,
+      this.nrDeathSlides, this.deathSlideWidth, g_sprites.deadEvilBomberman);
+
     return entityManager.KILL_ME_NOW;
   }
 
+  this.immunity -= du;
   this.Bombinterval -= du;
   this.computePosition();
   this.maybeDropBomb();
@@ -97,9 +109,12 @@ Evilbomberman.prototype.update = function(du) {
       }
     }
     // if hit by player's bombs, lose hp.
-    if ((hitEntity instanceof Explosion && hitEntity.bombermanID > 0)) {
+    if ((hitEntity instanceof Explosion && hitEntity.bombermanID > 0) &&
+          this.immunity < 20) {
       //award points?
       this.lives -= 1;
+      this.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
+      console.log('evil hp = ' + this.lives);
     }
   }
 

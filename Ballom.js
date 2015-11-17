@@ -11,7 +11,7 @@
 */
 
 //Ballom is an enemy that aimlessly wanders around at the same speed
-//as Bomberman does. 
+//as Bomberman does.
 
 //A generic constructor which accepts an arbitrary descriptor object
 function Ballom(descr) {
@@ -50,6 +50,13 @@ Ballom.prototype.rightStartY = 21;
 
 Ballom.prototype.spritePosX = 0;
 Ballom.prototype.spritePosY = 0;
+
+//Death animation stuff
+Ballom.prototype.isDead = false;
+Ballom.prototype.deadSpritePosX = 0;
+Ballom.prototype.deadSpritePosY = 152;
+Ballom.prototype.deathSlideWidth = 29;
+Ballom.prototype.nrDeathSlides = 7;
 
 Ballom.prototype.bombCollision = function(){
     //If colliding with a bomb, go the opposite way you came from
@@ -141,14 +148,14 @@ Ballom.prototype.computePosition = function () {
             else {
                 this.spritePosX = this.rightStartX;
                 this.currentrightFrame = 0;
-            } 
+            }
         }
-        
+
             // going down.
             if(this.direction === 2) {
                 wallId = this.getWallId(this.cx,bottomY);
 
-                if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3; 
+                if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3;
                 if(!this.checkForWall(rightId[0],rightId[1]) && shouldITurn) this.direction = 1;
 
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cy += this.speed;
@@ -168,15 +175,15 @@ Ballom.prototype.computePosition = function () {
             else {
                 this.spritePosX = this.downStartX;
                 this.currentdownFrame = 0;
-            } 
+            }
         }
 
 
          // going left
             if(this.direction === 3) {
                 wallId = this.getWallId(leftX,this.cy);
-            
-                if(!this.checkForWall(upId[0],upId[1]) && shouldITurn) this.direction = 4; 
+
+                if(!this.checkForWall(upId[0],upId[1]) && shouldITurn) this.direction = 4;
                 if(!this.checkForWall(downId[0],downId[1]) && shouldITurn) this.direction = 2;
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cx -= this.speed;
                 else{
@@ -192,7 +199,7 @@ Ballom.prototype.computePosition = function () {
             ++this.currentupFrame;
             this.spritePosX += this.width;
         }
-    
+
         else {
             this.spritePosX = this.upStartX;
             this.currentupFrame = 0;
@@ -202,7 +209,7 @@ Ballom.prototype.computePosition = function () {
             if(this.direction === 4) {
                 wallId = this.getWallId(this.cx,topY);
 
-                if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3; 
+                if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3;
                 if(!this.checkForWall(rightId[0],rightId[1]) && shouldITurn) this.direction = 1;
 
                 if (!this.checkForWall(wallId[0],wallId[1])) {
@@ -221,7 +228,7 @@ Ballom.prototype.computePosition = function () {
                 ++this.currentupFrame;
                 this.spritePosX += this.width;
             }
-    
+
             else {
                 this.spritePosX = this.upStartX;
                 this.currentupFrame = 0;

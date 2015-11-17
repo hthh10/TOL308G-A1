@@ -60,7 +60,7 @@ scale : 1,
 // Init function to set variables that must first be defined
 init : function(){
 	this.wallImg = g_images.wall;
-	this.sprite = g_sprites.brick;
+	this.brickImg = g_images.brick;
 	this.width  = this.wallImg.width;
 	this.height = this.wallImg.height;
 },
@@ -231,12 +231,12 @@ render : function(ctx){
             }
 			// Render breakable walls
 			else if (this.baseWall[i][j] > 1){
-				this.sprite.animate(ctx,this.baseCx+j*this.stepCx,
-				this.baseCy+i*this.stepCy,19,20,15.5,238);
+				this.drawWallCenteredAt(ctx,this.baseCx+j*this.stepCx,
+				this.baseCy+i*this.stepCy,this.brickImg);
             }
 						else if (this.baseWall[i][j] === -2){
-							entityManager.killBrick(this.baseCx+j*this.stepCx,
-							this.baseCy+i*this.stepCy,19,20);
+							entityManager.killSprite(this.baseCx+j*this.stepCx,
+							this.baseCy+i*this.stepCy,19,20,33.8,238,5,18.3,g_sprites.Brickdeath);
 							this.baseWall[i][j] = -1;
 			        }
 
