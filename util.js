@@ -77,15 +77,28 @@ wrappedDistSq: function(x1, y1, x2, y2, xWrap, yWrap) {
 // CANVAS OPS
 // ==========
 
-clearCanvas: function (ctx) {
-    var prevfillStyle = ctx.fillStyle;
-    ctx.fillStyle = "black";
-    ctx.fillRect(0,0, ctx.canvas.width,g_playzone[1][0]);
-    ctx.fillStyle = "#006000";
-    ctx.fillRect(0,g_playzone[1][0], ctx.canvas.width, ctx.canvas.height);
-    ctx.fillStyle = prevfillStyle;
+// clearCanvas: function (ctx) {
+//     var prevfillStyle = ctx.fillStyle;
+//     ctx.fillStyle = "black";
+//     ctx.fillRect(0,0, ctx.canvas.width,g_playzone[1][0]);
+//     ctx.fillStyle = "#006000";
+//     ctx.fillRect(0,g_playzone[1][0], ctx.canvas.width, ctx.canvas.height);
+//     ctx.fillStyle = prevfillStyle;
+// },
+clearCanvas: function(ctx) {;
+  var prevfillStyle = ctx.fillStyle;
+  var background = new Image();
+  background.src = 'Sprites/gras.jpg';
+  background.onload = function() {
+    var pattern = ctx.createPattern(this, "repeat");
+    ctx.fillStyle = pattern;
+  };
+  ctx.fillRect(0, g_playzone[1][0], ctx.canvas.width, ctx.canvas.height);
+  ctx.fillStyle = prevfillStyle;
+  var prevfillStyle = ctx.fillStyle;
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, ctx.canvas.width, g_playzone[1][0])
 },
-
 strokeCircle: function (ctx, x, y, r) {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
