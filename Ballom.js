@@ -24,6 +24,53 @@ function Ballom(descr) {
 //Ballom is an enemy so it inherits from the enemy function
 Ballom.prototype = new Enemy();
 
+Ballom.prototype.width = 19;//23.2;
+Ballom.prototype.height = 22;
+
+//15 rammar, frá 0 - 14
+Ballom.prototype.downFrameLimit = 11; // 3 rammar. 0,1,2
+Ballom.prototype.currentdownFrame = 0;
+Ballom.prototype.downStartX = 0;
+Ballom.prototype.downStartY = 0;
+
+Ballom.prototype.upFrameLimit = 11;
+Ballom.prototype.currentupFrame = 0;
+Ballom.prototype.upStartX = 0;
+Ballom.prototype.upStartY = 43; //20
+
+Ballom.prototype.leftFrameLimit = 11;
+Ballom.prototype.currentleftFrame = 0;
+Ballom.prototype.leftStartX = 0; //42;
+Ballom.prototype.leftStartY = 0; //20;
+
+Ballom.prototype.rightFrameLimit = 11;
+Ballom.prototype.currentrightFrame = 0;
+Ballom.prototype.rightStartX = 0; //41;
+Ballom.prototype.rightStartY = 21;
+
+Ballom.prototype.spritePosX = 0;
+Ballom.prototype.spritePosY = 0;
+
+Ballom.prototype.bombCollision = function(){
+    //If colliding with a bomb, go the opposite way you came from
+    if (this.isColliding() instanceof Bomb){
+        this.isCollidingWithBomb(this.isColliding());
+        if(this.direction === 1){
+            this.direction = 3;
+        }
+        if(this.direction === 2){
+            this.direction = 4;
+        }
+        if(this.direction === 3){
+            this.direction = 1;
+        }
+        if(this.direction === 4){
+            this.direction = 2;
+        }
+
+    }
+}
+
 Ballom.prototype.computePosition = function () {
     //Enemy moves by default
     var wallId,
@@ -77,16 +124,25 @@ Ballom.prototype.computePosition = function () {
                 if(!this.checkForWall(upId[0],upId[1]) && shouldITurn) {
                     this.direction = 4;
                 }
-
-                //make ballom look right
-                this.sprite = g_sprites.ballomRight;
                 // going forward logic. Check if the next block is a wall
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cx += this.speed;
                 else{ // if there is a wall
                     if(Math.random() < 0.5) this.direction = 2; // 50% chance of going up
                     else this.direction = 4; // otherwise he goes up.
                 }
+                if(this.currentrightFrame === 0) {
+                this.spritePosX = this.rightStartX;
+                this.spritePosY = this.rightStartY;
             }
+            if(this.currentrightFrame < this.rightFrameLimit) {
+                ++this.currentrightFrame;
+                this.spritePosX += this.width;
+            }
+            else {
+                this.spritePosX = this.rightStartX;
+                this.currentrightFrame = 0;
+            } 
+        }
         
             // going down.
             if(this.direction === 2) {
@@ -100,15 +156,26 @@ Ballom.prototype.computePosition = function () {
                     if(Math.random() < 0.5) this.direction = 1;  // 50% chance of enemy going right
                     else this.direction = 3; // otherwise he goes left.
                 }
+                //Animation
+            if(this.currentdownFrame === 0) {
+                this.spritePosX = this.downStartX;
+                this.spritePosY = this.downStartY;
             }
+            if(this.currentdownFrame < this.downFrameLimit){
+                ++this.currentdownFrame;
+                this.spritePosX += this.width;
+            }
+            else {
+                this.spritePosX = this.downStartX;
+                this.currentdownFrame = 0;
+            } 
+        }
 
 
          // going left
             if(this.direction === 3) {
                 wallId = this.getWallId(leftX,this.cy);
-                //make ballom look left
-                this.sprite = g_sprites.ballomLeft;
-
+            
                 if(!this.checkForWall(upId[0],upId[1]) && shouldITurn) this.direction = 4; 
                 if(!this.checkForWall(downId[0],downId[1]) && shouldITurn) this.direction = 2;
                 if (!this.checkForWall(wallId[0],wallId[1])) this.cx -= this.speed;
@@ -116,12 +183,24 @@ Ballom.prototype.computePosition = function () {
                     if(Math.random() < 0.5) this.direction = 4; // 50% chance of enemy going down
                     else this.direction = 2; // otherwise he goes up.
                     }
-            }
+                    // Animation
+        if(this.currentupFrame === 0) {
+            this.spritePosX = this.upStartX;
+            this.spritePosY = this.upStartY;
+        }
+        if(this.currentupFrame < this.upFrameLimit) {
+            ++this.currentupFrame;
+            this.spritePosX += this.width;
+        }
+    
+        else {
+            this.spritePosX = this.upStartX;
+            this.currentupFrame = 0;
+        }
+    }
                 // Going up
             if(this.direction === 4) {
                 wallId = this.getWallId(this.cx,topY);
-                //make ballom look up
-                this.sprite = g_sprites.ballomUp;
 
                 if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3; 
                 if(!this.checkForWall(rightId[0],rightId[1]) && shouldITurn) this.direction = 1;
@@ -133,6 +212,20 @@ Ballom.prototype.computePosition = function () {
                     if(Math.random() < 0.5) this.direction = 3; // 50% chance of enemy going left
                     else this.direction = 1; // otherwise he goes right.
                 }
+                // Animation
+            if(this.currentupFrame === 0) {
+                this.spritePosX = this.upStartX;
+                this.spritePosY = this.upStartY;
+            }
+            if(this.currentupFrame < this.upFrameLimit) {
+                ++this.currentupFrame;
+                this.spritePosX += this.width;
+            }
+    
+            else {
+                this.spritePosX = this.upStartX;
+                this.currentupFrame = 0;
             }
         }
-        };
+    }
+};

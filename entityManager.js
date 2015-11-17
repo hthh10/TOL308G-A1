@@ -79,6 +79,32 @@ initLevel: function(level) {
 		this._generateBombermen();
 		this._generateEnemies();
 	}
+  
+  if (level === 2){
+    this.resetBombermen();
+    // Clear relevant entities
+    this._door[0].kill();
+    this.clearEntityType(this._bombs);
+    this.clearEntityType(this._explosions);
+    this.clearEntityType(this._powerups);
+    
+    // Generate new level
+    wall.generateLevel(g_level);
+    this._generateEnemies();
+  }
+  if (level === 3){
+    this.resetBombermen();
+    // Clear relevant entities
+    this._door[0].kill();
+    this.clearEntityType(this._bombs);
+    this.clearEntityType(this._explosions);
+    this.clearEntityType(this._powerups);
+    
+    // Generate new level
+    wall.generateLevel(g_level);
+    this._generateEnemies();
+  }
+  /*
 	else if (level < 4) {
 		this.resetBombermen();
 		// Clear relevant entities
@@ -88,9 +114,10 @@ initLevel: function(level) {
 		this.clearEntityType(this._powerups);
 		
 		// Generate new level
-		this._generateEnemies();
+		//this._generateEnemies();
 		wall.generateLevel(g_level);
 	}
+  */
 	else if (level === 4) {
 		g_score.win = true;
 	}	
@@ -108,7 +135,7 @@ initMultiplayer: function() {
 checkWinConditions : function() {
 	if (!g_multiplayerMode) {
 		if (g_level < 4) {
-			if (this._ballom.length < 1 && this._onil.length < 1) {
+			if (this._ballom.length < 1 && this._onil.length < 1 && this._pakupaku < 1) {
 				g_level += 1;
 				this.initLevel(g_level);
 			}
@@ -254,32 +281,34 @@ generateBomberman : function(descr) {
 },
 
 generateEnemy : function(){
+  if(g_level === 1){
     this._ballom.push(new Ballom({
       cx : 40,
       cy : 350,
-      sprite : g_sprites.ballomRight || g_sprites.ballomLeft ||
-              g_sprites.ballomUp
+      sprite : g_sprites.ballom
     }));
-    /*
-    this._ballom.push(new Enemy({
+    this._ballom.push(new Ballom({
       cx : 360,
       cy : 190,
-      sprite : g_sprites.ballomRight || g_sprites.ballomLeft
+      sprite : g_sprites.ballom
     }));
-*/
+  }
+  if(g_level === 2){
     this._onil.push(new Onil({
       cx : 360,
       cy : 190,
-      sprite : g_sprites.onilLeft && g_sprites.onilRight,
+      sprite : g_sprites.onil,
       speed : 3
     }));
-
+  }
+  if(g_level === 3){
     this._pakupaku.push(new Pakupaku({
       cx : 600,
       cy : 150,
       sprite : g_sprites.pakupaku,
       speed : 2.2
-    }));
+      }));
+  }
 },
 
 // tímabundið fall til að messa ekki í enemies á meðan

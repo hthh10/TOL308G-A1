@@ -28,16 +28,22 @@ Enemy.prototype.cy = 350;
 Enemy.prototype.sprite = this.sprite;
 Enemy.prototype.lifeSpan = 1000 / NOMINAL_UPDATE_INTERVAL;
 Enemy.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
-//spawn immunity
+
 
 Enemy.prototype.update = function(du) {
-    this.immunity -= du;
      // Unregister and check for death
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+    //spawn immunity
+    this.immunity -= du;
+
     //remember previous position
     this.computePosition();
 
+
+    this.bombCollision();
+
+/*
     //If colliding with a bomb, go the opposite way you came from
     if (this.isColliding() instanceof Bomb){
         this.isCollidingWithBomb(this.isColliding());
@@ -55,6 +61,7 @@ Enemy.prototype.update = function(du) {
         }
 
     }
+    */
     // if standing in fire, die!
     if ((this.isColliding() instanceof Explosion) && this.immunity < 10){
         //award points?
@@ -158,7 +165,7 @@ Enemy.prototype.computePosition = function () {
         */
 
 Enemy.prototype.getRadius = function() {
-      return (this.sprite.width / 2) * 1;
+    return this.width*0.8;
 };
 // athugar collision við sprengju og breytir hraðanum eftir því
 Enemy.prototype.isCollidingWithBomb = function(bomba) {
@@ -200,6 +207,7 @@ Enemy.prototype.render = function(ctx){
     //var origScale = this.sprite.scale;
     //pass my scale into the sprite, for drawing
     //this.sprite.scale = this.scale;
-    this.sprite.drawCentredAt(ctx, this.cx, this.cy);
+    //this.sprite.drawCentredAt(ctx, this.cx, this.cy);
+    this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,this.spritePosX,this.spritePosY);
     //this.sprite.scale = origScale;
 };

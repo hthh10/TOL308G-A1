@@ -159,12 +159,9 @@ function requestPreloads() {
     var requiredImages = {
         wall : "Sprites/wall.png",
         brick : "Sprites/brick.png",
-        ballomLeft : "Sprites/ballomLeft.png",
-        ballomRight : "Sprites/ballomRight.png",
-        ballomUp : "Sprites/ballomUp.png",
-        onilLeft : "Sprites/onilLeft.png",
-        onilRight : "Sprites/onilRight.png",
-        pakupaku : "Sprites/pakupaku.gif",
+        ballom : "Sprites/ballomSpritesheet.png",
+        onil : "Sprites/onilSpritesheet.png",
+        pakupaku : "Sprites/pakupakuSpritesheet.png",
         Bomb : "Sprites/Bombsprite.gif",
 	    bomberman : "Sprites/bombermanSpritesheet.png",
         explosion : "Sprites/Explosion.gif",
@@ -186,11 +183,8 @@ function preloadDone() {
     g_sprites.brick = new Sprite(g_images.brick);
     g_sprites.wall = new Sprite(g_images.wall);
 	g_sprites.bomberman = new Sprite(g_images.bomberman);
-    g_sprites.ballomLeft = new Sprite(g_images.ballomLeft);
-    g_sprites.ballomRight = new Sprite(g_images.ballomRight);
-    g_sprites.ballomUp = new Sprite(g_images.ballomUp);
-    g_sprites.onilLeft = new Sprite(g_images.onilLeft);
-    g_sprites.onilRight = new Sprite(g_images.onilRight);
+    g_sprites.ballom = new Sprite(g_images.ballom);
+    g_sprites.onil = new Sprite(g_images.onil);
     g_sprites.pakupaku = new Sprite(g_images.pakupaku);
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
