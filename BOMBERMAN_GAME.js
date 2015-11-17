@@ -2,9 +2,7 @@
 // BOMBERMAN
 // =========
 /*
-
 TEXT HERE
-
 */
 
 "use strict";
@@ -61,6 +59,7 @@ var g_multiplayerMode = false;
 var g_player2 = false;
 var g_gameStarted = false;
 var g_level = 1;
+var g_gameOver = false;
 
 var KEY_SPATIAL = keyCode('X');
 
@@ -69,18 +68,27 @@ var KEY_MULTIPLAYER  = keyCode('M');
 var KEY_PLAYER2  = keyCode('O');
 var KEY_RESET = keyCode('R');
 
+function resetControlVars() {
+	g_multiplayerMode = false;
+	g_player2 = false;
+	g_level = 1;
+	g_gameOver = false;
+}
+
 function processDiagnostics() {
 
     if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
-	if (eatKey(KEY_PLAYER2) && !g_player2) {
+	if (eatKey(KEY_PLAYER2) && !g_player2 && !g_gameOver) {
 		g_player2 = true;
 		entityManager.addPlayer2();
 	}
-	if (eatKey(KEY_STORYMODE) && !g_gameStarted) {
+	if (eatKey(KEY_STORYMODE) && (!g_gameStarted || g_gameOver)) {
+		resetControlVars();
 		g_gameStarted = true;
 		startStorymode();
 	}
-	else if (eatKey(KEY_MULTIPLAYER) && !g_gameStarted) {
+	else if (eatKey(KEY_MULTIPLAYER) && (!g_gameStarted || g_gameOver)) {
+		resetControlVars();
 		g_gameStarted = true;
 		g_player2 = true;
 		g_multiplayerMode = true;
@@ -113,14 +121,14 @@ function renderSimulation(ctx) {
     if(g_isUpdatePaused){
         backgroundMusic.pause();
     }
-	
+
 	if (!g_gameStarted) {
 		startupScreen.render(ctx);
 	}
 	else {
 		renderScore(ctx);
 	}
-	
+
     entityManager.render(ctx);
 
     if (g_renderSpatialDebug) spatialManager.render(ctx);
@@ -137,14 +145,14 @@ function resetManagers() {
 
 function startStorymode() {
 	resetManagers();
+	resetScore();
 	entityManager.initStorymode();
-	wall.initStorymode();
 }
 
 function startMultiplayer() {
 	resetManagers();
+	resetScore();
 	entityManager.initMultiplayer();
-	wall.initMultiplayer();
 }
 
 
@@ -162,6 +170,7 @@ function requestPreloads() {
         ballom : "Sprites/ballomSpritesheet.png",
         onil : "Sprites/onilSpritesheet.png",
         pakupaku : "Sprites/pakupakuSpritesheet.png",
+        brick : "Sprites/Spritesheet.png",
         Bomb : "Sprites/Bombsprite.gif",
 	    bomberman : "Sprites/bombermanSpritesheet.png",
         explosion : "Sprites/Explosion.gif",
@@ -170,6 +179,8 @@ function requestPreloads() {
         trigger:"Sprites/trigger.gif",
         strength:"Sprites/Strength.gif",
         speed: "Sprites/Speed.gif",
+        evilbomberman: "Sprites/EvilbombermanSpritesheet.gif",
+        Brickdeath: "Sprites/Spritesheet.png",
 
     };
 
@@ -193,7 +204,9 @@ function preloadDone() {
                           new Sprite(g_images.strength),
                           new Sprite(g_images.speed)];
     g_sprites.door = new Sprite(g_images.door);
-	
+    g_sprites.evilbomberman = new Sprite(g_images.evilbomberman);
+    g_sprites.Brickdeath = new Sprite(g_images.Brickdeath);
+
 	wall.init();
 
     main.init();

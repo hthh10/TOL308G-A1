@@ -1,4 +1,4 @@
-﻿/*
+/*
 entityManager.js
 A module which handles arbitrary entity-management for "Bomberman"
 We create this module as a single global object, and initialise it
@@ -28,6 +28,8 @@ _pakupaku : [],
 _explosions : [],
 _powerups : [],
 _door : [],
+_evilbomberman: [],
+_brickdeath: [],
 
 // -------------
 // Ugly var for level design
@@ -38,11 +40,9 @@ _door : [],
 _generateBombermen : function() {
     this.generateBomberman();
 },
-
 _generateEnemies : function() {
     this.generateEnemy();
 },
-
 
 _forEachOf: function(aCategory, fn) {
     for (var i = 0; i < aCategory.length; ++i) {
@@ -63,7 +63,8 @@ KILL_ME_NOW : -1,
 deferredSetup : function () {
 
     this._categories = [this._bombermen, this._ballom, this._onil,
-       this._bombs, this._explosions, this._powerups, this._door, this._pakupaku];
+       this._bombs, this._explosions, this._powerups, this._door,
+        this._pakupaku, this._evilbomberman, this._brickdeath];
 
 },
 
@@ -78,6 +79,7 @@ initLevel: function(level) {
 	if (level === 1) {
 		this._generateBombermen();
 		this._generateEnemies();
+		wall.initStorymode();
 	}
   
   if (level === 2){
@@ -112,7 +114,7 @@ initLevel: function(level) {
 		this.clearEntityType(this._bombs);
 		this.clearEntityType(this._explosions);
 		this.clearEntityType(this._powerups);
-		
+
 		// Generate new level
 		//this._generateEnemies();
 		wall.generateLevel(g_level);
@@ -120,16 +122,24 @@ initLevel: function(level) {
   */
 	else if (level === 4) {
 		g_score.win = true;
-	}	
+		g_gameOver = true;
+	}
 },
 
 initStorymode : function() {
 	this.initLevel(1);
 },
 
+checkLoseConditions : function() {
+	if (g_score.P1_lives <= 0 && g_score.P2_lives <= 0) {
+		g_gameOver = true;
+	}
+},
+
 initMultiplayer: function() {
 	this._generateBombermen();
 	this.addPlayer2();
+	wall.initMultiplayer();
 },
 
 checkWinConditions : function() {
@@ -147,9 +157,24 @@ checkWinConditions : function() {
 	else {
 		if (this._bombermen.length < 2) {
 			g_score.win = true;
+			g_gameOver = true;
 		}
 	}
+},
 
+killBrick : function(cx, cy, width, height) {
+  this._brickdeath.push(new Brickdeath({
+    cx   : cx,
+    cy   : cy,
+    width : width,
+    height : height
+    }));
+},
+
+checkLoseConditions : function() {
+	if (g_score.P1_lives <= 0 && g_score.P2_lives <= 0) {
+		g_gameOver = true;
+	}
 },
 
 
@@ -309,6 +334,12 @@ generateEnemy : function(){
       speed : 2.2
       }));
   }
+    this._evilbomberman.push(new Evilbomberman({
+      cx : 590,
+      cy : 590,
+      sprite : g_sprites.evilbomberman,
+      speed : 1.8
+    }));
 },
 
 // tímabundið fall til að messa ekki í enemies á meðan
@@ -350,6 +381,7 @@ generateDoor : function(descr) {
 	this._door.push(new Door(descr));
 },
 addPlayer2 : function() {
+  g_score.P2_lives = 3;
   this._bombermen.push(new Bomberman({
         cx   : g_canvas.width-40,
         cy   : 120,
@@ -377,6 +409,7 @@ reset: function() {
 	this._explosions = [];
 	this._powerups = [];
 	this._door = [];
+	this._pakupaku = [];
 	this.deferredSetup();
 },
 

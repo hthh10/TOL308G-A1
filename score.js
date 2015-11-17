@@ -7,11 +7,21 @@ var g_score = {
     P1_score: 0,
 	P2_score: 0,
     P1_lives: 3,
-	P2_lives: 3,
+	P2_lives: 0,
     P1_maxBombs:1,
 	P2_maxBombs:1,
 	win: false
 };
+
+function resetScore() {
+	g_score.P1_score = 0;
+	g_score.P2_score = 0;
+	g_score.P1_lives = 3;
+	g_score.P2_lives = 0;
+	g_score.P1_maxBombs = 1;
+	g_score.P2_maxBombs = 1;
+	g_score.win = false;
+}
 
 function renderScore (ctx) {
 	renderP1Score(ctx);
@@ -27,16 +37,9 @@ function renderScore (ctx) {
 	if (g_score.win) {
 		renderWin(ctx);
 	}
-	/* Game over condition - To be implemented
-    if (g_score.P1_lives <= 0 &&
-	    (g_score.P2_lives <= 0 || g_score.P2_lives === 'undefined')) {
-        ctx.font="40px Arial";
-        ctx.fillText("Game Over",  g_canvas.width/2,250);
-        ctx.font="25px Arial";
-        ctx.fillText("Press 'N' to start a new game.",  g_canvas.width/2,300);
-        g_gameOver = true;
-    }
-	*/
+	else if (g_gameOver) {
+		renderLose(ctx);
+	}
 	ctx.restore();
 }
 
@@ -45,18 +48,37 @@ function renderWin (ctx) {
 	ctx.font="60px Arial";
 	ctx.textAlign = "center";
 	if (!g_multiplayerMode) {
-		ctx.fillText("YOU WIN!", g_canvas.width/2, g_canvas.height/2);
+		ctx.fillText("YOU WIN!", g_canvas.width/2, g_canvas.height/2 - 10);
 	}
 	else {
 		if (g_score.P1_lives > 0) {
 			ctx.fillStyle = "red";
-			ctx.fillText("PLAYER 1 WINS!", g_canvas.width/2, g_canvas.height/2);
+			ctx.fillText("PLAYER 1 WINS!", g_canvas.width/2, g_canvas.height/2 - 10);
 		}
 		else {
 			ctx.fillStyle = "blue";
-			ctx.fillText("PLAYER 2 WINS!", g_canvas.width/2, g_canvas.height/2);
+			ctx.fillText("PLAYER 2 WINS!", g_canvas.width/2, g_canvas.height/2 - 10);
 		}
 	}
+	ctx.font="20px Arial";
+    ctx.fillText("Press 'space' to start story mode", g_canvas.width/2,g_canvas.height/2 + 35);
+	ctx.fillText("Press 'M' to start versus mode", g_canvas.width/2,g_canvas.height/2 + 75);
+	ctx.restore();
+}
+
+function renderLose (ctx) {
+	ctx.save();
+	ctx.font="60px Arial";
+	ctx.textAlign = "center";
+	if (!g_multiplayerMode) {
+		ctx.fillText("GAME OVER", g_canvas.width/2, g_canvas.height/2 - 10);
+	}
+	else {
+		ctx.fillText("NO WINNER", g_canvas.width/2, g_canvas.height/2 - 10);
+	}
+	ctx.font="20px Arial";
+    ctx.fillText("Press 'space' to start story mode", g_canvas.width/2,g_canvas.height/2 + 35);
+	ctx.fillText("Press 'M' to start versus mode", g_canvas.width/2,g_canvas.height/2 + 75);
 	ctx.restore();
 }
 

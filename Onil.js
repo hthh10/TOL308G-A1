@@ -12,7 +12,7 @@
 */
 
 //Onil is an enemy that is more dangerous than Ballom because it travels
-//double the speed of Bomberman. 
+//double the speed of Bomberman.
 
 //A generic constructor which accepts an arbitrary descriptor object
 function Onil(descr) {
