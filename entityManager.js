@@ -103,6 +103,12 @@ initStorymode : function() {
 	this.initLevel(1);
 },
 
+checkLoseConditions : function() {
+	if (g_score.P1_lives <= 0 && g_score.P2_lives <= 0) {
+		g_gameOver = true;
+	}
+},
+
 initMultiplayer: function() {
 	this._generateBombermen();
 	this.addPlayer2();

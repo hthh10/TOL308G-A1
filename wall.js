@@ -59,9 +59,6 @@ scale : 1,
 
 // Init function to set variables that must first be defined
 init : function(){
-
-	this.baseWallReset = this.baseWall;
-
 	this.wallImg = g_images.wall;
 	this.sprite = g_sprites.brick;
 	this.width  = this.wallImg.width;
