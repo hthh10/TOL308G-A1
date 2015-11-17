@@ -2,9 +2,7 @@
 // BOMBERMAN
 // =========
 /*
-
 TEXT HERE
-
 */
 
 "use strict";
@@ -48,7 +46,7 @@ function updateSimulation(du) {
     processDiagnostics();
 
 
-if (g_gameStarted)entityManager.update(du);
+if (g_gameStarted) entityManager.update(du);
 
 // Prevent perpetual firing!
 eatKey(Bomberman.prototype.KEY_FIRE);
@@ -61,6 +59,7 @@ var g_multiplayerMode = false;
 var g_player2 = false;
 var g_gameStarted = false;
 var g_level = 1;
+var g_gameOver = false;
 
 var KEY_SPATIAL = keyCode('X');
 
@@ -69,18 +68,27 @@ var KEY_MULTIPLAYER  = keyCode('M');
 var KEY_PLAYER2  = keyCode('O');
 var KEY_RESET = keyCode('R');
 
+function resetControlVars() {
+	g_multiplayerMode = false;
+	g_player2 = false;
+	g_level = 1;
+	g_gameOver = false;
+}
+
 function processDiagnostics() {
 
     if (eatKey(KEY_SPATIAL)) g_renderSpatialDebug = !g_renderSpatialDebug;
-	if (eatKey(KEY_PLAYER2) && !g_player2) {
+	if (eatKey(KEY_PLAYER2) && !g_player2 && !g_gameOver) {
 		g_player2 = true;
 		entityManager.addPlayer2();
 	}
-	if (eatKey(KEY_STORYMODE) && !g_gameStarted) {
+	if (eatKey(KEY_STORYMODE) && (!g_gameStarted || g_gameOver)) {
+		resetControlVars();
 		g_gameStarted = true;
 		startStorymode();
 	}
-	else if (eatKey(KEY_MULTIPLAYER) && !g_gameStarted) {
+	else if (eatKey(KEY_MULTIPLAYER) && (!g_gameStarted || g_gameOver)) {
+		resetControlVars();
 		g_gameStarted = true;
 		g_player2 = true;
 		g_multiplayerMode = true;
@@ -137,14 +145,14 @@ function resetManagers() {
 
 function startStorymode() {
 	resetManagers();
+	resetScore();
 	entityManager.initStorymode();
-	wall.initStorymode();
 }
 
 function startMultiplayer() {
 	resetManagers();
+	resetScore();
 	entityManager.initMultiplayer();
-	wall.initMultiplayer();
 }
 
 

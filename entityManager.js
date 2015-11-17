@@ -1,4 +1,4 @@
-﻿/*
+/*
 entityManager.js
 A module which handles arbitrary entity-management for "Bomberman"
 We create this module as a single global object, and initialise it
@@ -30,6 +30,7 @@ _powerups : [],
 _door : [],
 _evilbomberman: [],
 _brickdeath: [],
+
 // -------------
 // Ugly var for level design
 
@@ -39,11 +40,9 @@ _brickdeath: [],
 _generateBombermen : function() {
     this.generateBomberman();
 },
-
 _generateEnemies : function() {
     this.generateEnemy();
 },
-
 
 _forEachOf: function(aCategory, fn) {
     for (var i = 0; i < aCategory.length; ++i) {
@@ -67,7 +66,6 @@ deferredSetup : function () {
        this._bombs, this._explosions, this._powerups, this._door,
         this._pakupaku, this._evilbomberman, this._brickdeath];
 
-
 },
 
 clearEntityType : function (aCategory) {
@@ -81,6 +79,7 @@ initLevel: function(level) {
 	if (level === 1) {
 		this._generateBombermen();
 		this._generateEnemies();
+		wall.initStorymode();
 	}
 	else if (level < 4) {
 		this.resetBombermen();
@@ -96,6 +95,7 @@ initLevel: function(level) {
 	}
 	else if (level === 4) {
 		g_score.win = true;
+		g_gameOver = true;
 	}
 },
 
@@ -106,6 +106,7 @@ initStorymode : function() {
 initMultiplayer: function() {
 	this._generateBombermen();
 	this.addPlayer2();
+	wall.initMultiplayer();
 },
 
 checkWinConditions : function() {
@@ -123,9 +124,9 @@ checkWinConditions : function() {
 	else {
 		if (this._bombermen.length < 2) {
 			g_score.win = true;
+			g_gameOver = true;
 		}
 	}
-
 },
 
 killBrick : function(cx, cy, width, height) {
@@ -136,6 +137,13 @@ killBrick : function(cx, cy, width, height) {
     height : height
     }));
 },
+
+checkLoseConditions : function() {
+	if (g_score.P1_lives <= 0 && g_score.P2_lives <= 0) {
+		g_gameOver = true;
+	}
+},
+
 
 dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID, trigger) {
   this._bombs.push(new Bomb({
@@ -339,6 +347,7 @@ generateDoor : function(descr) {
 	this._door.push(new Door(descr));
 },
 addPlayer2 : function() {
+  g_score.P2_lives = 3;
   this._bombermen.push(new Bomberman({
         cx   : g_canvas.width-40,
         cy   : 120,
@@ -366,6 +375,7 @@ reset: function() {
 	this._explosions = [];
 	this._powerups = [];
 	this._door = [];
+	this._pakupaku = [];
 	this.deferredSetup();
 },
 
@@ -411,5 +421,6 @@ render: function(ctx) {
 }
 
 }
+
 // Some deferred setup which needs the object to have been created first
 entityManager.deferredSetup();
