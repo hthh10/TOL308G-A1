@@ -48,7 +48,7 @@ function renderWin (ctx) {
 	ctx.font="60px Arial";
 	ctx.textAlign = "center";
 	if (!g_multiplayerMode) {
-		ctx.fillText("YOU WIN!", g_canvas.width/2, g_canvas.height/2 - 10);
+		ctx.fillText("VICTORY!", g_canvas.width/2, g_canvas.height/2 - 10);
 	}
 	else {
 		if (g_score.P1_lives > 0) {

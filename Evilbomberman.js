@@ -21,7 +21,7 @@ function Evilbomberman(descr) {
   this._scale = 1;
 
   // Default sprite, if not otherwise specified
-  this.sprite = this.sprite;
+  this.sprite = this.sprite || g_sprites.deadBomberman;
   this.sprite.width = 28;
 }
 
@@ -75,6 +75,10 @@ Evilbomberman.prototype.nrDeathSlides = 7;
 
 
 Evilbomberman.prototype.update = function(du) {
+  // Unregister and check for death
+    spatialManager.unregister(this);
+    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+  
   if (this.lives < 1) {
     entityManager.killSprite(this.cx, this.cy, this.width,
       this.height, this.deadSpritePosX, this.deadSpritePosY,
@@ -122,6 +126,8 @@ Evilbomberman.prototype.update = function(du) {
     this.Bombinterval = 4000 / NOMINAL_UPDATE_INTERVAL;
     this.canDropBomb = true;
   }
+  
+  spatialManager.register(this);
 
 };
 
@@ -303,6 +309,10 @@ Evilbomberman.prototype.computePosition = function() {
       }
     }
   }
+};
+
+Evilbomberman.prototype.getRadius = function () {
+    return this.width;
 };
 
 Evilbomberman.prototype.render = function(ctx) {

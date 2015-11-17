@@ -22,9 +22,7 @@ var entityManager = {
 // "PRIVATE" DATA
 _bombs : [],
 _bombermen : [],
-_ballom : [],
-_onil : [],
-_pakupaku : [],
+_enemies : [],
 _explosions : [],
 _powerups : [],
 _door : [],
@@ -62,9 +60,9 @@ KILL_ME_NOW : -1,
 //
 deferredSetup : function () {
 
-    this._categories = [this._bombermen, this._ballom, this._onil,
+    this._categories = [this._bombermen, this._enemies,
        this._bombs, this._explosions, this._powerups, this._door,
-        this._pakupaku, this._evilbomberman, this._spritedeath];
+       this._evilbomberman, this._spritedeath];
 
 },
 
@@ -72,6 +70,14 @@ clearEntityType : function (aCategory) {
 	for (var i = 0; i < aCategory.length; ++i) {
 		aCategory[i].kill();
 	}
+},
+
+clearLevelEntities : function() {
+	this.clearEntityType(this._door);
+	this.clearEntityType(this._bombs);
+    this.clearEntityType(this._explosions);
+    this.clearEntityType(this._powerups);
+	this.clearEntityType(this._enemies);
 },
 
 initLevel: function(level) {
@@ -82,47 +88,32 @@ initLevel: function(level) {
 		wall.initStorymode();
 	}
 
-  if (level === 2){
+  else if (level === 2){
     this.resetBombermen();
     // Clear relevant entities
-    this._door[0].kill();
-    this.clearEntityType(this._bombs);
-    this.clearEntityType(this._explosions);
-    this.clearEntityType(this._powerups);
+    this.clearLevelEntities();
 
     // Generate new level
     wall.generateLevel(g_level);
     this._generateEnemies();
   }
-  if (level === 3){
+  else if (level === 3){
     this.resetBombermen();
     // Clear relevant entities
-    this._door[0].kill();
-    this.clearEntityType(this._bombs);
-    this.clearEntityType(this._explosions);
-    this.clearEntityType(this._powerups);
+    this.clearLevelEntities();
 
     // Generate new level
     wall.generateLevel(g_level);
     this._generateEnemies();
   }
-  /*
-	else if (level < 4) {
+	else if (level === 4) {
 		this.resetBombermen();
 		// Clear relevant entities
-		this._door[0].kill();
-		this.clearEntityType(this._bombs);
-		this.clearEntityType(this._explosions);
-		this.clearEntityType(this._powerups);
+		this.clearLevelEntities();
 
 		// Generate new level
-		//this._generateEnemies();
+		this._generateEnemies();
 		wall.generateLevel(g_level);
-	}
-  */
-	else if (level === 4) {
-		g_score.win = true;
-		g_gameOver = true;
 	}
 },
 
@@ -145,14 +136,14 @@ initMultiplayer: function() {
 checkWinConditions : function() {
 	if (!g_multiplayerMode) {
 		if (g_level < 4) {
-			if (this._ballom.length < 1 && this._onil.length < 1 && this._pakupaku < 1) {
+			if (this._enemies.length < 1) {
 				g_level += 1;
 				this.initLevel(g_level);
 			}
 		}
+		/* This is covered in the update function
 		else if (g_level === 4) {
-
-		}
+		}*/
 	}
 	else {
 		if (this._bombermen.length < 2) {
@@ -312,22 +303,22 @@ generateBomberman : function(descr) {
 },
 
 generateEnemy : function(){
-  if(g_level === 1){
-    this._ballom.push(new Ballom({
+  if (g_level === 1){
+    this._enemies.push(new Ballom({
       cx : 40,
       cy : 350,
       sprite : g_sprites.ballom,
       deathsheet:g_sprites.deadBallom
     }));
-    this._ballom.push(new Ballom({
+    this._enemies.push(new Ballom({
       cx : 360,
       cy : 190,
       sprite : g_sprites.ballom,
       deathsheet:g_sprites.deadBallom
     }));
   }
-  if(g_level === 2){
-    this._onil.push(new Onil({
+  else if (g_level === 2){
+    this._enemies.push(new Onil({
       cx : 360,
       cy : 190,
       sprite : g_sprites.onil,
@@ -335,8 +326,8 @@ generateEnemy : function(){
       speed : 3
     }));
   }
-  if(g_level === 3){
-    this._pakupaku.push(new Pakupaku({
+  else if (g_level === 3){
+    this._enemies.push(new Pakupaku({
       cx : 600,
       cy : 150,
       sprite : g_sprites.pakupaku,
@@ -344,12 +335,14 @@ generateEnemy : function(){
       speed : 2.2
       }));
   }
-    this._evilbomberman.push(new Evilbomberman({
+  else if (g_level === 4) {
+	  this._enemies.push(new Evilbomberman({
       cx : 590,
       cy : 590,
       sprite : g_sprites.evilbomberman,
       speed : 1.8
     }));
+  }
 },
 
 // tímabundið fall til að messa ekki í enemies á meðan
@@ -357,7 +350,7 @@ generateEnemy : function(){
 generateRandomEnemy : function(cx, cy){
     var luck = Math.random();
     if (luck<0.5) {
-    this._ballom.push(new Ballom({
+    this._enemies.push(new Ballom({
       cx : cx,
       cy : cy,
       sprite : g_sprites.ballom,
@@ -366,7 +359,7 @@ generateRandomEnemy : function(cx, cy){
     }));
 }
     else {
-      this._onil.push(new Onil({
+      this._enemies.push(new Onil({
         cx : cx,
         cy : cy,
         sprite : g_sprites.onil,
@@ -415,12 +408,10 @@ resetBombermen: function() {
 reset: function() {
 	this._bombs = [];
 	this._bombermen = [];
-	this._ballom = [];
-	this._onil = [];
+	this._enemies = [];
 	this._explosions = [];
 	this._powerups = [];
 	this._door = [];
-	this._pakupaku = [];
 	this.deferredSetup();
 },
 
@@ -437,6 +428,10 @@ update: function(du) {
             if (status === this.KILL_ME_NOW) {
                 // remove the dead guy, and shuffle the others down to
                 // prevent a confusing gap from appearing in the array
+				if (aCategory[i] instanceof Evilbomberman) {
+					g_score.win = true;
+					g_gameOver = true;
+				}
                 aCategory.splice(i,1);
             }
             else {
