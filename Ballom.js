@@ -52,11 +52,10 @@ Ballom.prototype.spritePosX = 0;
 Ballom.prototype.spritePosY = 0;
 
 //Death animation stuff
-Ballom.prototype.isDead = false;
 Ballom.prototype.deadSpritePosX = 0;
 Ballom.prototype.deadSpritePosY = 152;
 Ballom.prototype.deathSlideWidth = 29;
-Ballom.prototype.nrDeathSlides = 7;
+Ballom.prototype.nrDeathSlides = 6;
 
 Ballom.prototype.bombCollision = function(){
     //If colliding with a bomb, go the opposite way you came from

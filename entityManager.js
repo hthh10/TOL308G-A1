@@ -173,7 +173,7 @@ killSprite : function(cx, cy, width, height, spritePosX,spritePosY,
     spritePosY : spritePosY,
     sprite : sprite,
     nrDeathSlides : nrDeathSlides,
-    deathSlideWidth : deathSlideWidth
+    deathSlideWidth : deathSlideWidth,
     }));
 },
 
@@ -322,7 +322,8 @@ generateEnemy : function(){
     this._ballom.push(new Ballom({
       cx : 360,
       cy : 190,
-      sprite : g_sprites.ballom
+      sprite : g_sprites.ballom,
+      deathsheet:g_sprites.deadBallom
     }));
   }
   if(g_level === 2){
@@ -330,6 +331,7 @@ generateEnemy : function(){
       cx : 360,
       cy : 190,
       sprite : g_sprites.onil,
+      deathsheet: g_sprites.deadOnil,
       speed : 3
     }));
   }
@@ -338,6 +340,7 @@ generateEnemy : function(){
       cx : 600,
       cy : 150,
       sprite : g_sprites.pakupaku,
+      deathsheet:g_sprites.deadPakupaku,
       speed : 2.2
       }));
   }

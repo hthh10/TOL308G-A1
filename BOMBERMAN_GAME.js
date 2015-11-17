@@ -183,6 +183,8 @@ function requestPreloads() {
         Brickdeath: "Sprites/Spritesheet.png",
         deadBomberman: "Sprites/Deathsheet.gif",
         deadBallom: "Sprites/Deathsheet.gif",
+        deadOnil: "Sprites/Evildeathsheet.gif",
+        deadPakupaku: "Sprites/Evildeathsheet.gif",
         deadEvilBomberman: "Sprites/Evildeathsheet.gif",
     };
 
@@ -210,6 +212,8 @@ function preloadDone() {
     g_sprites.Brickdeath = new Sprite(g_images.Brickdeath);
     g_sprites.deadBomberman = new Sprite(g_images.deadBomberman);
     g_sprites.deadBallom = new Sprite(g_images.deadBallom);
+    g_sprites.deadOnil = new Sprite(g_images.deadOnil);
+    g_sprites.deadPakupaku = new Sprite(g_images.deadPakupaku);
     g_sprites.deadEvilBomberman = new Sprite(g_images.deadEvilBomberman);
 
 	wall.init();

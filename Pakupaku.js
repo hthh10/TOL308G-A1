@@ -62,6 +62,13 @@ Pakupaku.prototype.eatRightStartY = 105;
 Pakupaku.prototype.spritePosX = 0;
 Pakupaku.prototype.spritePosY = 0;
 
+//Death animation stuff
+Pakupaku.prototype.deadSpritePosX = 0;
+Pakupaku.prototype.deadSpritePosY = 94;
+Pakupaku.prototype.deathSlideWidth = 29;
+Pakupaku.prototype.nrDeathSlides = 6;
+
+
 Pakupaku.prototype.bombCollision = function() {
 	//Checks to see if it's colliding with bomb
     if (this.isColliding() instanceof Bomb && this.direction === 1){
@@ -74,7 +81,7 @@ Pakupaku.prototype.bombCollision = function() {
             ++this.currentEatRightFrame;
             this.spritePosX += this.width;
         }
-    
+
         else {
             this.spritePosX = this.eatRightStartX;
             this.currenteatRightFrame = 0;
@@ -92,7 +99,7 @@ Pakupaku.prototype.bombCollision = function() {
             ++this.currentEatLeftFrame;
             this.spritePosX += this.width;
         }
-    
+
         else {
             this.spritePosX = this.eatLeftStartX;
             this.currenteatLeftFrame = 0;
@@ -110,7 +117,7 @@ Pakupaku.prototype.bombCollision = function() {
             ++this.currentEatRightFrame;
             this.spritePosX += this.width;
         }
-    
+
         else {
             this.spritePosX = this.eatRightStartX;
             this.currenteatRightFrame = 0;
@@ -188,14 +195,14 @@ Pakupaku.prototype.computePosition = function () {
         else {
             this.spritePosX = this.rightStartX;
             this.currentrightFrame = 0;
-        } 
+        }
     }
-        
+
         // going down.
         if(this.direction === 2) {
             wallId = this.getWallId(this.cx,bottomY);
 
-            if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3; 
+            if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3;
             if(!this.checkForWall(rightId[0],rightId[1]) && shouldITurn) this.direction = 1;
 
             if (!this.checkForWall(wallId[0],wallId[1])) this.cy += this.speed;
@@ -215,7 +222,7 @@ Pakupaku.prototype.computePosition = function () {
         else {
             this.spritePosX = this.downStartX;
             this.currentdownFrame = 0;
-        } 
+        }
     }
 
 
@@ -223,7 +230,7 @@ Pakupaku.prototype.computePosition = function () {
         if(this.direction === 3) {
             wallId = this.getWallId(leftX,this.cy);
 
-            if(!this.checkForWall(upId[0],upId[1]) && shouldITurn) this.direction = 4; 
+            if(!this.checkForWall(upId[0],upId[1]) && shouldITurn) this.direction = 4;
             if(!this.checkForWall(downId[0],downId[1]) && shouldITurn) this.direction = 2;
             if (!this.checkForWall(wallId[0],wallId[1])) this.cx -= this.speed;
             else{
@@ -239,7 +246,7 @@ Pakupaku.prototype.computePosition = function () {
             	++this.currentupFrame;
             	this.spritePosX += this.width;
         	}
-    
+
         	else {
             	this.spritePosX = this.upStartX;
             	this.currentupFrame = 0;
@@ -250,7 +257,7 @@ Pakupaku.prototype.computePosition = function () {
         if(this.direction === 4) {
             wallId = this.getWallId(this.cx,topY);
 
-            if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3; 
+            if(!this.checkForWall(leftId[0],leftId[1]) && shouldITurn) this.direction = 3;
             if(!this.checkForWall(rightId[0],rightId[1]) && shouldITurn) this.direction = 1;
 
             if (!this.checkForWall(wallId[0],wallId[1])) {

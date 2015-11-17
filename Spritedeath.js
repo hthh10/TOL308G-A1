@@ -18,7 +18,8 @@ function Spritedeath(descr) {
   // Common inherited setup logic from Entity
   this.setup(descr);
   this._scale = 1;
-  this.sprite = this.sprite || g_sprites.Spritedeath || g_sprites.deadBomberman;
+  this.sprite = this.sprite || g_sprites.Spritedeath || g_sprites.deadBomberman ||
+    g_sprites.deadOnil || g_sprites.deadPakupaku;
 }
 
 Spritedeath.prototype = new Entity();
@@ -46,32 +47,32 @@ Spritedeath.prototype.update = function(du) {
      this.counter < this.nrDeathSlides) {
     return entityManager.KILL_ME_NOW
   };
-  if (this.deathTimer < 400 / NOMINAL_UPDATE_INTERVAL
+  if (this.deathTimer < 200 / NOMINAL_UPDATE_INTERVAL
      && this.counter < this.nrDeathSlides - 1) {
     this.spritePosX += this.deathSlideWidth;
     this.counter += 1;
   }
-  if (this.deathTimer < 600 / NOMINAL_UPDATE_INTERVAL
+  if (this.deathTimer < 400 / NOMINAL_UPDATE_INTERVAL
      && this.counter < this.nrDeathSlides - 2) {
     this.spritePosX += this.deathSlideWidth;
     this.counter += 1;
   }
-  if (this.deathTimer < 800 / NOMINAL_UPDATE_INTERVAL
+  if (this.deathTimer < 600 / NOMINAL_UPDATE_INTERVAL
      && this.counter < this.nrDeathSlides - 3) {
     this.spritePosX += this.deathSlideWidth;
     this.counter += 1;
   }
-  if (this.deathTimer < 200 / NOMINAL_UPDATE_INTERVAL
+  if (this.deathTimer < 800 / NOMINAL_UPDATE_INTERVAL
      && this.counter < this.nrDeathSlides - 4) {
     this.spritePosX += this.deathSlideWidth;
     this.counter += 1;
   }
-  if (this.deathTimer < 200 / NOMINAL_UPDATE_INTERVAL
+  if (this.deathTimer < 900 / NOMINAL_UPDATE_INTERVAL
      && this.counter < this.nrDeathSlides - 5) {
     this.spritePosX += this.deathSlideWidth;
     this.counter += 1;
   }
-  if (this.deathTimer < 200 / NOMINAL_UPDATE_INTERVAL
+  if (this.deathTimer < 1000 / NOMINAL_UPDATE_INTERVAL
      && this.counter < this.nrDeathSlides - 6) {
     this.spritePosX += this.deathSlideWidth;
     this.counter += 1;

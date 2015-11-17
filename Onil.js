@@ -52,6 +52,12 @@ Onil.prototype.rightStartY = 21;
 Onil.prototype.spritePosX = 0;
 Onil.prototype.spritePosY = 0;
 
+//Death animation stuff
+Onil.prototype.deadSpritePosX = 0;
+Onil.prototype.deadSpritePosY = 152;
+Onil.prototype.deathSlideWidth = 29;
+Onil.prototype.nrDeathSlides = 6;
+
 Onil.prototype.bombCollision = function(){
     //If colliding with a bomb, go the opposite way you came from
     if (this.isColliding() instanceof Bomb){
@@ -130,10 +136,10 @@ Onil.prototype.computePosition = function () {
             else {
                 this.spritePosX = this.rightStartX;
                 this.currentrightFrame = 0;
-            } 
+            }
         }
 
-        
+
     }
         // going down.
         if(this.direction === 2) {
@@ -144,7 +150,7 @@ Onil.prototype.computePosition = function () {
                 if(Math.random() < 0.5) this.direction = 1;  // 50% chance of enemy going right
                 else this.direction = 3; // otherwise he goes left.
             }
-            
+
             //Animation
             if(this.currentdownFrame === 0) {
                 this.spritePosX = this.downStartX;
@@ -157,8 +163,8 @@ Onil.prototype.computePosition = function () {
             else {
                 this.spritePosX = this.downStartX;
                 this.currentdownFrame = 0;
-            } 
-            
+            }
+
         }
 
 
@@ -179,7 +185,7 @@ Onil.prototype.computePosition = function () {
             ++this.currentupFrame;
             this.spritePosX += this.width;
         }
-    
+
         else {
             this.spritePosX = this.upStartX;
             this.currentupFrame = 0;
@@ -206,11 +212,11 @@ Onil.prototype.computePosition = function () {
                 ++this.currentupFrame;
                 this.spritePosX += this.width;
             }
-    
+
             else {
                 this.spritePosX = this.upStartX;
                 this.currentupFrame = 0;
             }
-            
+
         }
     };
