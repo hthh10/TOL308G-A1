@@ -25,7 +25,7 @@ function Ballom(descr) {
 Ballom.prototype = new Enemy();
 
 Ballom.prototype.width = 19;//23.2;
-Ballom.prototype.height = 22;
+Ballom.prototype.height = 20;
 
 //15 rammar, frá 0 - 14
 Ballom.prototype.downFrameLimit = 11; // 3 rammar. 0,1,2
@@ -36,7 +36,7 @@ Ballom.prototype.downStartY = 0;
 Ballom.prototype.upFrameLimit = 11;
 Ballom.prototype.currentupFrame = 0;
 Ballom.prototype.upStartX = 0;
-Ballom.prototype.upStartY = 43; //20
+Ballom.prototype.upStartY = 41; //20
 
 Ballom.prototype.leftFrameLimit = 11;
 Ballom.prototype.currentleftFrame = 0;
@@ -46,7 +46,7 @@ Ballom.prototype.leftStartY = 0; //20;
 Ballom.prototype.rightFrameLimit = 11;
 Ballom.prototype.currentrightFrame = 0;
 Ballom.prototype.rightStartX = 0; //41;
-Ballom.prototype.rightStartY = 21;
+Ballom.prototype.rightStartY = 20;
 
 Ballom.prototype.spritePosX = 0;
 Ballom.prototype.spritePosY = 0;
