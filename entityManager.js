@@ -325,15 +325,42 @@ generateEnemy : function(){
       deathsheet: g_sprites.deadOnil,
       speed : 3
     }));
+    this._enemies.push(new Onil({
+      cx : 490,
+      cy : 190,
+      sprite : g_sprites.onil,
+      deathsheet : g_sprites.deadOnil,
+      speed : 3
+    }));
+    this._enemies.push(new Ballom({
+      cx : 600,
+      cy : 350,
+      sprite : g_sprites.ballom,
+      deathsheet : g_sprites.deadBallom,
+    }));
   }
   else if (g_level === 3){
     this._enemies.push(new Pakupaku({
       cx : 600,
       cy : 150,
       sprite : g_sprites.pakupaku,
-      deathsheet:g_sprites.deadPakupaku,
-      speed : 2.2
+      deathsheet : g_sprites.deadPakupaku,
+      speed : 2
       }));
+    this._enemies.push(new Onil({
+      cx : 40,
+      cy : 350,
+      sprite : g_sprites.onil,
+      deathsheet : g_sprites.deadOnil,
+      speed : 3
+    }));
+    this._enemies.push(new Pakupaku({
+      cx : 360,
+      cy : 590,
+      sprite : g_sprites.pakupaku,
+      deathsheet : g_sprites.deadPakupaku,
+      speed : 2
+    }));
   }
   else if (g_level === 4) {
 	  this._enemies.push(new Evilbomberman({
