@@ -53,13 +53,8 @@ Bomberman.prototype.lives = 3;
 Bomberman.prototype.walkspeed = 1.5;
 Bomberman.prototype.wallPass = false;
 
-// Sprite sheet properties
-/*
-Bomberman.prototype.width = 14;
-Bomberman.prototype.height = 19;
-*/
 
-Bomberman.prototype.width = 19;//23.2;
+Bomberman.prototype.width = 19;
 Bomberman.prototype.height = 21;
 
 //13 rammar, frá 0 - 12
@@ -211,10 +206,10 @@ Bomberman.prototype.computePosition = function () {
 		this.maybeMoveUp(leftX, rightX, topY - this.walkspeed, bottomY);
 
 		// Animation
-    if(this.direction !== 3) {
-      this.direction = 3;
-      this.currentupFrame = 0;
-    }
+	    if(this.direction !== 3) {
+	      this.direction = 3;
+	      this.currentupFrame = 0;
+	    }
 		if(moveUpDown.currentTime > 0.3) {
 			moveUpDown.currentTime = 0;
 		}
@@ -238,84 +233,83 @@ Bomberman.prototype.computePosition = function () {
 	if (keys[this.KEY_DOWN]) {
 		this.maybeMoveDown(leftX, rightX, topY, bottomY + this.walkspeed);
 
-		// ANIMATION
-      if(this.direction !== 1) {
+		//Animation
+		if(this.direction !== 1) {
         this.direction = 1;
         this.currentdownFrame = 0;
-    }
-			if(moveUpDown.currentTime > 0.3) {
-				moveUpDown.currentTime = 0;
-			}
+    	}
+		if(moveUpDown.currentTime > 0.3) {
+			moveUpDown.currentTime = 0;
+		}
 
-			if(this.currentdownFrame === 0) {
-				this.spritePosX = this.downStartX;
-				this.spritePosY = this.downStartY;
-			}
-			if(this.currentdownFrame < this.downFrameLimit){
-				++this.currentdownFrame;
-				this.spritePosX += this.width;
-			}
-			else {
-				this.spritePosX = this.downStartX;
-				this.currentdownFrame = 0;
-			}
-			moveUpDown.play();
+		if(this.currentdownFrame === 0) {
+			this.spritePosX = this.downStartX;
+			this.spritePosY = this.downStartY;
+		}
+		if(this.currentdownFrame < this.downFrameLimit){
+			++this.currentdownFrame;
+			this.spritePosX += this.width;
+		}
+		else {
+			this.spritePosX = this.downStartX;
+			this.currentdownFrame = 0;
+		}
+		moveUpDown.play();
 	}
 
 	if (keys[this.KEY_LEFT]) {
 		this.maybeMoveLeft(leftX - this.walkspeed, rightX, topY, bottomY);
-		
-		// ANIMATION
-      if(this.direction !== 2 ) {
+
+		//Animation
+		if(this.direction !== 2 ) {
         this.direction = 2;
         this.currentleftFrame = 0;
-      }
+      	}
 
-			if(moveLeftRight.currentTime > 0.3) {
-				moveLeftRight.currentTime = 0;
-			}
-			if(this.currentleftFrame === 0) {
-				this.spritePosX = this.leftStartX;
-				this.spritePosY = this.leftStartY;
-			}
-			if(this.currentleftFrame < this.leftFrameLimit) {
-				++this.currentleftFrame;
-				this.spritePosX += this.width;
-			}
-			else {
-				this.spritePosX = this.leftStartX;
-				this.currentleftFrame = 0;
-			}
-			moveLeftRight.play();
+		if(moveLeftRight.currentTime > 0.3) {
+			moveLeftRight.currentTime = 0;
+		}
+		if(this.currentleftFrame === 0) {
+			this.spritePosX = this.leftStartX;
+			this.spritePosY = this.leftStartY;
+		}
+		if(this.currentleftFrame < this.leftFrameLimit) {
+			++this.currentleftFrame;
+			this.spritePosX += this.width;
+		}
+		else {
+			this.spritePosX = this.leftStartX;
+			this.currentleftFrame = 0;
+		}
+		moveLeftRight.play();
 	}
 
 	if (keys[this.KEY_RIGHT]) {
 		this.maybeMoveRight(leftX, rightX + this.walkspeed, topY, bottomY);
 
-		// ANIMATION
-
-      // reset the variables to new direction
-      if(this.direction !== 0) {
+		//Animation
+		// reset the variables to new direction
+		if(this.direction !== 0) {
         this.direction = 0;
         this.currentrightFrame = 0;
-      }
-			if(moveLeftRight.currentTime > 0.3) {
-				moveLeftRight.currentTime = 0;
-			}
-			if(this.currentrightFrame === 0) {
-				this.spritePosX = this.rightStartX;
-				this.spritePosY = this.rightStartY;
-			}
-			if(this.currentrightFrame < this.rightFrameLimit) {
-				++this.currentrightFrame;
-				this.spritePosX += this.width;
-			}
-			else {
-				this.spritePosX = this.rightStartX;
-				this.currentrightFrame = 0;
-			}
-			moveLeftRight.play();
+      	}
+		if(moveLeftRight.currentTime > 0.3) {
+			moveLeftRight.currentTime = 0;
 		}
+		if(this.currentrightFrame === 0) {
+			this.spritePosX = this.rightStartX;
+			this.spritePosY = this.rightStartY;
+		}
+		if(this.currentrightFrame < this.rightFrameLimit) {
+			++this.currentrightFrame;
+			this.spritePosX += this.width;
+		}
+		else {
+			this.spritePosX = this.rightStartX;
+			this.currentrightFrame = 0;
+		}
+		moveLeftRight.play();
+	}
 };
 
 Bomberman.prototype.maybeMoveUp = function(leftX, rightX, topY, bottomY) {
@@ -324,9 +318,7 @@ Bomberman.prototype.maybeMoveUp = function(leftX, rightX, topY, bottomY) {
 		wallIdTop,
 		wallIdBottom;
 	// If topY is out of bounds, fix it
-	if (topY < g_playzone[1][0]){
-		this.cy = g_playzone[1][0]+this.getRadius();
-	}
+	if (topY < g_playzone[1][0]) this.cy = g_playzone[1][0]+this.getRadius();
 	else {
 		wallIdLeft = this.getWallId(leftX,topY);
 		wallIdRight = this.getWallId(rightX,topY);
@@ -343,9 +335,7 @@ Bomberman.prototype.maybeMoveDown = function(leftX, rightX, topY, bottomY) {
 		wallIdTop,
 		wallIdBottom;
 	// If BottomY is out of bounds, fix it
-	if (bottomY > g_playzone[1][1]){
-		this.cy = g_playzone[1][1]-this.getRadius()-1;
-	}
+	if (bottomY > g_playzone[1][1]) this.cy = g_playzone[1][1]-this.getRadius()-1;
 	else {
 		wallIdLeft = this.getWallId(leftX,bottomY);
 		wallIdRight = this.getWallId(rightX,bottomY);
@@ -362,9 +352,7 @@ Bomberman.prototype.maybeMoveLeft = function(leftX, rightX, topY, bottomY) {
 		wallIdTop,
 		wallIdBottom;
 	// If leftX is out of bounds, fix it
-	if (leftX < g_playzone[0][0]){
-		this.cx = g_playzone[0][0]+this.getRadius();
-	}
+	if (leftX < g_playzone[0][0]) this.cx = g_playzone[0][0]+this.getRadius();
 	else {
 		wallIdTop = this.getWallId(leftX,topY);
 		wallIdBottom = this.getWallId(leftX,bottomY);
@@ -381,9 +369,7 @@ Bomberman.prototype.maybeMoveRight = function(leftX, rightX, topY, bottomY) {
 		wallIdTop,
 		wallIdBottom;
 	// If rightX is out of bounds, fix it
-	if (rightX > g_playzone[0][1]){
-		this.cx = g_playzone[0][1]-this.getRadius()-1;
-	}
+	if (rightX > g_playzone[0][1]) this.cx = g_playzone[0][1]-this.getRadius()-1;
 	else {
 		wallIdTop = this.getWallId(rightX,topY);
 		wallIdBottom = this.getWallId(rightX,bottomY);
@@ -398,72 +384,71 @@ Bomberman.prototype.maybeMoveRight = function(leftX, rightX, topY, bottomY) {
 // athugar collision við sprengju og breytir hraðanum eftir því
 Bomberman.prototype.isCollidingWithBomb = function(bomba) {
 
+
     var wallId,
     leftX = this.cx - this.getRadius(),
     rightX = this.cx + this.getRadius(),
     topY = this.cy - this.getRadius(),
     bottomY = this.cy + this.getRadius();
 
-  if (this.cy > bomba.cy && bottomY < g_playzone[1][1]) {
-    wallId = this.getWallId(this.cx, bottomY);
-    if (!this.checkForWall(wallId[0], wallId[1]))
-      this.cy += this.walkspeed;
-  }
-  if (this.cy < bomba.cy && topY > g_playzone[1][0]) {
-    wallId = this.getWallId(this.cx, topY);
-    if (!this.checkForWall(wallId[0], wallId[1]))
-      this.cy -= this.walkspeed;
-  }
-  if (this.cx > bomba.cx && rightX < g_playzone[0][1]) {
-    wallId = this.getWallId(rightX, this.cy);
-    if (!this.checkForWall(wallId[0], wallId[1]))
-      this.cx += this.walkspeed;
-  }
-  if (this.cx < bomba.cx && leftX > g_playzone[0][0]) {
-    wallId = this.getWallId(leftX, this.cy);
-    if (!this.checkForWall(wallId[0], wallId[1]))
-      this.cx -= this.walkspeed;
-  }
+    if (this.cy > bomba.cy && bottomY < g_playzone[1][1]) {
+    	wallId = this.getWallId(this.cx, bottomY);
+    	if (!this.checkForWall(wallId[0], wallId[1])) this.cy += this.walkspeed;
+    }
+
+    if (this.cy < bomba.cy && topY > g_playzone[1][0]) {
+    	wallId = this.getWallId(this.cx, topY);
+    	if (!this.checkForWall(wallId[0], wallId[1])) this.cy -= this.walkspeed;
+    }
+    if (this.cx > bomba.cx && rightX < g_playzone[0][1]) {
+    	wallId = this.getWallId(rightX, this.cy);
+    	if (!this.checkForWall(wallId[0], wallId[1])) this.cx += this.walkspeed;
+    }
+    if (this.cx < bomba.cx && leftX > g_playzone[0][0]) {
+    	wallId = this.getWallId(leftX, this.cy);
+    	if (!this.checkForWall(wallId[0], wallId[1])) this.cx -= this.walkspeed;
+    }
 };
 
 //Athugar hvor playerinn þetta er og kíkir hvað hann á margar sprengjur eftir
 Bomberman.prototype.checkBombBag = function() {
-  if (this._spatialID === 1) {
-     g_score.P1_maxBombs += this.noBombs;
-     this.noBombs = 0;
-    return g_score.P1_maxBombs;
-  }
-  //krefst breytinga ef við bætum við fleiri playerum
-  if (this._spatialID > 1) {
-    g_score.P2_maxBombs += this.noBombs;
-    this.noBombs = 0;
-    return g_score.P2_maxBombs;
-  }
+	if (this._spatialID === 1) {
+		g_score.P1_maxBombs += this.noBombs;
+		this.noBombs = 0;
+		return g_score.P1_maxBombs;
+  	}
+  	//krefst breytinga ef við bætum við fleiri playerum
+  	if (this._spatialID > 1) {
+  		g_score.P2_maxBombs += this.noBombs;
+  		this.noBombs = 0;
+  		return g_score.P2_maxBombs;
+  	}
 };
 
+
 Bomberman.prototype.maybeDropBomb = function() {
-  if (keys[this.KEY_FIRE]) {
-	  // Don't drop bomb if there is one already in the square
-	  var hitEntity = spatialManager.findEntityInRange(this.cx, this.cy, 1);
-	  if (hitEntity instanceof Bomb) return;
+	if (keys[this.KEY_FIRE]) {
+		// Don't drop bomb if there is one already in the square
+		var hitEntity = spatialManager.findEntityInRange(this.cx, this.cy, 1);
+		if (hitEntity instanceof Bomb) return;
 
-    // Can only drop one at a time
-    if (this.checkBombBag() > 0) {
-      dropBomb.currentTime = 0; // Resets the sounds to 0 sec. Allowing "overlapping".
-      dropBomb.play();
-      // Always drop bombs in center of the square
-      // Some magic numbers: cx: 40, cy: 110 is the center of the first
-      var baseCx = g_playzone[0][0],
-        baseCy = g_playzone[1][0];
-      var xPos = Math.floor((this.cx - baseCx) / g_sprites.wall.width),
-        yPos = Math.floor((this.cy - baseCy) / g_sprites.wall.height);
-      var bombCx = g_sprites.wall.width + (g_sprites.wall.width * xPos),
-        bombCy = 110 + (g_sprites.wall.height * yPos);
+		// Can only drop one at a time
+		if (this.checkBombBag() > 0) {
+			dropBomb.currentTime = 0; // Resets the sounds to 0 sec. Allowing "overlapping".
+			dropBomb.play();
+			// Always drop bombs in center of the square
+			// Some magic numbers: 110 is the center of the first square
+			var baseCx = g_playzone[0][0],
+				baseCy = g_playzone[1][0];
+			var xPos = Math.floor((this.cx - baseCx) / g_sprites.wall.width),
+				yPos = Math.floor((this.cy - baseCy) / g_sprites.wall.height);
+			var bombCx = g_sprites.wall.width + (g_sprites.wall.width * xPos),
+				bombCy = 110 + (g_sprites.wall.height * yPos);
 
-      entityManager.dropBomb(bombCx, bombCy, xPos, yPos,
-         this.bombStrength, this._spatialID, this.trigger);
-    }
-  }
+			entityManager.dropBomb(bombCx, bombCy, xPos, yPos,
+         		this.bombStrength, this._spatialID, this.trigger);
+		}
+  	}	
 };
 
 Bomberman.prototype.applySpeed = function () {
@@ -484,11 +469,8 @@ Bomberman.prototype.halt = function () {
 };
 
 Bomberman.prototype.render = function (ctx) {
-    var origScale = this.sprite.scale;
-    // pass my scale into the sprite, for drawing
-    this.sprite.scale = this._scale;
-    this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,this.spritePosX,this.spritePosY);
-    //this.sprite.drawCentredAt(ctx, this.cx, this.cy);
-    this.sprite.scale = origScale;
+
+    this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,
+    	this.spritePosX,this.spritePosY);
 
 };

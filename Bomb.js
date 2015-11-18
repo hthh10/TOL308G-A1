@@ -1,5 +1,5 @@
 // ======
-// BULLET
+//  BOMB
 // ======
 
 "use strict";
@@ -21,19 +21,9 @@ function Bomb(descr) {
   this.sprite = g_sprites.bomb;
   this.logBomb(1);
 
-  // Make a noise when I am created (i.e. fired)
-  //this.fireSound.play();
-
-  /*
-      // Diagnostics to check inheritance stuff
-      this._bulletProperty = true;
-      console.dir(this);
-  */
-
 }
 
 Bomb.prototype = new Entity();
-
 
 // Initial, inheritable, default values
 Bomb.prototype.rotation = 0;
@@ -41,10 +31,9 @@ Bomb.prototype.cx = 16;
 Bomb.prototype.cy = 200;
 Bomb.prototype.velX = 1;
 Bomb.prototype.velY = 1;
-Bomb.prototype.KEY_P1_TRIGGER   = '3'.charCodeAt(0);
-Bomb.prototype.KEY_P2_TRIGGER   = '0'.charCodeAt(0);
+Bomb.prototype.KEY_P1_TRIGGER = '3'.charCodeAt(0);
+Bomb.prototype.KEY_P2_TRIGGER = '0'.charCodeAt(0);
 Bomb.prototype.explodeSound = new Audio("Sounds/Explosion.wav");
-//Bomb.prototype.explodeSound.src = "Sounds/Explosion.wav";
 Bomb.prototype.width = 19;
 Bomb.prototype.height = 22;
 
@@ -72,6 +61,7 @@ Bomb.prototype.update = function(du) {
   if (this.lifeSpan < 40) {
     this.configureExplosion();
     this.logBomb(-1);
+
     return entityManager.KILL_ME_NOW;
   }
 
@@ -96,15 +86,18 @@ Bomb.prototype.animate = function() {
     this.spritePosX += this.SlideWidth;
     this.counter += 1;
     this.interval += hradi;
-  } else if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 2) {
+  }
+  else if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 2) {
     this.spritePosX += this.SlideWidth;
     this.counter += 1;
     this.interval += hradi;
-  } else if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 3) {
+  }
+  else if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 3) {
     this.spritePosX -= this.SlideWidth;
     this.counter += 1;
     this.interval += hradi;
-  } else if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 4) {
+  }
+  else if (this.lifeSpan < (3000 - i) / NOMINAL_UPDATE_INTERVAL && this.counter < 4) {
     this.spritePosX -= this.SlideWidth;
     this.counter = 0;
     this.interval += hradi;
@@ -113,9 +106,9 @@ Bomb.prototype.animate = function() {
 
 // sendir entitymanager upplýsingar um sprengingu
 Bomb.prototype.configureExplosion = function() {
-	this.kill();
+  this.kill();
 	entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,
-		this.strength, this.bombermanID,this.explodeSound);
+    this.strength, this.bombermanID,this.explodeSound);
 
 };
 
@@ -139,23 +132,17 @@ Bomb.prototype.logBomb = function(x) {
 };
 
 Bomb.prototype.getRadius = function() {
-    return g_images.explosion.width/2;
+    return this.width;
 };
 
-Bomb.prototype.takeBombHit = function() {
-  this.kill();
-
-  // Make a noise when I am zapped by another bullet
-  //this.zappedSound.play();
-};
+//Bomb.prototype.takeBombHit = function() {
+//  this.kill();
+//};
 
 Bomb.prototype.render = function(ctx) {
-  var fadeThresh = Bomb.prototype.lifeSpan / 3;
+  // var fadeThresh = Bomb.prototype.lifeSpan / 3;
 
 this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,this.spritePosX,this.spritePosY);
-  // g_sprites.bomb.drawWrappedCentredAt(
-  //   ctx, this.cx, this.cy
-  // );
 
   ctx.globalAlpha = 1;
 };
