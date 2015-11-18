@@ -84,24 +84,30 @@ function renderLose (ctx) {
 
 
 function renderP1Score (ctx) {
+  var hp = new Image();
+  hp.src = 'Sprites/bomberman.gif';
+  ctx.drawImage(hp,10,12);
 	ctx.save();
 	ctx.font="20px Arial";
-    ctx.fillStyle = "red";
+  ctx.fillStyle = "red";
 	ctx.textAlign = "left";
-    ctx.fillText("Lives:" + g_score.P1_lives, 5, 30);
+  ctx.fillText(' x ' + g_score.P1_lives, 40, 30);
 	ctx.fillText("Score:" + g_score.P1_score, 150, 30);
 	ctx.fillText("Level: " + g_level, 280,30);
 	ctx.restore();
 }
 
 function renderP2Score (ctx) {
+  var hp = new Image();
+  hp.src = 'Sprites/p2hp.gif';
 	ctx.save();
 	ctx.font="20px Arial";
     ctx.fillStyle = "blue";
 	ctx.textAlign = "right";
 	if (!g_player2) ctx.fillText("Press 'O' to start", g_canvas.width-5, 30);
     else {
-		ctx.fillText("Lives:" + g_score.P2_lives, g_canvas.width-5, 30);
+    ctx.drawImage(hp,g_canvas.width-67,12);
+		ctx.fillText(" x " + g_score.P2_lives, g_canvas.width-5, 30);
 		ctx.fillText("Score:" + g_score.P2_score, g_canvas.width-150, 30);
 	}
 	ctx.restore();

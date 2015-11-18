@@ -393,7 +393,7 @@ addPlayer2 : function() {
     KEY_DOWN   : 'K'.charCodeAt(0),
     KEY_LEFT   : 'J'.charCodeAt(0),
     KEY_RIGHT  : 'L'.charCodeAt(0),
-
+    sprite : g_sprites.player2,
     KEY_FIRE   : '9'.charCodeAt(0)
     }));
 },

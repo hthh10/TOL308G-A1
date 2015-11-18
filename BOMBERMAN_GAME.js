@@ -185,6 +185,8 @@ function requestPreloads() {
         deadOnil: "Sprites/Evildeathsheet.gif",
         deadPakupaku: "Sprites/Evildeathsheet.gif",
         deadEvilBomberman: "Sprites/Evildeathsheet.gif",
+        player2: "Sprites/p2.png"
+
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -214,6 +216,7 @@ function preloadDone() {
     g_sprites.deadOnil = new Sprite(g_images.deadOnil);
     g_sprites.deadPakupaku = new Sprite(g_images.deadPakupaku);
     g_sprites.deadEvilBomberman = new Sprite(g_images.deadEvilBomberman);
+    g_sprites.player2 = new Sprite(g_images.player2);
 
 	wall.init();
 
