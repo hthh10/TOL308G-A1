@@ -11,7 +11,7 @@
 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 */
 
-//Onil is an enemy that is more dangerous than Ballom because it travels
+//Onil is an enemy that's more dangerous than Ballom because it travels
 //double the speed of Bomberman.
 
 //A generic constructor which accepts an arbitrary descriptor object
@@ -25,12 +25,12 @@ function Onil(descr) {
 //Onil is an enemy so it inherits from the Enemy function
 Onil.prototype = new Enemy();
 
-Onil.prototype.width = 21;//23.2;
+Onil.prototype.width = 21;
 Onil.prototype.height = 21;
 Onil.prototype.speed = 2.5;
 
-//13 rammar, frá 0 - 12
-Onil.prototype.downFrameLimit = 9; // 3 rammar. 0,1,2
+//10 frames, from 0 - 9
+Onil.prototype.downFrameLimit = 9;
 Onil.prototype.currentdownFrame = 0;
 Onil.prototype.downStartX = 0;
 Onil.prototype.downStartY = 21;
@@ -38,16 +38,16 @@ Onil.prototype.downStartY = 21;
 Onil.prototype.upFrameLimit = 9;
 Onil.prototype.currentupFrame = 0;
 Onil.prototype.upStartX = 0;
-Onil.prototype.upStartY = 0; //20
+Onil.prototype.upStartY = 0;
 
 Onil.prototype.leftFrameLimit = 9;
 Onil.prototype.currentleftFrame = 0;
-Onil.prototype.leftStartX = 0; //42;
-Onil.prototype.leftStartY = 0; //20;
+Onil.prototype.leftStartX = 0; 
+Onil.prototype.leftStartY = 0; 
 
 Onil.prototype.rightFrameLimit = 9;
 Onil.prototype.currentrightFrame = 0;
-Onil.prototype.rightStartX = 0; //41;
+Onil.prototype.rightStartX = 0;
 Onil.prototype.rightStartY = 21;
 
 Onil.prototype.spritePosX = 0;
@@ -63,19 +63,10 @@ Onil.prototype.bombCollision = function(){
     //If colliding with a bomb, go the opposite way you came from
     if (this.isColliding() instanceof Bomb){
         this.isCollidingWithBomb(this.isColliding());
-        if(this.direction === 1){
-            this.direction = 3;
-        }
-        if(this.direction === 2){
-            this.direction = 4;
-        }
-        if(this.direction === 3){
-            this.direction = 1;
-        }
-        if(this.direction === 4){
-            this.direction = 2;
-        }
-
+        if(this.direction === 1) this.direction = 3;
+        if(this.direction === 2) this.direction = 4;
+        if(this.direction === 3) this.direction = 1;
+        if(this.direction === 4) this.direction = 2;
     }
 }
 
@@ -89,9 +80,8 @@ Onil.prototype.computePosition = function () {
 
     var upId, downId, leftId, rightId;
 
-        // playzone rules - If the enemy hits the edges of the playfield
-        // he is kindly asked to go away.
-
+    // playzone rules - If the enemy hits the edges of the playfield
+    // he is kindly asked to go away.
     if (rightX >= g_playzone[0][1]){
         this.cx -= this.speed;
         if(Math.random() < 0.5) this.direction = 2;
@@ -112,8 +102,6 @@ Onil.prototype.computePosition = function () {
         if(Math.random() < 0.5) this.direction = 1;
         else this.direction = 3;
     }
-
-
 
     else {
         // Going right
@@ -140,18 +128,16 @@ Onil.prototype.computePosition = function () {
             }
         }
 
-
     }
         // going down.
         if(this.direction === 2) {
             wallId = this.getWallId(this.cx,bottomY);
 
-        if (!this.checkForWall(wallId[0],wallId[1])) this.cy += this.speed;
-            else{
-                if(Math.random() < 0.5) this.direction = 1;  // 50% chance of enemy going right
-                else this.direction = 3; // otherwise he goes left.
-            }
-
+            if (!this.checkForWall(wallId[0],wallId[1])) this.cy += this.speed;
+                else{
+                    if(Math.random() < 0.5) this.direction = 1;  // 50% chance of enemy going right
+                    else this.direction = 3; // otherwise he goes left.
+                }
             //Animation
             if(this.currentdownFrame === 0) {
                 this.spritePosX = this.downStartX;
@@ -169,7 +155,7 @@ Onil.prototype.computePosition = function () {
         }
 
 
-     // going left
+        // going left
         if(this.direction === 3) {
             wallId = this.getWallId(leftX,this.cy);
             if (!this.checkForWall(wallId[0],wallId[1])) this.cx -= this.speed;
@@ -178,21 +164,21 @@ Onil.prototype.computePosition = function () {
                 else this.direction = 2; // otherwise he goes up.
                 }
             // Animation
-        if(this.currentupFrame === 0) {
-            this.spritePosX = this.upStartX;
-            this.spritePosY = this.upStartY;
-        }
-        if(this.currentupFrame < this.upFrameLimit) {
-            ++this.currentupFrame;
-            this.spritePosX += this.width;
-        }
+            if(this.currentupFrame === 0) {
+                this.spritePosX = this.upStartX;
+                this.spritePosY = this.upStartY;
+            }
+            if(this.currentupFrame < this.upFrameLimit) {
+                ++this.currentupFrame;
+                this.spritePosX += this.width;
+            }
 
-        else {
-            this.spritePosX = this.upStartX;
-            this.currentupFrame = 0;
+            else {
+                this.spritePosX = this.upStartX;
+                this.currentupFrame = 0;
+            }
         }
-        }
-            // Going up
+        // Going up
         if(this.direction === 4) {
             wallId = this.getWallId(this.cx,topY);
 

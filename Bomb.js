@@ -1,6 +1,6 @@
-// ======
-//  BOMB
-// ======
+// ====
+// BOMB
+// ====
 
 "use strict";
 
@@ -37,7 +37,7 @@ Bomb.prototype.explodeSound = new Audio("Sounds/Explosion.wav");
 Bomb.prototype.width = 19;
 Bomb.prototype.height = 22;
 
-// animation stuff
+// Animation stuff
 Bomb.prototype.spritePosX = 179.5;
 Bomb.prototype.spritePosY = 90;
 Bomb.prototype.SlideWidth = 30;
@@ -65,11 +65,11 @@ Bomb.prototype.update = function(du) {
     return entityManager.KILL_ME_NOW;
   }
 
-  // ef sprengjan verður fyrir sprengingu springur hún
+  // If the bomb is in an explosion, it explodes as well
   if (this.isColliding() && (this.isColliding() instanceof Explosion)) {
     this.configureExplosion();
   }
-
+  // If colliding with enemy Pakupaku, make it eat the bomb
   if (this.isColliding() instanceof Pakupaku) {
     eatBomb.play();
     this.kill();
@@ -104,7 +104,7 @@ Bomb.prototype.animate = function() {
   }
 };
 
-// sendir entitymanager upplýsingar um sprengingu
+// Sends entityManager information about an explosion
 Bomb.prototype.configureExplosion = function() {
   this.kill();
 	entityManager.explode(this.cx,this.cy,this.xPos,this.yPos,
@@ -135,14 +135,8 @@ Bomb.prototype.getRadius = function() {
     return this.width;
 };
 
-//Bomb.prototype.takeBombHit = function() {
-//  this.kill();
-//};
 
 Bomb.prototype.render = function(ctx) {
-  // var fadeThresh = Bomb.prototype.lifeSpan / 3;
-
-this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,this.spritePosX,this.spritePosY);
-
+  this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,this.spritePosX,this.spritePosY);
   ctx.globalAlpha = 1;
 };

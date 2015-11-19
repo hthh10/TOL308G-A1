@@ -17,7 +17,7 @@ var g_prevUpdateDu = null;
 //
 var g_isUpdateOdd = false;
 
-//Add background music
+// Add background music
 var backgroundMusic = new Audio("Sounds/BombermanBGMusic.mp3");
 
 function update(dt) {
@@ -51,10 +51,8 @@ function update(dt) {
 }
 
 // Togglable Pause Mode
-//
 var KEY_PAUSE = 'P'.charCodeAt(0);
 var KEY_STEP  = 'O'.charCodeAt(0);
-var KEY_MUTE = 'M'.charCodeAt(0);
 
 var g_isUpdatePaused = false;
 

@@ -17,27 +17,9 @@ function Explosion(descr) {
 
   // Common inherited setup logic from Entity
   this.setup(descr);
-
-
-  // Make a noise when I am created (i.e. fired)
-  //this.fireSound.play();
-
-  /*
-      // Diagnostics to check inheritance stuff
-      this._bulletProperty = true;
-      console.dir(this);
-  */
-
 }
 
 Explosion.prototype = new Entity();
-
-
-// HACKED-IN AUDIO (no preloading)
-// Explosion.prototype.fireSound = new Audio(
-//   "sounds/bulletFire.ogg");
-// Explosion.prototype.zappedSound = new Audio(
-//   "sounds/bulletZapped.ogg");
 
 // Initial, inheritable, default values
 Explosion.prototype.rotation = 0;

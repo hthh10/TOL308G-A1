@@ -13,9 +13,6 @@
 
 //A generic constructor which accepts an arbitrary descriptor object
 
-// UGLY var for level layout...
-
-// ATH: BREYTTI KÓÐUNINNI FYRIR BASE WALL
 // 10 = brick with door
 // 5 = brick with powerup3
 // 4 = brick with powerup2
@@ -92,7 +89,6 @@ resetWall : function(){
 },
 
 generateLevel : function(level){
-//TODO: Magic numbers for position of wall/rock. Higly dependent on the size of Wall sprite
 	this.resetWall();
 	if (level === 4) return;
 	for(var i = 0; i < this.baseWall.length; i++) {
@@ -131,7 +127,7 @@ generateBrickVal: function(level) {
   else return this.selectItem();
 },
 
-//random powerup ef við viljum hafa eitthvert þeirra algengara en annað
+// Random powerup if we want some of them to be more common than others
 selectItem: function() {
   var luck = Math.random();
   if (luck < 0.20) {
@@ -150,7 +146,7 @@ destroyBrick : function (yId, xId) {
 		cx : centerPos[0],
 		cy : centerPos[1]
 	};
-	// býr til hurð
+	// Creates a door
 	if (this.baseWall[yId][xId] === 10) {
 	  entityManager.generateDoor(descr);
 	  this.baseWall[yId][xId] = -10;
@@ -234,13 +230,12 @@ render : function(ctx){
 				this.drawWallCenteredAt(ctx,this.baseCx+j*this.stepCx,
 				this.baseCy+i*this.stepCy,this.brickImg);
             }
-						else if (this.baseWall[i][j] === -2){
-							entityManager.killSprite(this.baseCx+j*this.stepCx,
-							this.baseCy+i*this.stepCy,19,20,33.8,238,5,18.3,g_sprites.Brickdeath);
-							this.baseWall[i][j] = -1;
-			        }
-
-        }
+			else if (this.baseWall[i][j] === -2){
+				entityManager.killSprite(this.baseCx+j*this.stepCx,
+				this.baseCy+i*this.stepCy,19,20,33.8,238,5,18.3,g_sprites.Brickdeath);
+				this.baseWall[i][j] = -1;
+			}
+		}
     }
 },
 

@@ -24,7 +24,7 @@ function Pakupaku(descr) {
 //Pakupaku is an enemy so it inherits from the Enemy function
 Pakupaku.prototype = new Enemy();
 
-Pakupaku.prototype.width = 21;//23.2;
+Pakupaku.prototype.width = 21;
 Pakupaku.prototype.height = 20;
 Pakupaku.prototype.speed = 2;
 
@@ -32,22 +32,22 @@ Pakupaku.prototype.speed = 2;
 
 Pakupaku.prototype.upFrameLimit = 9;
 Pakupaku.prototype.currentupFrame = 0;
-Pakupaku.prototype.upStartX = 0; //42;
-Pakupaku.prototype.upStartY = 0; //20;
+Pakupaku.prototype.upStartX = 0; 
+Pakupaku.prototype.upStartY = 0; 
 
 Pakupaku.prototype.downFrameLimit = 9;
 Pakupaku.prototype.currentdownFrame = 0;
-Pakupaku.prototype.downStartX = 0; //42;
-Pakupaku.prototype.downStartY = 21; //20;
+Pakupaku.prototype.downStartX = 0; 
+Pakupaku.prototype.downStartY = 21; 
 
 Pakupaku.prototype.leftFrameLimit = 9;
 Pakupaku.prototype.currentleftFrame = 0;
-Pakupaku.prototype.leftStartX = 0; //42;
-Pakupaku.prototype.leftStartY = 42; //20;
+Pakupaku.prototype.leftStartX = 0; 
+Pakupaku.prototype.leftStartY = 42; 
 
 Pakupaku.prototype.rightFrameLimit = 9;
 Pakupaku.prototype.currentrightFrame = 0;
-Pakupaku.prototype.rightStartX = 0; //41;
+Pakupaku.prototype.rightStartX = 0; 
 Pakupaku.prototype.rightStartY = 63;
 
 Pakupaku.prototype.eatLeftFrameLimit = 9;
@@ -72,8 +72,10 @@ Pakupaku.prototype.nrDeathSlides = 6;
 
 Pakupaku.prototype.bombCollision = function() {
 	//Checks to see if it's colliding with bomb
-    if (this.isColliding() instanceof Bomb && this.direction === 1){
+    //If it is colliding with a bomb and is going right or down, do the right animation
+    if (this.isColliding() instanceof Bomb && (this.direction === 1 || this.direction ===2)){
         this.isCollidingWithBomb(this.isColliding());
+        // Animation
         if(this.currentEatRightFrame === 0) {
             this.spritePosX = this.eatRightStartX;
             this.spritePosY = this.eatRightStartY;
@@ -88,8 +90,8 @@ Pakupaku.prototype.bombCollision = function() {
             this.currenteatRightFrame = 0;
         }
     }
-    //If it is colliding with a bomb and going left, do the left animation
-	if(this.isColliding() instanceof Bomb && this.direction === 3){
+    //If it is colliding with a bomb and is going left or up, do the left animation
+	if(this.isColliding() instanceof Bomb && (this.direction === 3 || this.direction === 4)){
 		this.isCollidingWithBomb(this.isColliding());
 		// Animation
         if(this.currentEatLeftFrame === 0) {
@@ -104,24 +106,6 @@ Pakupaku.prototype.bombCollision = function() {
         else {
             this.spritePosX = this.eatLeftStartX;
             this.currenteatLeftFrame = 0;
-        }
-	}
-	//If it is colliding with a bomb and going left, do the right animation
-	if(this.isColliding() instanceof Bomb && (this.direction === 2 || this.direction === 4)){
-	this.isCollidingWithBomb(this.isColliding());
-		// Animation
-        if(this.currentEatRightFrame === 0) {
-            this.spritePosX = this.eatRightStartX;
-            this.spritePosY = this.eatRightStartY;
-        }
-            if(this.currentEatRightFrame < this.eatRightFrameLimit) {
-            ++this.currentEatRightFrame;
-            this.spritePosX += this.width;
-        }
-
-        else {
-            this.spritePosX = this.eatRightStartX;
-            this.currenteatRightFrame = 0;
         }
 	}
 }
@@ -145,7 +129,6 @@ Pakupaku.prototype.computePosition = function () {
 
     // playzone rules - If the enemy hits the edges of the playfield
     // he is kindly asked to go away.
-
     if (rightX >= g_playzone[0][1]){
         this.cx -= this.speed;
         if(Math.random() < 0.5) this.direction = 2;

@@ -59,10 +59,9 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-
-    this._categories = [this._bombermen, this._enemies,
-       this._bombs, this._explosions, this._powerups, this._door,
-       this._evilbomberman, this._spritedeath];
+  this._categories = [this._bombermen, this._enemies,
+    this._bombs, this._explosions, this._powerups, this._door,
+    this._evilbomberman, this._spritedeath];
 
 },
 
@@ -75,20 +74,20 @@ clearEntityType : function (aCategory) {
 clearLevelEntities : function() {
 	this.clearEntityType(this._door);
 	this.clearEntityType(this._bombs);
-    this.clearEntityType(this._explosions);
-    this.clearEntityType(this._powerups);
+  this.clearEntityType(this._explosions);
+  this.clearEntityType(this._powerups);
 	this.clearEntityType(this._enemies);
 },
 
-initLevel: function(level) {
+initLevel: function() {
 	console.log(g_level);
-	if (level === 1) {
+	if (g_level === 1) {
 		this._generateBombermen();
 		this._generateEnemies();
 		wall.initStorymode();
 	}
 
-  else if (level === 2){
+  else if (g_level === 2){
     this.resetBombermen();
     // Clear relevant entities
     this.clearLevelEntities();
@@ -97,7 +96,7 @@ initLevel: function(level) {
     wall.generateLevel(g_level);
     this._generateEnemies();
   }
-  else if (level === 3){
+  else if (g_level === 3){
     this.resetBombermen();
     // Clear relevant entities
     this.clearLevelEntities();
@@ -106,7 +105,7 @@ initLevel: function(level) {
     wall.generateLevel(g_level);
     this._generateEnemies();
   }
-	else if (level === 4) {
+	else if (g_level === 4) {
 		this.resetBombermen();
 		// Clear relevant entities
 		this.clearLevelEntities();
@@ -141,9 +140,6 @@ checkWinConditions : function() {
 				this.initLevel(g_level);
 			}
 		}
-		/* This is covered in the update function
-		else if (g_level === 4) {
-		}*/
 	}
 	else {
 		if (this._bombermen.length < 2) {
@@ -177,13 +173,13 @@ checkLoseConditions : function() {
 
 dropBomb: function(cx, cy, xPos, yPos, strength, bombermanID, trigger) {
   this._bombs.push(new Bomb({
-      cx   : cx,
-      cy   : cy,
-      xPos : xPos,
-      yPos : yPos,
-      strength : strength,
-      bombermanID : bombermanID,
-      trigger : trigger
+    cx   : cx,
+    cy   : cy,
+    xPos : xPos,
+    yPos : yPos,
+    strength : strength,
+    bombermanID : bombermanID,
+    trigger : trigger
   }));
 },
 
@@ -391,11 +387,11 @@ generateRandomEnemy: function(cx, cy) {
 
 generateDeadBomberman : function(cx,cy) {
   this._bombermen.push(new Bomberman({
-        cx   : cx,
-        cy   : cy,
-        isDead: true,
-        sprite: g_sprites.deadBomberman
-    }));
+    cx   : cx,
+    cy   : cy,
+    isDead: true,
+    sprite: g_sprites.deadBomberman
+  }));
 },
 
 generatePowerup : function(descr) {
@@ -408,22 +404,22 @@ generateDoor : function(descr) {
 addPlayer2 : function() {
   g_score.P2_lives = 3;
   this._bombermen.push(new Bomberman({
-        cx   : g_canvas.width-40,
-        cy   : 120,
+    cx   : g_canvas.width-40,
+    cy   : 120,
     KEY_UP     : 'I'.charCodeAt(0),
     KEY_DOWN   : 'K'.charCodeAt(0),
     KEY_LEFT   : 'J'.charCodeAt(0),
     KEY_RIGHT  : 'L'.charCodeAt(0),
     sprite : g_sprites.player2,
     KEY_FIRE   : '9'.charCodeAt(0)
-    }));
+  }));
 },
 
 // Moves all bombermen to initial position
 resetBombermen: function() {
-    for (var i = 0; i < this._bombermen.length; i++) {
-        this._bombermen[i]._moveToBeginning();
-    }
+  for (var i = 0; i < this._bombermen.length; i++) {
+      this._bombermen[i]._moveToBeginning();
+  }
 },
 
 reset: function() {
@@ -437,48 +433,46 @@ reset: function() {
 },
 
 update: function(du) {
-    for (var c = 0; c < this._categories.length; ++c) {
+  for (var c = 0; c < this._categories.length; ++c) {
 
-        var aCategory = this._categories[c];
-        var i = 0;
+      var aCategory = this._categories[c];
+      var i = 0;
 
-        while (i < aCategory.length) {
+      while (i < aCategory.length) {
 
-            var status = aCategory[i].update(du);
+        var status = aCategory[i].update(du);
 
-            if (status === this.KILL_ME_NOW) {
-                // remove the dead guy, and shuffle the others down to
-                // prevent a confusing gap from appearing in the array
-				if (aCategory[i] instanceof Evilbomberman) {
+        if (status === this.KILL_ME_NOW) {
+          // remove the dead guy, and shuffle the others down to
+          // prevent a confusing gap from appearing in the array
+				  if (aCategory[i] instanceof Evilbomberman) {
 					g_score.win = true;
 					g_gameOver = true;
 				}
-                aCategory.splice(i,1);
-            }
-            else {
-                ++i;
-            }
-        }
-    }
-
+        aCategory.splice(i,1);
+      }
+    else {
+          ++i;
+          }
+      }
+  }
 },
 
 render: function(ctx) {
+  var debugX = 10, debugY = 100;
 
-    var debugX = 10, debugY = 100;
+  for (var c = 0; c < this._categories.length; ++c) {
 
-    for (var c = 0; c < this._categories.length; ++c) {
+    var aCategory = this._categories[c];
 
-        var aCategory = this._categories[c];
+    for (var i = 0; i < aCategory.length; ++i) {
 
-        for (var i = 0; i < aCategory.length; ++i) {
+    aCategory[i].render(ctx);
+    //debug.text(".", debugX + i * 10, debugY);
 
-            aCategory[i].render(ctx);
-            //debug.text(".", debugX + i * 10, debugY);
-
-        }
-        debugY += 10;
     }
+    debugY += 10;
+  }
 }
 
 }

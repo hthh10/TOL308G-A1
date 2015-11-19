@@ -12,8 +12,7 @@
 */
 
 
-// Construct a "sprite" from the given `image`,
-//
+// Construct a "sprite" from the given `image`
 function Sprite(image) {
     this.image = image;
 
@@ -50,8 +49,6 @@ Sprite.prototype.animate = function (ctx, cx,cy,width,height,spritePosX,spritePo
     
     ctx.save();
     ctx.translate(cx, cy);
-    //ctx.rotate(rotation);
-    //ctx.scale(this.scale, this.scale);
     ctx.drawImage(this.image,spritePosX,spritePosY,width,height, 
                   -width,-height,width*2,height*2);
 

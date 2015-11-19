@@ -19,15 +19,11 @@ Powerup id list:
 
 // A generic contructor which accepts an arbitrary descriptor object
 function Powerup(descr) {
-
-
-    // Common inherited setup logic from Entity
-    this.setup(descr);
-    // select a random powerup ID
-    //this.id = util.randRange(0,3)
+  // Common inherited setup logic from Entity
+  this.setup(descr);
 
 	this.sprite = this.sprite || g_sprites.powerups[this.id];
-    this._scale = 1;
+  this._scale = 1;
 }
 
 Powerup.prototype = new Entity();
@@ -42,18 +38,16 @@ Powerup.prototype.lifeSpan = 4000 / NOMINAL_UPDATE_INTERVAL;
 var powerUpPickedUp = new Audio("Sounds/Bomberman SFX (4).wav");
 
 Powerup.prototype.update = function (du) {
-
-    // Unregister and check for death
+  // Unregister and check for death
 	spatialManager.unregister(this);
 	if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
-    this.lifeSpan -= du;
-    if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
+  this.lifeSpan -= du;
+  if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
 
 	if (this.isColliding() instanceof Explosion){
-        return entityManager.KILL_ME_NOW;
-    }
-
+      return entityManager.KILL_ME_NOW;
+  }
     // (Re-)Register
 	spatialManager.register(this);
 };
@@ -79,22 +73,21 @@ Powerup.prototype.deliverPowerup = function (bomberman) {
 };
 
 Powerup.prototype.getRadius = function () {
-    return 14;
+  return 14;
 };
 
 Powerup.prototype.takeExplosiontHit = function () {
-    this.kill();
+  this.kill();
 };
 
 Powerup.prototype.render = function (ctx) {
+  var fadeThresh = Powerup.prototype.lifeSpan / 3;
 
-    var fadeThresh = Powerup.prototype.lifeSpan / 3;
+  if (this.lifeSpan < fadeThresh) {
+      ctx.globalAlpha = this.lifeSpan / fadeThresh;
+  }
 
-    if (this.lifeSpan < fadeThresh) {
-        ctx.globalAlpha = this.lifeSpan / fadeThresh;
-    }
+  this.sprite.drawCentredAt(ctx, this.cx, this.cy);
 
-    this.sprite.drawCentredAt(ctx, this.cx, this.cy);
-
-    ctx.globalAlpha = 1;
+  ctx.globalAlpha = 1;
 };

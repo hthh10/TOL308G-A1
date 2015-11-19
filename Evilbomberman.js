@@ -29,18 +29,14 @@ function Evilbomberman(descr) {
 Evilbomberman.prototype = new Enemy();
 
 // Sprite sheet properties
-/*
-Evilbomberman.prototype.width = 14;
-Evilbomberman.prototype.height = 19;
-*/
 Evilbomberman.prototype.cx = 40;
 Evilbomberman.prototype.cy = 350;
-Evilbomberman.prototype.width = 19; //23.2;
+Evilbomberman.prototype.width = 19; 
 Evilbomberman.prototype.height = 21;
 Evilbomberman.prototype.speed = 2;
 
-//13 rammar, frá 0 - 12
-Evilbomberman.prototype.downFrameLimit = 12; // 3 rammar. 0,1,2
+//13 frames, from 0 - 12
+Evilbomberman.prototype.downFrameLimit = 12;
 Evilbomberman.prototype.currentdownFrame = 0;
 Evilbomberman.prototype.downStartX = 0;
 Evilbomberman.prototype.downStartY = 0;
@@ -48,16 +44,16 @@ Evilbomberman.prototype.downStartY = 0;
 Evilbomberman.prototype.upFrameLimit = 12;
 Evilbomberman.prototype.currentupFrame = 0;
 Evilbomberman.prototype.upStartX = 0;
-Evilbomberman.prototype.upStartY = 23; //20
+Evilbomberman.prototype.upStartY = 23; 
 
 Evilbomberman.prototype.leftFrameLimit = 12;
 Evilbomberman.prototype.currentleftFrame = 0;
-Evilbomberman.prototype.leftStartX = 0; //42;
-Evilbomberman.prototype.leftStartY = 45; //20;
+Evilbomberman.prototype.leftStartX = 0; 
+Evilbomberman.prototype.leftStartY = 45; 
 
 Evilbomberman.prototype.rightFrameLimit = 12;
 Evilbomberman.prototype.currentrightFrame = 0;
-Evilbomberman.prototype.rightStartX = 0; //41;
+Evilbomberman.prototype.rightStartX = 0; 
 Evilbomberman.prototype.rightStartY = 68;
 
 Evilbomberman.prototype.spritePosX = 0;
@@ -67,8 +63,8 @@ Evilbomberman.prototype.Bombinterval = 5000 / NOMINAL_UPDATE_INTERVAL;
 Evilbomberman.prototype.canDropBomb = true;
 Evilbomberman.prototype.lives = 3;
 Evilbomberman.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
-//Death animation stuff
 
+//Death animation stuff
 Evilbomberman.prototype.deadSpritePosX = 58;
 Evilbomberman.prototype.deadSpritePosY = 32;
 Evilbomberman.prototype.deathSlideWidth = 29;
@@ -100,18 +96,11 @@ Evilbomberman.prototype.update = function(du) {
     //If colliding with a bomb, go the opposite way you came from
     if (hitEntity instanceof Bomb && (hitEntity.lifeSpan < 100.0)) {
       this.isCollidingWithBomb(hitEntity);
-      if (this.direction === 1) {
-        this.direction = 3;
-      }
-      if (this.direction === 2) {
-        this.direction = 4;
-      }
-      if (this.direction === 3) {
-        this.direction = 1;
-      }
-      if (this.direction === 4) {
-        this.direction = 2;
-      }
+    
+      if(this.direction === 1) this.direction = 3;
+      if(this.direction === 2) this.direction = 4;
+      if(this.direction === 3) this.direction = 1;
+      if(this.direction === 4) this.direction = 2;
     }
     // if hit by player's bombs, lose hp.
     if ((hitEntity instanceof Explosion && hitEntity.bombermanID > 0) &&
@@ -160,7 +149,7 @@ Evilbomberman.prototype.computePosition = function() {
   var bmanY = spatialManager.findBomberman().posY;
   var bmanXprox = this.cx - bmanX;
   var bmanYprox = this.cy - bmanY;
-  //Enemy moves by default
+
   var wallId,
     leftX = this.cx - this.getRadius(),
     rightX = this.cx + this.getRadius(),
@@ -321,6 +310,5 @@ Evilbomberman.prototype.render = function(ctx) {
   // pass my scale into the sprite, for drawing
   this.sprite.scale = this._scale;
   this.sprite.animate(ctx, this.cx, this.cy, this.width, this.height, this.spritePosX, this.spritePosY);
-  //this.sprite.drawCentredAt(ctx, this.cx, this.cy);
   this.sprite.scale = origScale;
 };

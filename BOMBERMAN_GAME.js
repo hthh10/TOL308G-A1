@@ -68,6 +68,11 @@ var KEY_MULTIPLAYER  = keyCode('M');
 var KEY_PLAYER2  = keyCode('O');
 var KEY_RESET = keyCode('R');
 
+var KEY_LEVEL1 = keyCode('1');
+var KEY_LEVEL2 = keyCode('2');
+var KEY_LEVEL3 = keyCode('3');
+var KEY_LEVEL4 = keyCode('4');
+
 function resetControlVars() {
 	g_multiplayerMode = false;
 	g_player2 = false;
@@ -94,6 +99,25 @@ function processDiagnostics() {
 		g_multiplayerMode = true;
 		startMultiplayer();
 	}
+    //Cheat code to skip to each level
+    if(eatKey(KEY_LEVEL1)){
+        entityManager.resetBombermen();
+        entityManager.clearLevelEntities();
+        g_level = 1;
+        entityManager.initLevel();
+    }
+    if(eatKey(KEY_LEVEL2)){
+        g_level = 2;
+        entityManager.initLevel();
+    }
+    if(eatKey(KEY_LEVEL3)){
+        g_level = 3;
+        entityManager.initLevel();
+    }
+    if(eatKey(KEY_LEVEL4)){
+        g_level = 4;
+        entityManager.initLevel();
+    }
 }
 
 

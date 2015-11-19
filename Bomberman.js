@@ -57,8 +57,8 @@ Bomberman.prototype.wallPass = false;
 Bomberman.prototype.width = 19;
 Bomberman.prototype.height = 21;
 
-//13 rammar, frá 0 - 12
-Bomberman.prototype.downFrameLimit = 12; // 3 rammar. 0,1,2
+//13 frames, from 0 - 12
+Bomberman.prototype.downFrameLimit = 12;
 Bomberman.prototype.currentdownFrame = 0;
 Bomberman.prototype.downStartX = 0;
 Bomberman.prototype.downStartY = 0;
@@ -66,16 +66,16 @@ Bomberman.prototype.downStartY = 0;
 Bomberman.prototype.upFrameLimit = 12;
 Bomberman.prototype.currentupFrame = 0;
 Bomberman.prototype.upStartX = 0;
-Bomberman.prototype.upStartY = 23; //20
+Bomberman.prototype.upStartY = 23; 
 
 Bomberman.prototype.leftFrameLimit = 12;
 Bomberman.prototype.currentleftFrame = 0;
-Bomberman.prototype.leftStartX = 0; //42;
-Bomberman.prototype.leftStartY = 45; //20;
+Bomberman.prototype.leftStartX = 0; 
+Bomberman.prototype.leftStartY = 45;
 
 Bomberman.prototype.rightFrameLimit = 12;
 Bomberman.prototype.currentrightFrame = 0;
-Bomberman.prototype.rightStartX = 0; //41;
+Bomberman.prototype.rightStartX = 0; 
 Bomberman.prototype.rightStartY = 68;
 
 Bomberman.prototype.spritePosX = 0;
@@ -155,11 +155,11 @@ Bomberman.prototype.update = function (du) {
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
 	this.computePosition();
-    // Handle firing
-    this.maybeDropBomb();
+  // Handle bombs
+  this.maybeDropBomb();
 
-    // Reset position if isColliding, otherwise Register
-    // athuga hvort það er sprengja því þá viljum við ekki resetta. smá shitmix
+  // Reset position if isColliding, otherwise Register
+  // Check if there is a bomb because then we don't want to reset
 	if (this.isColliding()) {
 		var hitEntity = this.findHitEntity();
 		if (hitEntity instanceof Powerup) {
@@ -184,10 +184,10 @@ Bomberman.prototype.update = function (du) {
 			entityManager.checkWinConditions();
 		}
 
-      //athuga hvort hann collidar við sprengjuna eftir smá delay og
-      // lokar svo fyrir að hann komist í gegnum hana
-          // ATH HÉR GÆTI VERIÐ VANDAMÁL ÞEGAR BORÐIÐ ER FULLT AF HLUTUM SEM
-          // BOMBERMAN GETUR ÓVART SKOTIST INNÍ
+      // Check if he collides with the bomb after a little delay and 
+      // then gets rid of the possibility that he can go through it 
+      // !!! But this could create an issue when the level is full of things Bomberman
+      // can accidentally slip into 
     }
      if (hitEntity instanceof Bomb && (hitEntity.lifeSpan < 100.0)) {
         this.isCollidingWithBomb(hitEntity);
@@ -206,9 +206,9 @@ Bomberman.prototype.computePosition = function () {
 		this.maybeMoveUp(leftX, rightX, topY - this.walkspeed, bottomY);
 
 		// Animation
-	    if(this.direction !== 3) {
-	      this.direction = 3;
-	      this.currentupFrame = 0;
+	  if(this.direction !== 3) {
+	    this.direction = 3;
+	    this.currentupFrame = 0;
 	    }
 		if(moveUpDown.currentTime > 0.3) {
 			moveUpDown.currentTime = 0;
@@ -262,9 +262,9 @@ Bomberman.prototype.computePosition = function () {
 
 		//Animation
 		if(this.direction !== 2 ) {
-        this.direction = 2;
-        this.currentleftFrame = 0;
-      	}
+      this.direction = 2;
+      this.currentleftFrame = 0;
+      }
 
 		if(moveLeftRight.currentTime > 0.3) {
 			moveLeftRight.currentTime = 0;
@@ -288,11 +288,11 @@ Bomberman.prototype.computePosition = function () {
 		this.maybeMoveRight(leftX, rightX + this.walkspeed, topY, bottomY);
 
 		//Animation
-		// reset the variables to new direction
+		// reset the variables to a new direction
 		if(this.direction !== 0) {
-        this.direction = 0;
-        this.currentrightFrame = 0;
-      	}
+      this.direction = 0;
+      this.currentrightFrame = 0;
+      }
 		if(moveLeftRight.currentTime > 0.3) {
 			moveLeftRight.currentTime = 0;
 		}
@@ -314,9 +314,9 @@ Bomberman.prototype.computePosition = function () {
 
 Bomberman.prototype.maybeMoveUp = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
-		wallIdRight,
-		wallIdTop,
-		wallIdBottom;
+		  wallIdRight,
+		  wallIdTop,
+		  wallIdBottom;
 	// If topY is out of bounds, fix it
 	if (topY < g_playzone[1][0]) this.cy = g_playzone[1][0]+this.getRadius();
 	else {
@@ -331,9 +331,9 @@ Bomberman.prototype.maybeMoveUp = function(leftX, rightX, topY, bottomY) {
 
 Bomberman.prototype.maybeMoveDown = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
-		wallIdRight,
-		wallIdTop,
-		wallIdBottom;
+		  wallIdRight,
+		  wallIdTop,
+		  wallIdBottom;
 	// If BottomY is out of bounds, fix it
 	if (bottomY > g_playzone[1][1]) this.cy = g_playzone[1][1]-this.getRadius()-1;
 	else {
@@ -348,9 +348,9 @@ Bomberman.prototype.maybeMoveDown = function(leftX, rightX, topY, bottomY) {
 
 Bomberman.prototype.maybeMoveLeft = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
-		wallIdRight,
-		wallIdTop,
-		wallIdBottom;
+		  wallIdRight,
+		  wallIdTop,
+		  wallIdBottom;
 	// If leftX is out of bounds, fix it
 	if (leftX < g_playzone[0][0]) this.cx = g_playzone[0][0]+this.getRadius();
 	else {
@@ -365,9 +365,9 @@ Bomberman.prototype.maybeMoveLeft = function(leftX, rightX, topY, bottomY) {
 
 Bomberman.prototype.maybeMoveRight = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
-		wallIdRight,
-		wallIdTop,
-		wallIdBottom;
+		  wallIdRight,
+		  wallIdTop,
+		  wallIdBottom;
 	// If rightX is out of bounds, fix it
 	if (rightX > g_playzone[0][1]) this.cx = g_playzone[0][1]-this.getRadius()-1;
 	else {
@@ -381,15 +381,13 @@ Bomberman.prototype.maybeMoveRight = function(leftX, rightX, topY, bottomY) {
 },
 
 
-// athugar collision við sprengju og breytir hraðanum eftir því
+// Checks for collision with a bomb and changes the speed in regards to that
 Bomberman.prototype.isCollidingWithBomb = function(bomba) {
-
-
     var wallId,
-    leftX = this.cx - this.getRadius(),
-    rightX = this.cx + this.getRadius(),
-    topY = this.cy - this.getRadius(),
-    bottomY = this.cy + this.getRadius();
+        leftX = this.cx - this.getRadius(),
+        rightX = this.cx + this.getRadius(),
+        topY = this.cy - this.getRadius(),
+        bottomY = this.cy + this.getRadius();
 
     if (this.cy > bomba.cy && bottomY < g_playzone[1][1]) {
     	wallId = this.getWallId(this.cx, bottomY);
@@ -410,14 +408,14 @@ Bomberman.prototype.isCollidingWithBomb = function(bomba) {
     }
 };
 
-//Athugar hvor playerinn þetta er og kíkir hvað hann á margar sprengjur eftir
+//Checks which player this is and looks at how many bombs he's got left
 Bomberman.prototype.checkBombBag = function() {
 	if (this._spatialID === 1) {
 		g_score.P1_maxBombs += this.noBombs;
 		this.noBombs = 0;
 		return g_score.P1_maxBombs;
   	}
-  	//krefst breytinga ef við bætum við fleiri playerum
+  	//Works for now since we only have two players
   	if (this._spatialID > 1) {
   		g_score.P2_maxBombs += this.noBombs;
   		this.noBombs = 0;
@@ -469,8 +467,7 @@ Bomberman.prototype.halt = function () {
 };
 
 Bomberman.prototype.render = function (ctx) {
-
-    this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,
-    	this.spritePosX,this.spritePosY);
+  this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,
+  this.spritePosX,this.spritePosY);
 
 };

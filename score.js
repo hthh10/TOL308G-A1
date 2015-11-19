@@ -1,8 +1,8 @@
-// ============
+// ===========
 // SCORE STUFF
-// ============
-// Score
+// ===========
 
+// Score
 var g_score = {
     P1_score: 0,
 	P2_score: 0,
