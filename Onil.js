@@ -42,8 +42,8 @@ Onil.prototype.upStartY = 0;
 
 Onil.prototype.leftFrameLimit = 9;
 Onil.prototype.currentleftFrame = 0;
-Onil.prototype.leftStartX = 0; 
-Onil.prototype.leftStartY = 0; 
+Onil.prototype.leftStartX = 0;
+Onil.prototype.leftStartY = 0;
 
 Onil.prototype.rightFrameLimit = 9;
 Onil.prototype.currentrightFrame = 0;
@@ -52,7 +52,7 @@ Onil.prototype.rightStartY = 21;
 
 Onil.prototype.spritePosX = 0;
 Onil.prototype.spritePosY = 0;
-
+Onil.prototype.orientation = 1; // 0 = right, 1 = down, 2 = left, 3 = up
 //Death animation stuff
 Onil.prototype.deadSpritePosX = 0;
 Onil.prototype.deadSpritePosY = 152;
@@ -114,6 +114,10 @@ Onil.prototype.computePosition = function () {
                 if(Math.random() < 0.5) this.direction = 2; // 50% chance of going up
                 else this.direction = 4; // otherwise he goes up.
             }
+            if(this.orientation !== 0) {
+              this.orientation = 0;
+              this.currentrightFrame = 0;
+            }
             if(this.currentrightFrame === 0) {
                 this.spritePosX = this.rightStartX;
                 this.spritePosY = this.rightStartY;
@@ -139,6 +143,10 @@ Onil.prototype.computePosition = function () {
                     else this.direction = 3; // otherwise he goes left.
                 }
             //Animation
+            if(this.orientation !== 1) {
+                this.orientation = 1;
+                this.currentdownFrame = 0;
+            }
             if(this.currentdownFrame === 0) {
                 this.spritePosX = this.downStartX;
                 this.spritePosY = this.downStartY;
@@ -164,18 +172,22 @@ Onil.prototype.computePosition = function () {
                 else this.direction = 2; // otherwise he goes up.
                 }
             // Animation
-            if(this.currentupFrame === 0) {
-                this.spritePosX = this.upStartX;
-                this.spritePosY = this.upStartY;
+            if(this.orientation !== 2 ) {
+              this.orientation = 2;
+              this.currentleftFrame = 0;
             }
-            if(this.currentupFrame < this.upFrameLimit) {
-                ++this.currentupFrame;
+            if(this.currentleftFrame === 0) {
+                this.spritePosX = this.leftStartX;
+                this.spritePosY = this.leftStartY;
+            }
+            if(this.currentleftFrame < this.leftFrameLimit) {
+                ++this.currentleftFrame;
                 this.spritePosX += this.width;
             }
 
             else {
-                this.spritePosX = this.upStartX;
-                this.currentupFrame = 0;
+                this.spritePosX = this.leftStartX;
+                this.currentleftFrame = 0;
             }
         }
         // Going up
@@ -191,6 +203,10 @@ Onil.prototype.computePosition = function () {
             }
 
             // Animation
+            if(this.orientation !== 3) {
+              this.orientation = 3;
+              this.currentupFrame = 0;
+            }
             if(this.currentupFrame === 0) {
                 this.spritePosX = this.upStartX;
                 this.spritePosY = this.upStartY;
@@ -207,7 +223,7 @@ Onil.prototype.computePosition = function () {
 
         }
     }
-	
+
 Onil.prototype.getRadius = function() {
     return 19.9;
 };

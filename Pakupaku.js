@@ -32,22 +32,22 @@ Pakupaku.prototype.speed = 2;
 
 Pakupaku.prototype.upFrameLimit = 9;
 Pakupaku.prototype.currentupFrame = 0;
-Pakupaku.prototype.upStartX = 0; 
-Pakupaku.prototype.upStartY = 0; 
+Pakupaku.prototype.upStartX = 0;
+Pakupaku.prototype.upStartY = 0;
 
 Pakupaku.prototype.downFrameLimit = 9;
 Pakupaku.prototype.currentdownFrame = 0;
-Pakupaku.prototype.downStartX = 0; 
-Pakupaku.prototype.downStartY = 21; 
+Pakupaku.prototype.downStartX = 0;
+Pakupaku.prototype.downStartY = 21;
 
 Pakupaku.prototype.leftFrameLimit = 9;
 Pakupaku.prototype.currentleftFrame = 0;
-Pakupaku.prototype.leftStartX = 0; 
-Pakupaku.prototype.leftStartY = 42; 
+Pakupaku.prototype.leftStartX = 0;
+Pakupaku.prototype.leftStartY = 42;
 
 Pakupaku.prototype.rightFrameLimit = 9;
 Pakupaku.prototype.currentrightFrame = 0;
-Pakupaku.prototype.rightStartX = 0; 
+Pakupaku.prototype.rightStartX = 0;
 Pakupaku.prototype.rightStartY = 63;
 
 Pakupaku.prototype.eatLeftFrameLimit = 9;
@@ -62,6 +62,7 @@ Pakupaku.prototype.eatRightStartY = 105;
 
 Pakupaku.prototype.spritePosX = 0;
 Pakupaku.prototype.spritePosY = 0;
+Pakupaku.prototype.orientation = 1; // 0 = right, 1 = down, 2 = left, 3 = up
 
 //Death animation stuff
 Pakupaku.prototype.deadSpritePosX = 0;
@@ -168,6 +169,10 @@ Pakupaku.prototype.computePosition = function () {
                 else this.direction = 4; // otherwise he goes up.
             }
         //Animation
+        if(this.orientation !== 0) {
+          this.orientation = 0;
+          this.currentrightFrame = 0;
+        }
         if(this.currentrightFrame === 0) {
           	this.spritePosX = this.rightStartX;
             this.spritePosY = this.rightStartY;
@@ -195,6 +200,10 @@ Pakupaku.prototype.computePosition = function () {
                 else this.direction = 3; // otherwise he goes left.
             }
         //Animation
+        if(this.orientation !== 1) {
+            this.orientation = 1;
+            this.currentdownFrame = 0;
+        }
         if(this.currentdownFrame === 0) {
             this.spritePosX = this.downStartX;
             this.spritePosY = this.downStartY;
@@ -222,18 +231,22 @@ Pakupaku.prototype.computePosition = function () {
                 else this.direction = 2; // otherwise he goes up.
                 }
             // Animation
-        	if(this.currentupFrame === 0) {
-            	this.spritePosX = this.upStartX;
-            	this.spritePosY = this.upStartY;
+            if(this.orientation !== 2 ) {
+              this.orientation = 2;
+              this.currentleftFrame = 0;
+            }
+        	if(this.currentleftFrame === 0) {
+            	this.spritePosX = this.leftStartX;
+            	this.spritePosY = this.leftStartY;
         	}
-        	if(this.currentupFrame < this.upFrameLimit) {
-            	++this.currentupFrame;
+        	if(this.currentleftFrame < this.leftFrameLimit) {
+            	++this.currentleftFrame;
             	this.spritePosX += this.width;
         	}
 
         	else {
-            	this.spritePosX = this.upStartX;
-            	this.currentupFrame = 0;
+            	this.spritePosX = this.leftStartX;
+            	this.currentleftFrame = 0;
         	}
         }
 
@@ -252,6 +265,10 @@ Pakupaku.prototype.computePosition = function () {
                 else this.direction = 1; // otherwise he goes right.
             }
             // Animation
+            if(this.orientation !== 3) {
+              this.orientation = 3;
+              this.currentupFrame = 0;
+            }
             if(this.currentupFrame === 0) {
               	this.spritePosX = this.upStartX;
               	this.spritePosY = this.upStartY;
