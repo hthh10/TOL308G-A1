@@ -302,7 +302,7 @@ Evilbomberman.prototype.computePosition = function() {
 };
 
 Evilbomberman.prototype.getRadius = function () {
-    return this.width;
+    return 19.9;
 };
 
 Evilbomberman.prototype.render = function(ctx) {

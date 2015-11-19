@@ -72,8 +72,7 @@ Ballom.prototype.bombCollision = function(){
 }
 
 Ballom.prototype.computePosition = function () {
-	var wallId,
-		leftX = this.cx-this.getRadius(),
+	var leftX = this.cx-this.getRadius(),
 		rightX = this.cx+this.getRadius(),
 		topY = this.cy-this.getRadius(),
 		bottomY = this.cy+this.getRadius();
@@ -82,29 +81,18 @@ Ballom.prototype.computePosition = function () {
 		
 	// Going right
     if (this.direction === 1) {
-		// going forward logic. Check if the next block is a wall
+		// going forward logic
 		if(this.canMoveRight(leftX,rightX+this.speed,topY,bottomY)) {
 			this.cx += this.speed;
 			rightX += this.speed;
 			leftX += this.speed;
 		}
-		else { // if there is a wall
-			this.direction = 3; // change direction if there no wall exists
-            if(Math.random() < 0.5 && this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
-				this.direction = 2; // 50% chance of going down
-            else if (Math.random() < 0.5 && this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY)) 
-				this.direction = 4; // 50% chance he goes up.
-        }
+		else // if there is a wall
+			this.wallCollide(this.direction, leftX, rightX, topY, bottomY);
+		
 		// Maybe change direction
-		if (shouldITurn) {
-			if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius())) {
-				this.direction = 2;
-			}
-			// Maybe change direction
-			if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY)) {
-				this.direction = 4;
-			}
-		}
+		if (shouldITurn)
+			this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
             
         if(this.currentrightFrame === 0) {
             this.spritePosX = this.rightStartX;
@@ -121,29 +109,18 @@ Ballom.prototype.computePosition = function () {
 	}
     // going down.
     else if(this.direction === 2) {
-        // going forward logic. Check if the next block is a wall
+        // going forward logic
 		if(this.canMoveDown(leftX,rightX,topY,bottomY+this.speed)) {
 			this.cy += this.speed;
 			topY += this.speed;
 			bottomY += this.speed;
 		}
-		else { // if there is a wall
-			this.direction = 4; // change direction
-            if(Math.random() < 0.5 && this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
-				this.direction = 3; // 50% chance of going left
-            else if (Math.random() < 0.5 && this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY)) 
-				this.direction = 1; // 50% chance he goes right.
-        }
+		else // if there is a wall
+			this.wallCollide(this.direction, leftX, rightX, topY, bottomY);
+			
 		// Maybe change direction
-		if (shouldITurn) {
-			if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY)) {
-				this.direction = 3;
-			}
-			// Maybe change direction
-			if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY)) {
-				this.direction = 1;
-			}
-		}
+		if (shouldITurn)
+			this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
 
         //Animation
         if(this.currentdownFrame === 0) {
@@ -163,29 +140,18 @@ Ballom.prototype.computePosition = function () {
 
     // going left
     else if (this.direction === 3) {
-		// going forward logic. Check if the next block is a wall
+		// going forward logic
 		if(this.canMoveLeft(leftX-this.speed,rightX,topY,bottomY)) {
 			this.cx -= this.speed;
 			rightX -= this.speed;
 			leftX -= this.speed;
 		}
-		else { // if there is a wall
-			this.direction = 1; // change direction
-            if(Math.random() < 0.5 && this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
-				this.direction = 4; // 50% chance of going down
-            else if (Math.random() < 0.5 && this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius())) 
-				this.direction = 2; // 50% chance he goes up.
-        }
+		else // if there is a wall
+			this.wallCollide(this.direction, leftX, rightX, topY, bottomY);
+		
 		// Maybe change direction
-		if (shouldITurn) {
-			if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY)) {
-				this.direction = 4;
-			}
-			// Maybe change direction
-			if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius())) {
-				this.direction = 2;
-			}
-		}
+		if (shouldITurn)
+			this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
 		
 		// Animation
 		if(this.currentupFrame === 0) {
@@ -205,29 +171,19 @@ Ballom.prototype.computePosition = function () {
 	
     // Going up
     else if (this.direction === 4) {
-		// going forward logic. Check if the next block is a wall
+		// going forward logic
 		if(this.canMoveUp(leftX,rightX,topY-this.speed,bottomY)) {
 			this.cy -= this.speed;
 			topY -= this.speed;
 			bottomY -= this.speed;
 		}
-		else { // if there is a wall
-			this.direction = 2; // change direction
-            if(Math.random() < 0.5 && this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
-				this.direction = 1; // 50% chance of going left
-            else if (Math.random() < 0.5 && this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY)) 
-				this.direction = 3; // 50% chance he goes right.
-        }
+		else // if there is a wall
+			this.wallCollide(this.direction, leftX, rightX, topY, bottomY);
+		
 		// Maybe change direction
-		if (shouldITurn) {
-			if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY)) {
-				this.direction = 1;
-			}
-			// Maybe change direction
-			if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY)) {
-				this.direction = 3;
-			}
-		}
+		if (shouldITurn)
+			this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
+		
         // Animation
         if(this.currentupFrame === 0) {
             this.spritePosX = this.upStartX;

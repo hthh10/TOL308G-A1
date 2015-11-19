@@ -172,6 +172,148 @@ Enemy.prototype.canMoveRight = function(leftX, rightX, topY, bottomY) {
 	}
 },
 
+Enemy.prototype.wallCollide = function(direction, leftX, rightX, topY, bottomY) {
+	switch(direction) {
+		case 1:
+			this.direction = 3; // change direction if there no wall exists
+            if(Math.random() < 0.5) { // 50% chance he changes direction
+				if (Math.random() < 0.5) { // 50% chance checking move down first
+					if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+						this.direction = 2;
+					else if (this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+						this.direction = 4;
+				}
+				else { // 50% chance on checking move up first
+					if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+						this.direction = 4; // 50% chance of going up
+					else if (this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+						this.direction = 2; // 50% chance he goes down.
+				}
+			}
+			break;
+			
+		case 2:
+			this.direction = 4; // change direction if there no wall exists
+            if(Math.random() < 0.5) { // 50% chance he changes direction
+				if (Math.random() < 0.5) { // 50% chance checking move left first
+					if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+						this.direction = 3;
+					else if (this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+						this.direction = 1;
+				}
+				else { // 50% chance on checking move right first
+					if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+						this.direction = 1;
+					else if (this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+						this.direction = 3;
+				}
+			}
+			break;
+			
+		case 3: // Going left
+			this.direction = 1; // change direction if there no wall exists
+            if(Math.random() < 0.5) { // 50% chance he changes direction
+				if (Math.random() < 0.5) { // 50% chance checking move down first
+					if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+						this.direction = 2;
+					else if (this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+						this.direction = 4;
+				}
+				else { // 50% chance on checking move up first
+					if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+						this.direction = 4;
+					else if (this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+						this.direction = 2;
+				}
+			}
+			break;
+		
+		case 4: // Going up
+			this.direction = 2; // change direction if there no wall exists
+            if(Math.random() < 0.5) { // 50% chance he changes direction
+				if (Math.random() < 0.5) { // 50% chance checking move left first
+					if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+						this.direction = 3;
+					else if (this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+						this.direction = 1;
+				}
+				else { // 50% chance on checking move right first
+					if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+						this.direction = 1;
+					else if (this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+						this.direction = 3;
+				}
+			}
+			break;
+	}
+},
+
+Enemy.prototype.changeDirection = function(direction, leftX, rightX, topY, bottomY) {
+	switch(direction) {
+		case 1:
+			if (Math.random() < 0.5) { // 50% chance on checking down first
+				if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+					this.direction = 2;
+				else if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+					this.direction = 4;
+			}
+			else { // 50% chance on checking up first
+				if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+					this.direction = 4;
+				else if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+					this.direction = 2;
+			}
+			break;
+			
+		case 2:
+			if (Math.random() < 0.5) { // 50% chance checking move left first
+				if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+					this.direction = 3;
+				else if (this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+					this.direction = 1;
+			}
+			else { // 50% chance on checking move right first
+				if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+					this.direction = 1;
+				else if (this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+					this.direction = 3;
+			}
+			break;
+			
+		case 3: // Going left
+			if (Math.random() < 0.5) { // 50% chance on checking down first
+				if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+					this.direction = 2;
+				else if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+					this.direction = 4;
+			}
+			else { // 50% chance on checking up first
+				if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+					this.direction = 4;
+				else if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+					this.direction = 2;
+			}
+			break;
+		
+		case 4: // Going up
+			if (Math.random() < 0.5) { // 50% chance checking move left first
+				if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+					this.direction = 3;
+				else if (this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+					this.direction = 1;
+			}	
+			else { // 50% chance on checking move right first
+				if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+					this.direction = 1;
+				else if (this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+					this.direction = 3;
+			}
+			break;
+	}
+},
+
+
+
 Enemy.prototype.render = function(ctx){
     this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,this.spritePosX,this.spritePosY);
 };
