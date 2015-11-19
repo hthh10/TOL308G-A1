@@ -27,6 +27,7 @@ Onil.prototype = new Enemy();
 
 Onil.prototype.width = 21;//23.2;
 Onil.prototype.height = 21;
+Onil.prototype.speed = 2.5;
 
 //13 rammar, frá 0 - 12
 Onil.prototype.downFrameLimit = 9; // 3 rammar. 0,1,2
@@ -219,4 +220,8 @@ Onil.prototype.computePosition = function () {
             }
 
         }
-    };
+    }
+	
+Onil.prototype.getRadius = function() {
+    return 19.9;
+};

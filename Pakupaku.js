@@ -26,6 +26,7 @@ Pakupaku.prototype = new Enemy();
 
 Pakupaku.prototype.width = 21;//23.2;
 Pakupaku.prototype.height = 20;
+Pakupaku.prototype.speed = 2;
 
 //10 frames, from 0 - 9
 
@@ -282,4 +283,8 @@ Pakupaku.prototype.computePosition = function () {
             }
         }
     }
+}
+
+Pakupaku.prototype.getRadius = function() {
+    return 19.9;
 };

@@ -37,6 +37,7 @@ Evilbomberman.prototype.cx = 40;
 Evilbomberman.prototype.cy = 350;
 Evilbomberman.prototype.width = 19; //23.2;
 Evilbomberman.prototype.height = 21;
+Evilbomberman.prototype.speed = 2;
 
 //13 rammar, frá 0 - 12
 Evilbomberman.prototype.downFrameLimit = 12; // 3 rammar. 0,1,2
