@@ -31,7 +31,7 @@ Evilbomberman.prototype = new Enemy();
 // Sprite sheet properties
 Evilbomberman.prototype.cx = 40;
 Evilbomberman.prototype.cy = 350;
-Evilbomberman.prototype.width = 19; 
+Evilbomberman.prototype.width = 19;
 Evilbomberman.prototype.height = 21;
 Evilbomberman.prototype.speed = 2;
 
@@ -44,20 +44,21 @@ Evilbomberman.prototype.downStartY = 0;
 Evilbomberman.prototype.upFrameLimit = 12;
 Evilbomberman.prototype.currentupFrame = 0;
 Evilbomberman.prototype.upStartX = 0;
-Evilbomberman.prototype.upStartY = 23; 
+Evilbomberman.prototype.upStartY = 23;
 
 Evilbomberman.prototype.leftFrameLimit = 12;
 Evilbomberman.prototype.currentleftFrame = 0;
-Evilbomberman.prototype.leftStartX = 0; 
-Evilbomberman.prototype.leftStartY = 45; 
+Evilbomberman.prototype.leftStartX = 0;
+Evilbomberman.prototype.leftStartY = 45;
 
 Evilbomberman.prototype.rightFrameLimit = 12;
 Evilbomberman.prototype.currentrightFrame = 0;
-Evilbomberman.prototype.rightStartX = 0; 
+Evilbomberman.prototype.rightStartX = 0;
 Evilbomberman.prototype.rightStartY = 68;
 
 Evilbomberman.prototype.spritePosX = 0;
 Evilbomberman.prototype.spritePosY = 0;
+Evilbomberman.prototype.orientation = 1; // 0 = right, 1 = down, 2 = left, 3 = up
 
 Evilbomberman.prototype.Bombinterval = 5000 / NOMINAL_UPDATE_INTERVAL;
 Evilbomberman.prototype.canDropBomb = true;
@@ -75,7 +76,7 @@ Evilbomberman.prototype.update = function(du) {
   // Unregister and check for death
     spatialManager.unregister(this);
     if (this._isDeadNow) return entityManager.KILL_ME_NOW;
-  
+
   if (this.lives < 1) {
     entityManager.killSprite(this.cx, this.cy, this.width,
       this.height, this.deadSpritePosX, this.deadSpritePosY,
@@ -96,7 +97,7 @@ Evilbomberman.prototype.update = function(du) {
     //If colliding with a bomb, go the opposite way you came from
     if (hitEntity instanceof Bomb && (hitEntity.lifeSpan < 100.0)) {
       this.isCollidingWithBomb(hitEntity);
-    
+
       if(this.direction === 1) this.direction = 3;
       if(this.direction === 2) this.direction = 4;
       if(this.direction === 3) this.direction = 1;
@@ -116,7 +117,7 @@ Evilbomberman.prototype.update = function(du) {
     this.Bombinterval = 4000 / NOMINAL_UPDATE_INTERVAL;
     this.canDropBomb = true;
   }
-  
+
   spatialManager.register(this);
 
 };
@@ -202,7 +203,11 @@ Evilbomberman.prototype.computePosition = function() {
         if (bmanYprox < 0 && Math.random() < 0.8) this.direction = 2; // 80% chance of going down
         else this.direction = 4; // otherwise he goes up.
       }
-
+      //Animation
+      if(this.orientation !== 0) {
+        this.orientation = 0;
+        this.currentrightFrame = 0;
+        }
       if (this.currentrightFrame === 0) {
         this.spritePosX = this.rightStartX;
         this.spritePosY = this.rightStartY;
@@ -231,6 +236,11 @@ Evilbomberman.prototype.computePosition = function() {
         else this.direction = 3; // otherwise he goes left.
       }
 
+      //Animation
+      if(this.orientation !== 1) {
+          this.orientation = 1;
+          this.currentdownFrame = 0;
+        }
       if (this.currentdownFrame === 0) {
         this.spritePosX = this.downStartX;
         this.spritePosY = this.downStartY;
@@ -259,6 +269,11 @@ Evilbomberman.prototype.computePosition = function() {
         else this.direction = 2; // otherwise he goes up.
       }
 
+      //Animation
+  		if(this.orientation !== 2 ) {
+        this.orientation = 2;
+        this.currentleftFrame = 0;
+      }
       if (this.currentleftFrame === 0) {
         this.spritePosX = this.leftStartX;
         this.spritePosY = this.leftStartY;
@@ -286,6 +301,11 @@ Evilbomberman.prototype.computePosition = function() {
         else this.direction = 1; // otherwise he goes right.
       }
 
+      // Animation
+  	  if(this.orientation !== 3) {
+  	    this.orientation = 3;
+  	    this.currentupFrame = 0;
+  	  }
       if (this.currentupFrame === 0) {
         this.spritePosX = this.upStartX;
         this.spritePosY = this.upStartY;

@@ -29,7 +29,7 @@ Ballom.prototype.height = 20;
 Ballom.prototype.speed = 1.25;
 
 //12 frames, from 0 - 11
-Ballom.prototype.downFrameLimit = 11; 
+Ballom.prototype.downFrameLimit = 11;
 Ballom.prototype.currentdownFrame = 0;
 Ballom.prototype.downStartX = 0;
 Ballom.prototype.downStartY = 0;
@@ -41,17 +41,17 @@ Ballom.prototype.upStartY = 41;
 
 Ballom.prototype.leftFrameLimit = 11;
 Ballom.prototype.currentleftFrame = 0;
-Ballom.prototype.leftStartX = 0; 
+Ballom.prototype.leftStartX = 0;
 Ballom.prototype.leftStartY = 0;
 
 Ballom.prototype.rightFrameLimit = 11;
 Ballom.prototype.currentrightFrame = 0;
-Ballom.prototype.rightStartX = 0; 
+Ballom.prototype.rightStartX = 0;
 Ballom.prototype.rightStartY = 20;
 
 Ballom.prototype.spritePosX = 0;
 Ballom.prototype.spritePosY = 0;
-
+Ballom.prototype.orientation = 1; // 0 = right, 1 = down, 2 = left, 3 = up
 //Death animation stuff
 Ballom.prototype.deadSpritePosX = 0;
 Ballom.prototype.deadSpritePosY = 152;
@@ -72,13 +72,14 @@ Ballom.prototype.bombCollision = function(){
 }
 
 Ballom.prototype.computePosition = function () {
-	var leftX = this.cx-this.getRadius(),
+	var wallId,
+		leftX = this.cx-this.getRadius(),
 		rightX = this.cx+this.getRadius(),
 		topY = this.cy-this.getRadius(),
 		bottomY = this.cy+this.getRadius();
 
     var shouldITurn = (Math.random() < 0.5) ? true : false;
-		
+
 	// Going right
     if (this.direction === 1) {
 		// going forward logic
@@ -89,11 +90,12 @@ Ballom.prototype.computePosition = function () {
 		}
 		else // if there is a wall
 			this.wallCollide(this.direction, leftX, rightX, topY, bottomY);
-		
-		// Maybe change direction
-		if (shouldITurn)
-			this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
-            
+			
+		// Animation
+        if(this.orientation !== 0) {
+          this.orientation = 0;
+          this.currentrightFrame = 0;
+        }
         if(this.currentrightFrame === 0) {
             this.spritePosX = this.rightStartX;
             this.spritePosY = this.rightStartY;
@@ -123,6 +125,10 @@ Ballom.prototype.computePosition = function () {
 			this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
 
         //Animation
+        if(this.orientation !== 1) {
+            this.orientation = 1;
+            this.currentdownFrame = 0;
+        }
         if(this.currentdownFrame === 0) {
             this.spritePosX = this.downStartX;
             this.spritePosY = this.downStartY;
@@ -152,23 +158,27 @@ Ballom.prototype.computePosition = function () {
 		// Maybe change direction
 		if (shouldITurn)
 			this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
-		
+
 		// Animation
-		if(this.currentupFrame === 0) {
-			this.spritePosX = this.upStartX;
-			this.spritePosY = this.upStartY;
+    if(this.orientation !== 2 ) {
+      this.orientation = 2;
+      this.currentleftFrame = 0;
+    }
+		if(this.currentleftFrame === 0) {
+			this.spritePosX = this.leftStartX;
+			this.spritePosY = this.leftStartY;
 		}
-		if(this.currentupFrame < this.upFrameLimit) {
-			++this.currentupFrame;
+		if(this.currentleftFrame < this.leftFrameLimit) {
+			++this.currentleftFrame;
 			this.spritePosX += this.width;
 		}
 
 		else {
-			this.spritePosX = this.upStartX;
-			this.currentupFrame = 0;
+			this.spritePosX = this.leftStartX;
+			this.currentleftFrame = 0;
 		}
 	}
-	
+
     // Going up
     else if (this.direction === 4) {
 		// going forward logic
@@ -185,6 +195,10 @@ Ballom.prototype.computePosition = function () {
 			this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
 		
         // Animation
+        if(this.orientation !== 3) {
+          this.orientation = 3;
+          this.currentupFrame = 0;
+        }
         if(this.currentupFrame === 0) {
             this.spritePosX = this.upStartX;
             this.spritePosY = this.upStartY;
