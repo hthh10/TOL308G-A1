@@ -314,7 +314,7 @@ generateEnemy : function(){
       deathsheet: g_sprites.deadOnil,
     }));
     this._enemies.push(new Onil({
-      cx : 490,
+      cx : 480,
       cy : 190,
       sprite : g_sprites.onil,
       deathsheet : g_sprites.deadOnil,
