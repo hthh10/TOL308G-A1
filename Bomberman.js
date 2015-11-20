@@ -53,7 +53,6 @@ Bomberman.prototype.lives = 3;
 Bomberman.prototype.walkspeed = 1.5;
 Bomberman.prototype.wallPass = false;
 
-
 Bomberman.prototype.width = 19;
 Bomberman.prototype.height = 21;
 
@@ -201,7 +200,10 @@ Bomberman.prototype.computePosition = function () {
 		bottomY = this.cy+this.getRadius();
 
 	if (keys[this.KEY_UP]) {
-		this.maybeMoveUp(leftX, rightX, topY - this.walkspeed, bottomY);
+		if(this.canMoveUp(leftX, rightX, topY - this.walkspeed, bottomY)) 
+			this.cy -= this.walkspeed;
+		else // Smoothing logic
+			this.smoothMove("up", leftX, rightX, topY, bottomY);
 
 		// Animation
 	  if(this.direction !== 3) {
@@ -229,7 +231,10 @@ Bomberman.prototype.computePosition = function () {
 
 
 	if (keys[this.KEY_DOWN]) {
-		this.maybeMoveDown(leftX, rightX, topY, bottomY + this.walkspeed);
+		if (this.canMoveDown(leftX, rightX, topY, bottomY + this.walkspeed))
+			this.cy += this.walkspeed;
+		else // Smoothing logic
+			this.smoothMove("down", leftX, rightX, topY, bottomY);
 
 		//Animation
 		if(this.direction !== 1) {
@@ -256,7 +261,10 @@ Bomberman.prototype.computePosition = function () {
 	}
 
 	if (keys[this.KEY_LEFT]) {
-		this.maybeMoveLeft(leftX - this.walkspeed, rightX, topY, bottomY);
+		if (this.canMoveLeft(leftX - this.walkspeed, rightX, topY, bottomY))
+			this.cx -= this.walkspeed;
+		else // Smoothing logic
+			this.smoothMove("left", leftX, rightX, topY, bottomY);
 
 		//Animation
 		if(this.direction !== 2 ) {
@@ -283,7 +291,10 @@ Bomberman.prototype.computePosition = function () {
 	}
 
 	if (keys[this.KEY_RIGHT]) {
-		this.maybeMoveRight(leftX, rightX + this.walkspeed, topY, bottomY);
+		if (this.canMoveRight(leftX, rightX + this.walkspeed, topY, bottomY))
+			this.cx += this.walkspeed;
+		else // Smoothing logic
+			this.smoothMove("right", leftX, rightX, topY, bottomY);
 
 		//Animation
 		// reset the variables to a new direction
@@ -310,7 +321,199 @@ Bomberman.prototype.computePosition = function () {
 	}
 };
 
-Bomberman.prototype.maybeMoveUp = function(leftX, rightX, topY, bottomY) {
+Bomberman.prototype.smoothMove = function(direction, leftX, rightX, topY, bottomY) {
+	var wallWidth = wall.getWidth(),
+		smoothingMargin = wall.getWidth()/2-this.getRadius()-0.1,
+		wallId = this.getWallId(this.cx, this.cy),
+		wallCxCy = wall.wallIdToCxCy(wallId[0],wallId[1]),
+		offsetX = this.cx - wallCxCy[0],
+		offsetY = this.cy - wallCxCy[1];
+		
+	// Terrible code, but it does the job
+	switch (direction) {
+		case "up":
+			if (wallId[0] > 0) { // Not top edge wall
+				if (wall.baseWall[wallId[0]-1][wallId[1]] === 1) { // Block above is solid
+					if (offsetX > smoothingMargin) { // Right side of solid block
+						if (this.canMoveUp(wallCxCy[0]+wallWidth, wallCxCy[0]+wallWidth, 
+							topY-this.walkspeed, bottomY-this.walkspeed) && 
+							this.canMoveRight(leftX+this.walkspeed, 
+							rightX+this.walkspeed, wallCxCy[1], wallCxCy[1]) &&
+							!keys[this.KEY_RIGHT] && !keys[this.KEY_LEFT]) {
+							this.cx += this.walkspeed;
+						}
+					}
+					else if (offsetX < -smoothingMargin) { // Left side of solid block
+						if (this.canMoveUp(wallCxCy[0]-wallWidth, wallCxCy[0]-wallWidth, 
+							topY-this.walkspeed, bottomY-this.walkspeed) && 
+							this.canMoveLeft(leftX-this.walkspeed, 
+							rightX-this.walkspeed, wallCxCy[1], wallCxCy[1]) &&
+							!keys[this.KEY_LEFT] && !keys[this.KEY_RIGHT]) {
+							this.cx -= this.walkspeed;
+						}
+					}
+				}
+				else if (wall.baseWall[wallId[0]-1][wallId[1]] <= 0) { // Block above is empty
+					if (offsetX < -smoothingMargin) { // Right side of solid block
+						if (this.canMoveUp(wallCxCy[0], wallCxCy[0], 
+							topY-this.walkspeed, bottomY-this.walkspeed) && 
+							this.canMoveRight(leftX+this.walkspeed, 
+							rightX+this.walkspeed, wallCxCy[1], wallCxCy[1]) &&
+							!keys[this.KEY_RIGHT] && !keys[this.KEY_LEFT]) {
+							this.cx += this.walkspeed;
+						}
+					}
+					else if(offsetX > smoothingMargin) {
+						if (this.canMoveUp(wallCxCy[0], wallCxCy[0], 
+							topY-this.walkspeed, bottomY-this.walkspeed) && 
+							this.canMoveLeft(leftX-this.walkspeed, 
+							rightX-this.walkspeed, wallCxCy[1], wallCxCy[1]) &&
+							!keys[this.KEY_LEFT] && !keys[this.KEY_RIGHT]) {
+							this.cx -= this.walkspeed;
+						}
+					}
+				}
+			}
+			break;
+			
+		case "down":
+			if (wallId[0] < wall.baseWall.length-1) { // Not bottom edge wall
+				if (wall.baseWall[wallId[0]+1][wallId[1]] === 1) { // Block below is solid
+					if (offsetX > smoothingMargin) { // Right side of solid block
+						if (this.canMoveDown(wallCxCy[0]+wallWidth, wallCxCy[0]+wallWidth, 
+							topY+this.walkspeed, bottomY+this.walkspeed) && 
+							this.canMoveRight(leftX+this.walkspeed, 
+							rightX+this.walkspeed, wallCxCy[1], wallCxCy[1]) &&
+							!keys[this.KEY_RIGHT] && !keys[this.KEY_LEFT]) {
+							this.cx += this.walkspeed;
+						}
+					}
+					else if (offsetX < -smoothingMargin) { // Left side of solid block
+						if (this.canMoveDown(wallCxCy[0]-wallWidth, wallCxCy[0]-wallWidth, 
+							topY+this.walkspeed, bottomY+this.walkspeed) && 
+							this.canMoveLeft(leftX-this.walkspeed, 
+							rightX-this.walkspeed, wallCxCy[1], wallCxCy[1]) &&
+							!keys[this.KEY_LEFT] && !keys[this.KEY_RIGHT]) {
+							this.cx -= this.walkspeed;
+						}
+					}
+				}
+				else if (wall.baseWall[wallId[0]+1][wallId[1]] <= 0) { // Block above is empty
+					if (offsetX < -smoothingMargin) { // Right side of solid block
+						if (this.canMoveDown(wallCxCy[0], wallCxCy[0], 
+							topY+this.walkspeed, bottomY+this.walkspeed) && 
+							this.canMoveRight(leftX+this.walkspeed, 
+							rightX+this.walkspeed, wallCxCy[1], wallCxCy[1]) &&
+							!keys[this.KEY_RIGHT] && !keys[this.KEY_LEFT]) {
+							this.cx += this.walkspeed;
+						}
+					}
+					else if(offsetX > smoothingMargin) {
+						if (this.canMoveDown(wallCxCy[0], wallCxCy[0], 
+							topY+this.walkspeed, bottomY+this.walkspeed) && 
+							this.canMoveLeft(leftX-this.walkspeed, 
+							rightX-this.walkspeed, wallCxCy[1], wallCxCy[1]) &&
+							!keys[this.KEY_LEFT] && !keys[this.KEY_RIGHT]) {
+							this.cx -= this.walkspeed;
+						}
+					}
+				}
+			}
+			break;
+			
+		case "left":
+			if (wallId[1] > 0) { // Not left edge wall
+				if (wall.baseWall[wallId[0]][wallId[1]-1] === 1) { // Block to left is solid
+					if (offsetY > smoothingMargin) { // Bottom side of solid block
+						if (this.canMoveLeft(leftX-this.walkspeed, rightX-this.walkspeed, 
+							wallCxCy[1]+wallWidth, wallCxCy[1]+wallWidth) && 
+							this.canMoveDown(wallCxCy[0], wallCxCy[0],
+							topY+this.walkspeed, bottomY+this.walkspeed) &&
+							!keys[this.KEY_UP] && !keys[this.KEY_DOWN]) {
+							this.cy += this.walkspeed;
+						}
+					}
+					else if (offsetY < -smoothingMargin) { // Top side of solid block
+						if (this.canMoveLeft(leftX-this.walkspeed, rightX-this.walkspeed, 
+							wallCxCy[1]-wallWidth, wallCxCy[1]-wallWidth) && 
+							this.canMoveUp(wallCxCy[0], wallCxCy[0],
+							topY-this.walkspeed, bottomY-this.walkspeed) &&
+							!keys[this.KEY_UP] && !keys[this.KEY_DOWN]) {
+							this.cy -= this.walkspeed;
+						}
+					}
+				}
+				else if (wall.baseWall[wallId[0]][wallId[1]-1] <= 0) { // Block to left is empty
+					if (offsetY < -smoothingMargin) { // Bottom side of solid block
+						if (this.canMoveLeft(leftX-this.walkspeed, rightX-this.walkspeed, 
+							wallCxCy[1], wallCxCy[1]) && 
+							this.canMoveDown(wallCxCy[0], wallCxCy[0],
+							topY+this.walkspeed, bottomY+this.walkspeed) &&
+							!keys[this.KEY_UP] && !keys[this.KEY_DOWN]) {
+							this.cy += this.walkspeed;
+						}
+					}
+					else if(offsetY > smoothingMargin) {
+						if (this.canMoveLeft(leftX-this.walkspeed, rightX-this.walkspeed, 
+							wallCxCy[1], wallCxCy[1]) && 
+							this.canMoveUp(wallCxCy[0], wallCxCy[0],
+							topY-this.walkspeed, bottomY-this.walkspeed) &&
+							!keys[this.KEY_UP] && !keys[this.KEY_DOWN]) {
+							this.cy -= this.walkspeed;
+						}
+					}
+				}
+			}
+			break;
+			
+		case "right":
+			if (wallId[1] < wall.baseWall[0].length-1) { // Not right edge wall
+				if (wall.baseWall[wallId[0]][wallId[1]+1] === 1) { // Block to right is solid
+					if (offsetY > smoothingMargin) { // Bottom side of solid block
+						if (this.canMoveRight(leftX+this.walkspeed, rightX+this.walkspeed, 
+							wallCxCy[1]+wallWidth, wallCxCy[1]+wallWidth) && 
+							this.canMoveDown(wallCxCy[0], wallCxCy[0],
+							topY+this.walkspeed, bottomY+this.walkspeed) &&
+							!keys[this.KEY_UP] && !keys[this.KEY_DOWN]) {
+							this.cy += this.walkspeed;
+						}
+					}
+					else if (offsetY < -smoothingMargin) { // Top side of solid block
+						if (this.canMoveRight(leftX+this.walkspeed, rightX+this.walkspeed, 
+							wallCxCy[1]-wallWidth, wallCxCy[1]-wallWidth) && 
+							this.canMoveUp(wallCxCy[0], wallCxCy[0],
+							topY-this.walkspeed, bottomY-this.walkspeed) &&
+							!keys[this.KEY_UP] && !keys[this.KEY_DOWN]) {
+							this.cy -= this.walkspeed;
+						}
+					}
+				}
+				else if (wall.baseWall[wallId[0]][wallId[1]+1] <= 0) { // Block to right is empty
+					if (offsetY < -smoothingMargin) { // Bottom side of solid block
+						if (this.canMoveRight(leftX+this.walkspeed, rightX+this.walkspeed, 
+							wallCxCy[1], wallCxCy[1]) && 
+							this.canMoveDown(wallCxCy[0], wallCxCy[0],
+							topY+this.walkspeed, bottomY+this.walkspeed) &&
+							!keys[this.KEY_UP] && !keys[this.KEY_DOWN]) {
+							this.cy += this.walkspeed;
+						}
+					}
+					else if(offsetY > smoothingMargin) {
+						if (this.canMoveRight(leftX-this.walkspeed, rightX-this.walkspeed, 
+							wallCxCy[1], wallCxCy[1]) && 
+							this.canMoveUp(wallCxCy[0], wallCxCy[0],
+							topY-this.walkspeed, bottomY-this.walkspeed) &&
+							!keys[this.KEY_UP] && !keys[this.KEY_DOWN]) {
+							this.cy -= this.walkspeed;
+						}
+					}
+				}
+			}
+			break;
+	}
+};
+
+Bomberman.prototype.canMoveUp = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
 		  wallIdRight,
 		  wallIdTop,
@@ -322,12 +525,13 @@ Bomberman.prototype.maybeMoveUp = function(leftX, rightX, topY, bottomY) {
 		wallIdRight = this.getWallId(rightX,topY);
 		if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
 			!this.checkForWall(wallIdRight[0],wallIdRight[1])) {
-			this.cy -= this.walkspeed;
+			return true;
 		}
 	}
+	return false;
 },
 
-Bomberman.prototype.maybeMoveDown = function(leftX, rightX, topY, bottomY) {
+Bomberman.prototype.canMoveDown = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
 		  wallIdRight,
 		  wallIdTop,
@@ -339,12 +543,13 @@ Bomberman.prototype.maybeMoveDown = function(leftX, rightX, topY, bottomY) {
 		wallIdRight = this.getWallId(rightX,bottomY);
 		if (!this.checkForWall(wallIdLeft[0],wallIdLeft[1]) &&
 			!this.checkForWall(wallIdRight[0],wallIdRight[1])) {
-			this.cy += this.walkspeed;
+			return true;
 		}
 	}
+	return false;
 },
 
-Bomberman.prototype.maybeMoveLeft = function(leftX, rightX, topY, bottomY) {
+Bomberman.prototype.canMoveLeft = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
 		  wallIdRight,
 		  wallIdTop,
@@ -356,12 +561,13 @@ Bomberman.prototype.maybeMoveLeft = function(leftX, rightX, topY, bottomY) {
 		wallIdBottom = this.getWallId(leftX,bottomY);
 		if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
 			!this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
-			this.cx -= this.walkspeed;
+			return true;
 		}
 	}
+	return false;
 },
 
-Bomberman.prototype.maybeMoveRight = function(leftX, rightX, topY, bottomY) {
+Bomberman.prototype.canMoveRight = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
 		  wallIdRight,
 		  wallIdTop,
@@ -373,9 +579,10 @@ Bomberman.prototype.maybeMoveRight = function(leftX, rightX, topY, bottomY) {
 		wallIdBottom = this.getWallId(rightX,bottomY);
 		if (!this.checkForWall(wallIdTop[0],wallIdTop[1]) &&
 			!this.checkForWall(wallIdBottom[0],wallIdBottom[1])) {
-			this.cx += this.walkspeed;
+			return true;
 		}
 	}
+	return false;
 },
 
 

@@ -164,6 +164,10 @@ destroyBrick : function (yId, xId) {
 	}
 },
 
+getWidth : function() {
+	return this.width;
+},
+
 wallIdToCxCy : function (yId, xId) {
 	var cx = g_playzone[0][0]+xId*this.stepCx+this.width/2,
 		cy = g_playzone[1][0]+yId*this.stepCy+this.height/2;
