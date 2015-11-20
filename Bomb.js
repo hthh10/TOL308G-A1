@@ -116,11 +116,11 @@ Bomb.prototype.maybeDetonate = function () {
   if (this.trigger) {
     if (keys[this.KEY_P1_TRIGGER] && this.bombermanID === 1) {
       this.configureExplosion();
-      this.lifeSpan -= this.lifeSpan;
+      this.kill();
     }
      if (keys[this.KEY_P2_TRIGGER] && this.bombermanID !== 1) {
        this.configureExplosion();
-       this.lifeSpan -= this.lifeSpan;
+       this.kill();
      }
   }
 };
