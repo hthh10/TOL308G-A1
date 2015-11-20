@@ -146,10 +146,7 @@ Evilbomberman.prototype.maybeDropBomb = function() {
 };
 
 Evilbomberman.prototype.computePosition = function() {
-  var bmanX = spatialManager.findBomberman().posX;
-  var bmanY = spatialManager.findBomberman().posY;
-  var bmanXprox = this.cx - bmanX;
-  var bmanYprox = this.cy - bmanY;
+
 
   var wallId,
     leftX = this.cx - this.getRadius(),
@@ -160,167 +157,211 @@ Evilbomberman.prototype.computePosition = function() {
   var upId, downId, leftId, rightId;
 
   downId = this.getWallId(this.cx, bottomY);
-  upId = this.getWallId(this.cx, topY)
+  upId = this.getWallId(this.cx, topY);
   rightId = this.getWallId(rightX, this.cy);
   leftId = this.getWallId(leftX, this.cy);
 
-  var shouldITurn = (Math.random() < 0.01) ? true : false;
+  var shouldITurn = (Math.random() < 0.7) ? true : false;
 
   // playzone rules - If the enemy hits the edges of the playfield
   // he is kindly asked to go away.
 
-  if (rightX >= g_playzone[0][1]) {
-    this.cx -= this.speed;
-    if (bmanXprox < 0 && Math.random() < 0.8) this.direction = 2;
-    else this.direction = 4;
-  } else if (leftX <= g_playzone[0][0]) {
-    this.cx += this.speed;
-    if (bmanYprox < 0 && Math.random() < 0.8) this.direction = 2;
-    else this.direction = 4;
-  } else if (bottomY >= g_playzone[1][1]) {
-    this.cy -= this.speed;
-    if (bmanXprox < 0 && Math.random() < 0.8) this.direction = 1;
-    else this.direction = 3;
-  } else if (topY <= g_playzone[1][0] + 5) {
-    this.cy += this.speed;
-    if (bmanXprox < 0 && Math.random() < 0.8) this.direction = 1;
-    else this.direction = 3;
-  } else {
-    // Going right
-    if (this.direction === 1) {
+  // Going right
+  if (this.direction === 1) {
 
-      wallId = this.getWallId(rightX, this.cy);
+    // going forward logic
+    if (this.canMoveRight(leftX, rightX + this.speed, topY, bottomY)) {
+      this.cx += this.speed;
+      rightX += this.speed;
+      leftX += this.speed;
+    } else // if there is a wall
+      this.wallCollide(this.direction, leftX, rightX, topY, bottomY);
 
-      if (bmanYprox < 0 && !this.checkForWall(downId[0], downId[1]) && shouldITurn)  {
-        this.direction = 2;
-      }
-      if (bmanYprox > 0 && !this.checkForWall(upId[0], upId[1]) && shouldITurn) {
-        this.direction = 4;
-      }
-      // going forward logic. Check if the next block is a wall
-      if (!this.checkForWall(wallId[0], wallId[1])) this.cx += this.speed;
-      else { // if there is a wall
-        if (bmanYprox < 0 && Math.random() < 0.8) this.direction = 2; // 80% chance of going down
-        else this.direction = 4; // otherwise he goes up.
-      }
-      //Animation
-      if(this.orientation !== 0) {
-        this.orientation = 0;
-        this.currentrightFrame = 0;
-        }
-      if (this.currentrightFrame === 0) {
-        this.spritePosX = this.rightStartX;
-        this.spritePosY = this.rightStartY;
-      }
-      if (this.currentrightFrame < this.rightFrameLimit) {
-        ++this.currentrightFrame;
-        this.spritePosX += this.width;
-      } else {
-        this.spritePosX = this.rightStartX;
-        this.currentrightFrame = 0;
-      }
+    //Animation
+    if (this.orientation !== 0) {
+      this.orientation = 0;
+      this.currentrightFrame = 0;
     }
-
-    // going down.
-    if (this.direction === 2) {
-      wallId = this.getWallId(this.cx, bottomY);
-
-      if (bmanXprox > 0 && !this.checkForWall(leftId[0], leftId[1]) &&
-       shouldITurn) this.direction = 3;
-      if (bmanXprox < 0 && !this.checkForWall(rightId[0], rightId[1]) &&
-       shouldITurn) this.direction = 1;
-
-      if (!this.checkForWall(wallId[0], wallId[1])) this.cy += this.speed;
-      else {
-        if (bmanXprox < 0 && Math.random() < 0.8) this.direction = 1; // 80% chance of enemy going right
-        else this.direction = 3; // otherwise he goes left.
-      }
-
-      //Animation
-      if(this.orientation !== 1) {
-          this.orientation = 1;
-          this.currentdownFrame = 0;
-        }
-      if (this.currentdownFrame === 0) {
-        this.spritePosX = this.downStartX;
-        this.spritePosY = this.downStartY;
-      }
-      if (this.currentdownFrame < this.downFrameLimit) {
-        ++this.currentdownFrame;
-        this.spritePosX += this.width;
-      } else {
-        this.spritePosX = this.downStartX;
-        this.currentdownFrame = 0;
-      }
+    if (this.currentrightFrame === 0) {
+      this.spritePosX = this.rightStartX;
+      this.spritePosY = this.rightStartY;
     }
-
-
-    // going left
-    if (this.direction === 3) {
-      wallId = this.getWallId(leftX, this.cy);
-
-      if (bmanYprox > 0 && !this.checkForWall(upId[0], upId[1]) &&
-       shouldITurn) this.direction = 4;
-      if (bmanYprox < 0 && !this.checkForWall(downId[0], downId[1]) &&
-       shouldITurn) this.direction = 2;
-      if (!this.checkForWall(wallId[0], wallId[1])) this.cx -= this.speed;
-      else {
-        if (bmanYprox > 0 && Math.random() < 0.8) this.direction = 4; // 80% chance of enemy going up
-        else this.direction = 2; // otherwise he goes up.
-      }
-
-      //Animation
-  		if(this.orientation !== 2 ) {
-        this.orientation = 2;
-        this.currentleftFrame = 0;
-      }
-      if (this.currentleftFrame === 0) {
-        this.spritePosX = this.leftStartX;
-        this.spritePosY = this.leftStartY;
-      }
-      if (this.currentleftFrame < this.leftFrameLimit) {
-        ++this.currentleftFrame;
-        this.spritePosX += this.width;
-      } else {
-        this.spritePosX = this.leftStartX;
-        this.currentleftFrame = 0;
-      }
+    if (this.currentrightFrame < this.rightFrameLimit) {
+      ++this.currentrightFrame;
+      this.spritePosX += this.width;
+    } else {
+      this.spritePosX = this.rightStartX;
+      this.currentrightFrame = 0;
     }
-    // Going up
-    if (this.direction === 4) {
-      wallId = this.getWallId(this.cx, topY);
+  }
 
-      if (bmanXprox > 0 && !this.checkForWall(leftId[0], leftId[1]) && shouldITurn) this.direction = 3;
-      if (bmanXprox < 0 && !this.checkForWall(rightId[0], rightId[1]) && shouldITurn) this.direction = 1;
+  // going down.
+  else if (this.direction === 2) {
+    // going forward logic
+    if (this.canMoveDown(leftX, rightX, topY, bottomY + this.speed)) {
+      this.cy += this.speed;
+      topY += this.speed;
+      bottomY += this.speed;
+    } else // if there is a wall
+      this.wallCollide(this.direction, leftX, rightX, topY, bottomY);
 
-      if (!this.checkForWall(wallId[0], wallId[1])) {
-        this.cy -= this.speed;
-      }
-      if (this.checkForWall(wallId[0], wallId[1])) {
-        if (bmanXprox > 0 && Math.random() < 0.8) this.direction = 3; // 50% chance of enemy going left
-        else this.direction = 1; // otherwise he goes right.
-      }
+    // Maybe change direction
+    if (shouldITurn)
+      this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
 
-      // Animation
-  	  if(this.orientation !== 3) {
-  	    this.orientation = 3;
-  	    this.currentupFrame = 0;
-  	  }
-      if (this.currentupFrame === 0) {
-        this.spritePosX = this.upStartX;
-        this.spritePosY = this.upStartY;
-      }
-      if (this.currentupFrame < this.upFrameLimit) {
-        ++this.currentupFrame;
-        this.spritePosX += this.width;
-      } else {
-        this.spritePosX = this.upStartX;
-        this.currentupFrame = 0;
-      }
+    //Animation
+    if (this.orientation !== 1) {
+      this.orientation = 1;
+      this.currentdownFrame = 0;
+    }
+    if (this.currentdownFrame === 0) {
+      this.spritePosX = this.downStartX;
+      this.spritePosY = this.downStartY;
+    }
+    if (this.currentdownFrame < this.downFrameLimit) {
+      ++this.currentdownFrame;
+      this.spritePosX += this.width;
+    } else {
+      this.spritePosX = this.downStartX;
+      this.currentdownFrame = 0;
+    }
+  }
+
+
+  // going left
+  else if (this.direction === 3) {
+    // going forward logic
+    if (this.canMoveLeft(leftX - this.speed, rightX, topY, bottomY)) {
+      this.cx -= this.speed;
+      rightX -= this.speed;
+      leftX -= this.speed;
+    } else // if there is a wall
+      this.wallCollide(this.direction, leftX, rightX, topY, bottomY);
+
+    // Maybe change direction
+    if (shouldITurn)
+      this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
+
+
+    //Animation
+    if (this.orientation !== 2) {
+      this.orientation = 2;
+      this.currentleftFrame = 0;
+    }
+    if (this.currentleftFrame === 0) {
+      this.spritePosX = this.leftStartX;
+      this.spritePosY = this.leftStartY;
+    }
+    if (this.currentleftFrame < this.leftFrameLimit) {
+      ++this.currentleftFrame;
+      this.spritePosX += this.width;
+    } else {
+      this.spritePosX = this.leftStartX;
+      this.currentleftFrame = 0;
+    }
+  }
+  // Going up
+  else if (this.direction === 4) {
+    // going forward logic
+    if (this.canMoveUp(leftX, rightX, topY - this.speed, bottomY)) {
+      this.cy -= this.speed;
+      topY -= this.speed;
+      bottomY -= this.speed;
+    } else // if there is a wall
+      this.wallCollide(this.direction, leftX, rightX, topY, bottomY);
+
+    // Maybe change direction
+    if (shouldITurn)
+      this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
+
+    // Animation
+    if (this.orientation !== 3) {
+      this.orientation = 3;
+      this.currentupFrame = 0;
+    }
+    if (this.currentupFrame === 0) {
+      this.spritePosX = this.upStartX;
+      this.spritePosY = this.upStartY;
+    }
+    if (this.currentupFrame < this.upFrameLimit) {
+      ++this.currentupFrame;
+      this.spritePosX += this.width;
+    } else {
+      this.spritePosX = this.upStartX;
+      this.currentupFrame = 0;
     }
   }
 };
 
+Evilbomberman.prototype.changeDirection = function(direction, leftX, rightX, topY, bottomY) {
+
+  var bmanX = spatialManager.findBomberman().posX;
+  var bmanY = spatialManager.findBomberman().posY;
+  var bmanXprox = this.cx - bmanX;
+  var bmanYprox = this.cy - bmanY;
+
+  switch(direction) {
+		case 1:
+			if (bmanYprox < 0) { // 50% chance on checking down first
+				if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+					this.direction = 2;
+				else if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+					this.direction = 4;
+			}
+			else { // 50% chance on checking up first
+				if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+					this.direction = 4;
+				else if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+					this.direction = 2;
+			}
+			break;
+
+		case 2:
+			if (bmanXprox > 0) { // 50% chance checking move left first
+				if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+					this.direction = 3;
+				else if (this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+					this.direction = 1;
+			}
+			else { // 50% chance on checking move right first
+				if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+					this.direction = 1;
+				else if (this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+					this.direction = 3;
+			}
+			break;
+
+		case 3: // Going left
+			if (bmanYprox < 0) { // 50% chance on checking down first
+				if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+					this.direction = 2;
+				else if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+					this.direction = 4;
+			}
+			else { // 50% chance on checking up first
+				if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
+					this.direction = 4;
+				else if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
+					this.direction = 2;
+			}
+			break;
+
+		case 4: // Going up
+			if (bmanXprox > 0) { // 50% chance checking move left first
+				if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+					this.direction = 3;
+				else if (this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+					this.direction = 1;
+			}
+			else { // 50% chance on checking move right first
+				if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
+					this.direction = 1;
+				else if (this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
+					this.direction = 3;
+			}
+			break;
+	}
+},
 Evilbomberman.prototype.getRadius = function () {
     return 19.9;
 };
