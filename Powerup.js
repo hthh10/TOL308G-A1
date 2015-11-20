@@ -34,7 +34,7 @@ Powerup.prototype.cy = 0;
 Powerup.prototype.id = 0;
 
 // Convert times from milliseconds to "nominal" time units.
-Powerup.prototype.lifeSpan = 4000 / NOMINAL_UPDATE_INTERVAL;
+Powerup.prototype.lifeSpan = 5000 / NOMINAL_UPDATE_INTERVAL;
 var powerUpPickedUp = new Audio("Sounds/Bomberman SFX (4).wav");
 
 Powerup.prototype.update = function (du) {
@@ -54,7 +54,7 @@ Powerup.prototype.update = function (du) {
 
 Powerup.prototype.deliverPowerup = function (bomberman) {
   powerUpPickedUp.currentTime = 0;
-  powerUpPickedUp.play(); 
+  powerUpPickedUp.play();
 	switch (this.id) {
 		case 0:
 			bomberman.noBombs += 1;

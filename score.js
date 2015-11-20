@@ -12,6 +12,8 @@ var g_score = {
 	P2_maxBombs:1,
 	win: false
 };
+//Boss hp
+var g_evilHp = 3;
 
 function resetScore() {
 	g_score.P1_score = 0;
@@ -26,6 +28,10 @@ function resetScore() {
 function renderScore (ctx) {
 	renderP1Score(ctx);
 	renderP2Score(ctx);
+  if (g_level === 4) {
+      renderBoss(ctx);
+  }
+
 
 	ctx.save();
     if (!g_gameStarted && g_score.P1_lives > 0) {
@@ -93,8 +99,30 @@ function renderP1Score (ctx) {
 	ctx.textAlign = "left";
   ctx.fillText(' x ' + g_score.P1_lives, 40, 30);
 	ctx.fillText("Score:" + g_score.P1_score, 150, 30);
-	ctx.fillText("Level: " + g_level, 280,30);
+  if (g_level < 4) {
+    	ctx.fillText("Level: " + g_level, 280,30);
+  }
+  else {
+    ctx.fillText("Dark Bomberman",250,30);
+  }
 	ctx.restore();
+}
+
+function renderBoss(ctx) {
+  ctx.save();
+  ctx.font = "20px Arial";
+  ctx.fillStyle = "red";
+  if (g_evilHp > 2) {
+    ctx.fillRect(358, 35, 47, 12);
+  }
+  if (g_evilHp > 1) {
+    ctx.fillRect(304, 35, 47, 12);
+  }
+  if (g_evilHp > 0) {
+    ctx.fillRect(250, 35, 47, 12);
+  }
+  ctx.textAlign = "center";
+  ctx.restore();
 }
 
 function renderP2Score (ctx) {

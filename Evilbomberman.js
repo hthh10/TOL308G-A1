@@ -14,6 +14,7 @@
 //Evilbomberman moves slightly faster than Bomberman and eats the bombs it finds in it's way
 
 //A generic constructor which accepts an arbitrary descriptor object
+
 function Evilbomberman(descr) {
 
   //Common inherited setup logic from Entity
@@ -104,12 +105,13 @@ Evilbomberman.prototype.update = function(du) {
       if(this.direction === 4) this.direction = 2;
     }
     // if hit by player's bombs, lose hp.
-    if ((hitEntity instanceof Explosion && hitEntity.bombermanID > 0) &&
+    if ((hitEntity instanceof Explosion && hitEntity.bombermanID < 4) &&
           this.immunity < 20) {
       //award points?
       this.lives -= 1;
+      g_evilHp -= 1;
       this.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
-      console.log('evil hp = ' + this.lives);
+      console.log('evil hp = ' + g_evilHp);
     }
   }
 
@@ -122,28 +124,43 @@ Evilbomberman.prototype.update = function(du) {
 
 };
 
+Evilbomberman.prototype.DropPowerup = function(cx, cy) {
+  var descr ={
+    cx : cx,
+    cy: cy,
+    id : wall.selectItem()-3
+  };
+  entityManager.generatePowerup(descr);
+};
+
+
 Evilbomberman.prototype.maybeDropBomb = function() {
+  var hitEntity = spatialManager.findEntityInRange(this.cx, this.cy, 1);
+  var baseCx = g_playzone[0][0],
+    baseCy = g_playzone[1][0];
+  var xPos = Math.floor((this.cx - baseCx) / g_sprites.wall.width),
+    yPos = Math.floor((this.cy - baseCy) / g_sprites.wall.height);
+  var itemCx = g_sprites.wall.width + (g_sprites.wall.width * xPos),
+    itemCy = 110 + (g_sprites.wall.height * yPos);
+
   if ((this.canDropBomb && this.Bombinterval < 1000 / NOMINAL_UPDATE_INTERVAL) ||
     Math.random() < 0.005) {
+    if (Math.random() < 0.80) {
 
-    // Don't drop bomb if there is one already in the square
-    var hitEntity = spatialManager.findEntityInRange(this.cx, this.cy, 1);
-    if (hitEntity instanceof Bomb) return;
+      // Don't drop bomb if there is one already in the square
+      if (hitEntity instanceof Bomb) return;
+      entityManager.dropBomb(itemCx, itemCy, xPos, yPos,
+        6, 0 - this._spatialID, false);
 
-    var baseCx = g_playzone[0][0],
-      baseCy = g_playzone[1][0];
-    var xPos = Math.floor((this.cx - baseCx) / g_sprites.wall.width),
-      yPos = Math.floor((this.cy - baseCy) / g_sprites.wall.height);
-    var bombCx = g_sprites.wall.width + (g_sprites.wall.width * xPos),
-      bombCy = 110 + (g_sprites.wall.height * yPos);
 
-    entityManager.dropBomb(bombCx, bombCy, xPos, yPos,
-      6, 0 - this._spatialID, false);
-
-    this.canDropBomb = false;
-
+      this.canDropBomb = false;
+    } else {
+      if ((hitEntity instanceof Powerup) || (hitEntity instanceof Bomb)) return;
+      this.DropPowerup(itemCx, itemCy);
+      this.canDropBomb = false;
+    }
   }
-};
+  };
 
 Evilbomberman.prototype.computePosition = function() {
 
