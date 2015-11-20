@@ -14,10 +14,9 @@
 
 // A generic contructor which accepts an arbitrary descriptor object
 function Explosion(descr) {
-
   // Common inherited setup logic from Entity
   this.setup(descr);
-}
+};
 
 Explosion.prototype = new Entity();
 
@@ -60,7 +59,7 @@ Explosion.prototype.update = function(du) {
 };
 
 Explosion.prototype.getRadius = function() {
-    return g_images.explosion.width/2;
+  return g_images.explosion.width/2;
 };
 
 Explosion.prototype.takeExplosionHit = function() {

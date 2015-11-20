@@ -13,12 +13,11 @@
 
 //A generic constructor which accepts an arbitrary descriptor object
 function Enemy(descr) {
-
     //Common inherited setup logic from Entity
     this.setup(descr);
     this.sprite = this.sprite;
     this._scale = 1;
-}
+};
 
 Enemy.prototype = new Entity();
 
@@ -45,7 +44,7 @@ Enemy.prototype.update = function(du) {
     if ((this.isColliding() instanceof Explosion) && this.immunity < 10){
         //award points?
         if (this.deathsheet) {
-          entityManager.killSprite(this.cx,this.cy,this.width,
+            entityManager.killSprite(this.cx,this.cy,this.width,
             this.height,this.deadSpritePosX,this.deadSpritePosY,
             this.nrDeathSlides, this.deathSlideWidth, this.deathsheet);
         }
@@ -53,7 +52,7 @@ Enemy.prototype.update = function(du) {
     }
 
     spatialManager.register(this);
-}
+};
 
 Enemy.prototype.speed = 1.5;
 Enemy.prototype.moveEnemy = true;
@@ -62,6 +61,7 @@ Enemy.prototype.direction = 2; // 1 = Right, 2 = down, 3 = left, 4 = up
 Enemy.prototype.getRadius = function() {
     return this.width*0.9;
 };
+
 // Checks for collision with a bomb and changes the speed related to that
 Enemy.prototype.isCollidingWithBomb = function(bomba) {
 
@@ -110,7 +110,7 @@ Enemy.prototype.canMoveUp = function(leftX, rightX, topY, bottomY) {
 		}
 		return false;
 	}
-},
+};
 
 Enemy.prototype.canMoveDown = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
@@ -130,7 +130,7 @@ Enemy.prototype.canMoveDown = function(leftX, rightX, topY, bottomY) {
 		}
 		return false;
 	}
-},
+};
 
 Enemy.prototype.canMoveLeft = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
@@ -150,7 +150,7 @@ Enemy.prototype.canMoveLeft = function(leftX, rightX, topY, bottomY) {
 		}
 		return false;
 	}
-},
+};
 
 Enemy.prototype.canMoveRight = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
@@ -170,7 +170,7 @@ Enemy.prototype.canMoveRight = function(leftX, rightX, topY, bottomY) {
 		}
 		return false;
 	}
-},
+};
 
 Enemy.prototype.wallCollide = function(direction, leftX, rightX, topY, bottomY) {
 	switch(direction) {
@@ -246,7 +246,7 @@ Enemy.prototype.wallCollide = function(direction, leftX, rightX, topY, bottomY) 
 			}
 			break;
 	}
-},
+};
 
 Enemy.prototype.changeDirection = function(direction, leftX, rightX, topY, bottomY) {
 	switch(direction) {
@@ -310,7 +310,7 @@ Enemy.prototype.changeDirection = function(direction, leftX, rightX, topY, botto
 			}
 			break;
 	}
-},
+};
 
 
 

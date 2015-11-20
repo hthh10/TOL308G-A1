@@ -75,4 +75,4 @@ render : function(ctx) {
 	ctx.restore();
 	ctx.fillStyle = oldFillStyle;
 },
-}
+};

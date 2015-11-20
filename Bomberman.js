@@ -14,26 +14,25 @@
 
 // A generic contructor which accepts an arbitrary descriptor object
 function Bomberman(descr) {
+  // Common inherited setup logic from Entity
+  this.setup(descr);
 
-    // Common inherited setup logic from Entity
-    this.setup(descr);
+  this.rememberResets();
 
-    this.rememberResets();
+  // Default sprite, if not otherwise specified
+  this.sprite = this.sprite || g_sprites.bomberman || g_sprites.deadBomberman;
 
-    // Default sprite, if not otherwise specified
-    this.sprite = this.sprite || g_sprites.bomberman || g_sprites.deadBomberman;
-
-    // Set normal drawing scale, and warp state off
-    this._scale = 1;
-    this._isReseting = false;
+  // Set normal drawing scale, and warp state off
+  this._scale = 1;
+  this._isReseting = false;
 };
 
 Bomberman.prototype = new Entity();
 
 Bomberman.prototype.rememberResets = function () {
-    // Remember my reset positions
-    this.reset_cx = this.cx;
-    this.reset_cy = this.cy;
+  // Remember my reset positions
+  this.reset_cx = this.cx;
+  this.reset_cy = this.cy;
 };
 
 // Values for first bomberman
@@ -95,61 +94,57 @@ var dropBomb = new Audio("Sounds/Bomberman SFX (3).wav");
 
 Bomberman.prototype.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 Bomberman.prototype.reset = function () {
+  this._isReseting = true;
+  this._scaleDirn = -1;
+  this.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 
-    this._isReseting = true;
-    this._scaleDirn = -1;
-    this.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
-
-    spatialManager.unregister(this);
+  spatialManager.unregister(this);
 };
 
 
 Bomberman.prototype._updateReset = function (du) {
 
-    var SHRINK_RATE = 3 / SECS_TO_NOMINALS;
-    this._scale += this._scaleDirn * SHRINK_RATE * du;
+  var SHRINK_RATE = 3 / SECS_TO_NOMINALS;
+  this._scale += this._scaleDirn * SHRINK_RATE * du;
 
-    if (this._scale < 0.2) {
+  if (this._scale < 0.2) {
+    this._moveToBeginning();
+    this.halt();
+    this._scaleDirn = 1;
+  } else if (this._scale > 1) {
+      this._scale = 1;
+      this._isReseting = false;
 
-        this._moveToBeginning();
-        this.halt();
-        this._scaleDirn = 1;
-
-    } else if (this._scale > 1) {
-
-        this._scale = 1;
-        this._isReseting = false;
-
-        // Reregister me from my old posistion
-        // ...so that I can be collided with again
-        spatialManager.register(this);
+      // Reregister me from my old posistion
+      // ...so that I can be collided with again
+      spatialManager.register(this);
     }
 };
 
 Bomberman.prototype._moveToBeginning = function () {
-    // Move to initial position
-    this.cx = this.reset_cx;
-    this.cy = this.reset_cy;
+  // Move to initial position
+  this.cx = this.reset_cx;
+  this.cy = this.reset_cy;
 };
 
 
 Bomberman.prototype.update = function (du) {
-    this.respawan -= du;
-    this.immunity -= du;
-    // Handle warping
-    if (this._isReseting) {
-        this._updateReset(du);
-        return;
-    }
+  this.respawan -= du;
+  this.immunity -= du;
+  // Handle warping
+  if (this._isReseting) {
+      this._updateReset(du);
+      return;
+  }
 
 	// Remember current position
 	var oldCx = this.cx;
 	var oldCy = this.cy;
 
 
-    // Unregister and check for death
-    spatialManager.unregister(this);
-    if (this._isDeadNow) return entityManager.KILL_ME_NOW;
+  // Unregister and check for death
+  spatialManager.unregister(this);
+  if (this._isDeadNow) return entityManager.KILL_ME_NOW;
 
 	this.computePosition();
   // Handle bombs
@@ -163,41 +158,40 @@ Bomberman.prototype.update = function (du) {
 			hitEntity.deliverPowerup(this);
 		}
 	else if ((hitEntity instanceof Enemy || hitEntity instanceof Explosion) &&
-    this.immunity < 20) {
+          this.immunity < 20) {
 		this.reset();
-			this.lives -= 1;
-			if (this._spatialID === 1) g_score.P1_lives -= 1;
-			else g_score.P2_lives -= 1;
-      entityManager.killSprite(this.cx,this.cy,this.width,
-        this.height,this.deadSpritePosX,this.deadSpritePosY,
-        this.nrDeathSlides, this.deathSlideWidth, g_sprites.deadBomberman);
-			if (this.lives <= 0)
-			{
-				entityManager.checkLoseConditions();
-				return entityManager.KILL_ME_NOW;
-			}
+		this.lives -= 1;
+		if (this._spatialID === 1) g_score.P1_lives -= 1;
+		else g_score.P2_lives -= 1;
+    entityManager.killSprite(this.cx,this.cy,this.width,
+                            this.height,this.deadSpritePosX,this.deadSpritePosY,
+                            this.nrDeathSlides, this.deathSlideWidth, g_sprites.deadBomberman);
+		if (this.lives <= 0)
+		{
+			entityManager.checkLoseConditions();
+			return entityManager.KILL_ME_NOW;
 		}
-		else if (hitEntity instanceof Door) {
-			entityManager.checkWinConditions();
-		}
+	}
+	else if (hitEntity instanceof Door) {
+		entityManager.checkWinConditions();
+	}
 
-      // Check if he collides with the bomb after a little delay and 
-      // then gets rid of the possibility that he can go through it 
-      // !!! But this could create an issue when the level is full of things Bomberman
-      // can accidentally slip into 
-    }
-     if (hitEntity instanceof Bomb && (hitEntity.lifeSpan < 100.0)) {
-        this.isCollidingWithBomb(hitEntity);
-    } else spatialManager.register(this);
-
-    };
+  // Check if he collides with the bomb after a little delay and 
+  // then gets rid of the possibility that he can go through it 
+  // !!! But this could create an issue when the level is full of things Bomberman
+  // can accidentally slip into 
+  }
+  if (hitEntity instanceof Bomb && (hitEntity.lifeSpan < 100.0)) {
+      this.isCollidingWithBomb(hitEntity);
+  } else spatialManager.register(this);
+};
 
 Bomberman.prototype.computePosition = function () {
 	// Variables for position logic
 	var leftX = this.cx-this.getRadius(),
-		rightX = this.cx+this.getRadius(),
-		topY = this.cy-this.getRadius(),
-		bottomY = this.cy+this.getRadius();
+		  rightX = this.cx+this.getRadius(),
+		  topY = this.cy-this.getRadius(),
+		  bottomY = this.cy+this.getRadius();
 
 	if (keys[this.KEY_UP]) {
 		if(this.canMoveUp(leftX, rightX, topY - this.walkspeed, bottomY)) 
@@ -228,7 +222,6 @@ Bomberman.prototype.computePosition = function () {
 		}
 		moveUpDown.play();
 	}
-
 
 	if (keys[this.KEY_DOWN]) {
 		if (this.canMoveDown(leftX, rightX, topY, bottomY + this.walkspeed))
@@ -323,11 +316,11 @@ Bomberman.prototype.computePosition = function () {
 
 Bomberman.prototype.smoothMove = function(direction, leftX, rightX, topY, bottomY) {
 	var wallWidth = wall.getWidth(),
-		smoothingMargin = wall.getWidth()/2-this.getRadius()-0.1,
-		wallId = this.getWallId(this.cx, this.cy),
-		wallCxCy = wall.wallIdToCxCy(wallId[0],wallId[1]),
-		offsetX = this.cx - wallCxCy[0],
-		offsetY = this.cy - wallCxCy[1];
+		  smoothingMargin = wall.getWidth()/2-this.getRadius()-0.1,
+		  wallId = this.getWallId(this.cx, this.cy),
+		  wallCxCy = wall.wallIdToCxCy(wallId[0],wallId[1]),
+		  offsetX = this.cx - wallCxCy[0],
+		  offsetY = this.cy - wallCxCy[1];
 		
 	// Terrible code, but it does the job
 	switch (direction) {
@@ -529,7 +522,7 @@ Bomberman.prototype.canMoveUp = function(leftX, rightX, topY, bottomY) {
 		}
 	}
 	return false;
-},
+};
 
 Bomberman.prototype.canMoveDown = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
@@ -547,7 +540,7 @@ Bomberman.prototype.canMoveDown = function(leftX, rightX, topY, bottomY) {
 		}
 	}
 	return false;
-},
+};
 
 Bomberman.prototype.canMoveLeft = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
@@ -565,7 +558,7 @@ Bomberman.prototype.canMoveLeft = function(leftX, rightX, topY, bottomY) {
 		}
 	}
 	return false;
-},
+};
 
 Bomberman.prototype.canMoveRight = function(leftX, rightX, topY, bottomY) {
 	var wallIdLeft,
@@ -583,34 +576,34 @@ Bomberman.prototype.canMoveRight = function(leftX, rightX, topY, bottomY) {
 		}
 	}
 	return false;
-},
+};
 
 
 // Checks for collision with a bomb and changes the speed in regards to that
 Bomberman.prototype.isCollidingWithBomb = function(bomba) {
-    var wallId,
-        leftX = this.cx - this.getRadius(),
-        rightX = this.cx + this.getRadius(),
-        topY = this.cy - this.getRadius(),
-        bottomY = this.cy + this.getRadius();
+  var wallId,
+      leftX = this.cx - this.getRadius(),
+      rightX = this.cx + this.getRadius(),
+      topY = this.cy - this.getRadius(),
+      bottomY = this.cy + this.getRadius();
 
-    if (this.cy > bomba.cy && bottomY < g_playzone[1][1]) {
-    	wallId = this.getWallId(this.cx, bottomY);
-    	if (!this.checkForWall(wallId[0], wallId[1])) this.cy += this.walkspeed;
-    }
+  if (this.cy > bomba.cy && bottomY < g_playzone[1][1]) {
+  	wallId = this.getWallId(this.cx, bottomY);
+  	if (!this.checkForWall(wallId[0], wallId[1])) this.cy += this.walkspeed;
+  }
 
-    if (this.cy < bomba.cy && topY > g_playzone[1][0]) {
-    	wallId = this.getWallId(this.cx, topY);
-    	if (!this.checkForWall(wallId[0], wallId[1])) this.cy -= this.walkspeed;
-    }
-    if (this.cx > bomba.cx && rightX < g_playzone[0][1]) {
-    	wallId = this.getWallId(rightX, this.cy);
-    	if (!this.checkForWall(wallId[0], wallId[1])) this.cx += this.walkspeed;
-    }
-    if (this.cx < bomba.cx && leftX > g_playzone[0][0]) {
-    	wallId = this.getWallId(leftX, this.cy);
-    	if (!this.checkForWall(wallId[0], wallId[1])) this.cx -= this.walkspeed;
-    }
+  if (this.cy < bomba.cy && topY > g_playzone[1][0]) {
+  	wallId = this.getWallId(this.cx, topY);
+  	if (!this.checkForWall(wallId[0], wallId[1])) this.cy -= this.walkspeed;
+  }
+  if (this.cx > bomba.cx && rightX < g_playzone[0][1]) {
+  	wallId = this.getWallId(rightX, this.cy);
+  	if (!this.checkForWall(wallId[0], wallId[1])) this.cx += this.walkspeed;
+  }
+  if (this.cx < bomba.cx && leftX > g_playzone[0][0]) {
+  	wallId = this.getWallId(leftX, this.cy);
+  	if (!this.checkForWall(wallId[0], wallId[1])) this.cx -= this.walkspeed;
+  }
 };
 
 //Checks which player this is and looks at how many bombs he's got left
@@ -620,12 +613,11 @@ Bomberman.prototype.checkBombBag = function() {
 		this.noBombs = 0;
 		return g_score.P1_maxBombs;
   	}
-  	//Works for now since we only have two players
-  	if (this._spatialID > 1) {
-  		g_score.P2_maxBombs += this.noBombs;
-  		this.noBombs = 0;
-  		return g_score.P2_maxBombs;
-  	}
+  if (this._spatialID > 1) {
+  	g_score.P2_maxBombs += this.noBombs;
+  	this.noBombs = 0;
+  	return g_score.P2_maxBombs;
+  }
 };
 
 
@@ -642,16 +634,16 @@ Bomberman.prototype.maybeDropBomb = function() {
 			// Always drop bombs in center of the square
 			// Some magic numbers: 110 is the center of the first square
 			var baseCx = g_playzone[0][0],
-				baseCy = g_playzone[1][0];
+				  baseCy = g_playzone[1][0];
 			var xPos = Math.floor((this.cx - baseCx) / g_sprites.wall.width),
-				yPos = Math.floor((this.cy - baseCy) / g_sprites.wall.height);
+				  yPos = Math.floor((this.cy - baseCy) / g_sprites.wall.height);
 			var bombCx = g_sprites.wall.width + (g_sprites.wall.width * xPos),
-				bombCy = 110 + (g_sprites.wall.height * yPos);
+				  bombCy = 110 + (g_sprites.wall.height * yPos);
 
 			entityManager.dropBomb(bombCx, bombCy, xPos, yPos,
          		this.bombStrength, this._spatialID, this.trigger);
 		}
-  	}	
+  }	
 };
 
 Bomberman.prototype.applySpeed = function () {
@@ -659,20 +651,19 @@ Bomberman.prototype.applySpeed = function () {
 };
 
 Bomberman.prototype.getRadius = function () {
-    return this.width*0.8;
+  return this.width*0.8;
 };
 
 Bomberman.prototype.takeBombHit = function () {
-    this.reset();
+  this.reset();
 };
 
 Bomberman.prototype.halt = function () {
-    this.velX = 0;
-    this.velY = 0;
+  this.velX = 0;
+  this.velY = 0;
 };
 
 Bomberman.prototype.render = function (ctx) {
   this.sprite.animate(ctx,this.cx,this.cy,this.width,this.height,
   this.spritePosX,this.spritePosY);
-
 };

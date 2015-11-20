@@ -24,7 +24,7 @@ function Powerup(descr) {
 
 	this.sprite = this.sprite || g_sprites.powerups[this.id];
   this._scale = 1;
-}
+};
 
 Powerup.prototype = new Entity();
 

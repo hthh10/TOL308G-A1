@@ -15,7 +15,6 @@
 
 //A generic constructor which accepts an arbitrary descriptor object
 function Pakupaku(descr) {
-
     //Common inherited setup logic from Entity
     this.setup(descr);
     this._scale = 1;
@@ -29,7 +28,6 @@ Pakupaku.prototype.height = 20;
 Pakupaku.prototype.speed = 2;
 
 //10 frames, from 0 - 9
-
 Pakupaku.prototype.upFrameLimit = 9;
 Pakupaku.prototype.currentupFrame = 0;
 Pakupaku.prototype.upStartX = 0;
@@ -187,7 +185,6 @@ Pakupaku.prototype.computePosition = function () {
             this.currentdownFrame = 0;
         }
     }
-
 
     // going left
     else if(this.direction === 3) {

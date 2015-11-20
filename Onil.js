@@ -20,7 +20,7 @@ function Onil(descr) {
     //Common inherited setup logic from Entity
     this.setup(descr);
     this._scale = 1;
-}
+};
 
 //Onil is an enemy so it inherits from the Enemy function
 Onil.prototype = new Enemy();
@@ -68,7 +68,7 @@ Onil.prototype.bombCollision = function(){
         if(this.direction === 3) this.direction = 1;
         if(this.direction === 4) this.direction = 2;
     }
-}
+};
 
 Onil.prototype.computePosition = function () {
     //Enemy moves by default
@@ -76,7 +76,6 @@ Onil.prototype.computePosition = function () {
         rightX = this.cx + this.getRadius(),
         topY = this.cy - this.getRadius(),
         bottomY = this.cy + this.getRadius();
-
     
     // Going right
     if (this.direction === 1) {
@@ -137,7 +136,6 @@ Onil.prototype.computePosition = function () {
             }
 	}
 
-
     // going left
     else if(this.direction === 3) {
         // going forward logic
@@ -168,6 +166,7 @@ Onil.prototype.computePosition = function () {
                 this.currentleftFrame = 0;
             }
         }
+
     // Going up
     else if(this.direction === 4) {
         // going forward logic
@@ -199,7 +198,7 @@ Onil.prototype.computePosition = function () {
             }
 
     }
-}
+};
 
 Onil.prototype.getRadius = function() {
     return 19.9;

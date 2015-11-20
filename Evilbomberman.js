@@ -16,7 +16,6 @@
 //A generic constructor which accepts an arbitrary descriptor object
 
 function Evilbomberman(descr) {
-
   //Common inherited setup logic from Entity
   this.setup(descr);
   this._scale = 1;
@@ -24,7 +23,7 @@ function Evilbomberman(descr) {
   // Default sprite, if not otherwise specified
   this.sprite = this.sprite || g_sprites.deadBomberman;
   this.sprite.width = 28;
-}
+};
 
 //Evilbomberman is an enemy so it inherits from the Enemy function
 Evilbomberman.prototype = new Enemy();
@@ -137,11 +136,11 @@ Evilbomberman.prototype.DropPowerup = function(cx, cy) {
 Evilbomberman.prototype.maybeDropBomb = function() {
   var hitEntity = spatialManager.findEntityInRange(this.cx, this.cy, 1);
   var baseCx = g_playzone[0][0],
-    baseCy = g_playzone[1][0];
+      baseCy = g_playzone[1][0];
   var xPos = Math.floor((this.cx - baseCx) / g_sprites.wall.width),
-    yPos = Math.floor((this.cy - baseCy) / g_sprites.wall.height);
+      yPos = Math.floor((this.cy - baseCy) / g_sprites.wall.height);
   var itemCx = g_sprites.wall.width + (g_sprites.wall.width * xPos),
-    itemCy = 110 + (g_sprites.wall.height * yPos);
+      itemCy = 110 + (g_sprites.wall.height * yPos);
 
   if ((this.canDropBomb && this.Bombinterval < 1000 / NOMINAL_UPDATE_INTERVAL) ||
     Math.random() < 0.005) {
@@ -160,16 +159,16 @@ Evilbomberman.prototype.maybeDropBomb = function() {
       this.canDropBomb = false;
     }
   }
-  };
+};
 
 Evilbomberman.prototype.computePosition = function() {
 
 
   var wallId,
-    leftX = this.cx - this.getRadius(),
-    rightX = this.cx + this.getRadius(),
-    topY = this.cy - this.getRadius(),
-    bottomY = this.cy + this.getRadius();
+      leftX = this.cx - this.getRadius(),
+      rightX = this.cx + this.getRadius(),
+      topY = this.cy - this.getRadius(),
+      bottomY = this.cy + this.getRadius();
 
   var upId, downId, leftId, rightId;
 
@@ -244,7 +243,6 @@ Evilbomberman.prototype.computePosition = function() {
     }
   }
 
-
   // going left
   else if (this.direction === 3) {
     // going forward logic
@@ -277,6 +275,7 @@ Evilbomberman.prototype.computePosition = function() {
       this.currentleftFrame = 0;
     }
   }
+
   // Going up
   else if (this.direction === 4) {
     // going forward logic
@@ -378,7 +377,8 @@ Evilbomberman.prototype.changeDirection = function(direction, leftX, rightX, top
 			}
 			break;
 	}
-},
+};
+
 Evilbomberman.prototype.getRadius = function () {
     return 19.9;
 };

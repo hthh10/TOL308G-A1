@@ -23,15 +23,14 @@ function resetScore() {
 	g_score.P1_maxBombs = 1;
 	g_score.P2_maxBombs = 1;
 	g_score.win = false;
-}
+};
 
 function renderScore (ctx) {
 	renderP1Score(ctx);
 	renderP2Score(ctx);
-  if (g_level === 4) {
+  	if (g_level === 4) {
       renderBoss(ctx);
   }
-
 
 	ctx.save();
     if (!g_gameStarted && g_score.P1_lives > 0) {
@@ -47,7 +46,7 @@ function renderScore (ctx) {
 		renderLose(ctx);
 	}
 	ctx.restore();
-}
+};
 
 function renderWin (ctx) {
 	ctx.save();
@@ -70,7 +69,7 @@ function renderWin (ctx) {
     ctx.fillText("Press 'space' to start story mode", g_canvas.width/2,g_canvas.height/2 + 35);
 	ctx.fillText("Press 'M' to start versus mode", g_canvas.width/2,g_canvas.height/2 + 75);
 	ctx.restore();
-}
+};
 
 function renderLose (ctx) {
 	ctx.save();
@@ -86,7 +85,7 @@ function renderLose (ctx) {
     ctx.fillText("Press 'space' to start story mode", g_canvas.width/2,g_canvas.height/2 + 35);
 	ctx.fillText("Press 'M' to start versus mode", g_canvas.width/2,g_canvas.height/2 + 75);
 	ctx.restore();
-}
+};
 
 
 function renderP1Score (ctx) {
@@ -106,7 +105,7 @@ function renderP1Score (ctx) {
     ctx.fillText("Dark Bomberman",250,30);
   }
 	ctx.restore();
-}
+};
 
 function renderBoss(ctx) {
   ctx.save();
@@ -123,7 +122,7 @@ function renderBoss(ctx) {
   }
   ctx.textAlign = "center";
   ctx.restore();
-}
+};
 
 function renderP2Score (ctx) {
   var hp = new Image();
@@ -139,4 +138,4 @@ function renderP2Score (ctx) {
 		ctx.fillText("Score:" + g_score.P2_score, g_canvas.width-150, 30);
 	}
 	ctx.restore();
-}
+};

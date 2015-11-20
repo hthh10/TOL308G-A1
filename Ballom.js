@@ -19,7 +19,7 @@ function Ballom(descr) {
     //Common inherited setup logic from Entity
     this.setup(descr);
     this._scale = 1;
-}
+};
 
 //Ballom is an enemy so it inherits from the enemy function
 Ballom.prototype = new Enemy();
@@ -69,7 +69,7 @@ Ballom.prototype.bombCollision = function(){
         if(this.direction === 3) this.direction = 1;
         if(this.direction === 4) this.direction = 2;
     }
-}
+};
 
 Ballom.prototype.computePosition = function () {
 	var wallId,
@@ -143,7 +143,6 @@ Ballom.prototype.computePosition = function () {
         }
     }
 
-
     // going left
     else if (this.direction === 3) {
 		// going forward logic
@@ -159,11 +158,11 @@ Ballom.prototype.computePosition = function () {
 		if (shouldITurn)
 			this.changeDirection(this.direction, leftX, rightX, topY, bottomY);
 
-		// Animation
-    if(this.orientation !== 2 ) {
-      this.orientation = 2;
-      this.currentleftFrame = 0;
-    }
+	    // Animation
+        if(this.orientation !== 2 ) {
+            this.orientation = 2;
+            this.currentleftFrame = 0;
+        }
 		if(this.currentleftFrame === 0) {
 			this.spritePosX = this.leftStartX;
 			this.spritePosY = this.leftStartY;
@@ -213,7 +212,7 @@ Ballom.prototype.computePosition = function () {
             this.currentupFrame = 0;
         }
     }
-}
+};
 
 Ballom.prototype.getRadius = function() {
     return 19.9;

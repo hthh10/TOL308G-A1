@@ -14,14 +14,12 @@
 
 // A generic contructor which accepts an arbitrary descriptor object
 function Bomb(descr) {
-
   // Common inherited setup logic from Entity
-
   this.setup(descr);
   this.sprite = g_sprites.bomb;
   this.logBomb(1);
 
-}
+};
 
 Bomb.prototype = new Entity();
 
@@ -48,7 +46,6 @@ Bomb.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 var eatBomb = new Audio("Sounds/Eat Bomb.wav");
 
 Bomb.prototype.update = function(du) {
-
   spatialManager.unregister(this);
   if (this._isDeadNow) {
     this.logBomb(-1);
@@ -69,6 +66,7 @@ Bomb.prototype.update = function(du) {
   if (this.isColliding() && (this.isColliding() instanceof Explosion)) {
     this.configureExplosion();
   }
+
   // If colliding with enemy Pakupaku, make it eat the bomb
   if (this.isColliding() instanceof Pakupaku) {
     eatBomb.play();
@@ -126,13 +124,12 @@ Bomb.prototype.maybeDetonate = function () {
 };
 
 Bomb.prototype.logBomb = function(x) {
-
   if(this.bombermanID === 1) {g_score.P1_maxBombs -= x;}
   if(this.bombermanID !== 1) {g_score.P2_maxBombs -= x;}
 };
 
 Bomb.prototype.getRadius = function() {
-    return this.width;
+  return this.width;
 };
 
 
