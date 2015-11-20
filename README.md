@@ -3,6 +3,14 @@
 
 BOMBERMAN
 
+
+How to play: 
+
+	Kill all enemies in each level and escape through the hidden door.
+	You kill enemies with bombs. 
+	You must locate the hidden door by blasting away brick walls. 
+	Some bricks may contain a hidden surprise that will aid you on your journey. 
+
 Key features:
 
 Power-ups!:
@@ -20,9 +28,11 @@ Multiplayer mode(s):
 
 Multiple levels:
 	3 levels + a Boss level, where you fight Evil Bomberman.
+	Bricks are randomly generated.
 	More difficult enemies generate on higher levels.
-	One level finishing door in each level that generates FAST enemies if blasted.
-
+	The escape door is randomly generated as well.
+	If the escape door gets blasted a random enemy will spawn. This enemy will move faster than normal.
+	
 Animation:
 	Bombermen and enemies animate while moving.
 	Bombermen and enemies have a special "death animation".
