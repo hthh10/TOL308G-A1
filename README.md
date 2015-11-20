@@ -14,11 +14,14 @@ Power-ups!:
 
 Multiplayer mode(s):
 	During story mode player 2 can join in to help his brother.
+	
 	Player vs player mode. No enemies are generated and the two Bombermen can fight to the death!
+	In order to win the epic battle you must kill the other bomberman and escape through the door.
 
 Multiple levels:
 	3 levels + a Boss level, where you fight Evil Bomberman.
 	More difficult enemies generate on higher levels.
+	One level finishing door in each level that generates FAST enemies if blasted.
 
 Animation:
 	Bombermen and enemies animate while moving.
@@ -28,10 +31,11 @@ Animation:
 	
 Enemies: 
 	Have AI. And each one behaves differntly. 
-	Ballom: (Pink balloon) move as fast as bomberman and may decide to move in a different direction if they can.
-	Onil: (blue drops) move faster than other enemies, but they have only change direction if they collide with a wall.
-	PakuPaku (dragon..) If they encounter bomberman's bomb. They will eat them.
+	Ballom: (Pink balloon) Move slightly slower than bomberman and has 50% chance to move in a different direction at a junction if they can.
+	Onil: (Blue drops) Move faster than other enemies, but they have only change direction if they collide with a wall.
+	PakuPaku (Green dragon) If they encounter bomberman's bomb, they will eat them. Moves same as Ballom.
 	Evil Bomberman (Boss) He can deploy bombs, destroy walls and is immune to his own explosions. It takes multiple hits to kill him.
+
 Sound effects and music: 
 	There's music in the title screen / info screen
 	There's a game-theme music playing througout the game.
@@ -42,4 +46,7 @@ Sound effects and music:
 
 Game info displayed while playing.
 	Lives, current level, score.
+	
+Movement smoothing
+	Bomberman moves smoothly around corners of solid walls.
 

@@ -60,6 +60,7 @@ Explosion.prototype.update = function(du) {
 
 Explosion.prototype.getRadius = function() {
   return g_images.explosion.width/2;
+  return g_images.explosion.width/2*0.8;
 };
 
 Explosion.prototype.takeExplosionHit = function() {
