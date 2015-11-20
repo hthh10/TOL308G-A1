@@ -101,8 +101,6 @@ Bomberman.prototype.reset = function () {
     this._scaleDirn = -1;
     this.immunity = 3000 / NOMINAL_UPDATE_INTERVAL;
 
-    // Unregister me from my old posistion
-    // ...so that I can't be collided with while warping
     spatialManager.unregister(this);
 };
 

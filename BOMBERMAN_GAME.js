@@ -17,16 +17,6 @@ var g_ctx = g_canvas.getContext("2d");
 12345678901234567890123456789012345678901234567890123456789012345678901234567890
 */
 
-// =============
-// GATHER INPUTS
-// =============
-
-function gatherInputs() {
-    // Nothing to do here!
-    // The event handlers do everything we need for now.
-}
-
-
 // =================
 // UPDATE SIMULATION
 // =================
@@ -46,7 +36,10 @@ function updateSimulation(du) {
     processDiagnostics();
 
 
-if (g_gameStarted) entityManager.update(du);
+if (g_gameStarted) {
+    entityManager.update(du);
+    titlescreen.pause();
+}
 
 // Prevent perpetual firing!
 eatKey(Bomberman.prototype.KEY_FIRE);
@@ -65,7 +58,7 @@ var KEY_SPATIAL = keyCode('X');
 
 var KEY_STORYMODE  = keyCode(' ');
 var KEY_MULTIPLAYER  = keyCode('M');
-var KEY_PLAYER2  = keyCode('O');
+var KEY_PLAYER2  = keyCode('0');
 var KEY_RESET = keyCode('R');
 
 var KEY_LEVEL1 = keyCode('1');

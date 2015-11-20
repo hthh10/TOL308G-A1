@@ -58,7 +58,6 @@ main._updateClocks = function (frameTime) {
 };
 
 main._iterCore = function (dt) {
-    gatherInputs();
     update(dt);
     render(g_ctx);
 };

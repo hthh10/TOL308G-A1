@@ -10,11 +10,6 @@ with suitable 'data' and 'methods'.
 "use strict";
 
 
-// Tell jslint not to complain about my use of underscore prefixes (nomen),
-// my flattening of some indentation (white), or my use of incr/decr ops
-// (plusplus).
-//
-/*jslint nomen: true, white: true, plusplus: true*/
 
 
 var entityManager = {
@@ -29,8 +24,6 @@ _door : [],
 _evilbomberman: [],
 _spritedeath: [],
 
-// -------------
-// Ugly var for level design
 
 
 // "PRIVATE" METHODS
@@ -362,8 +355,7 @@ generateEnemy : function(){
   }
 },
 
-// tímabundið fall til að messa ekki í enemies á meðan
-// þeir eru svona mikið under construction
+
 generateRandomEnemy: function(cx, cy) {
   var luck = Math.random();
   if (luck < 0.5) {
@@ -468,7 +460,6 @@ render: function(ctx) {
     for (var i = 0; i < aCategory.length; ++i) {
 
     aCategory[i].render(ctx);
-    //debug.text(".", debugX + i * 10, debugY);
 
     }
     debugY += 10;

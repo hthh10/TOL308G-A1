@@ -163,8 +163,6 @@ Evilbomberman.prototype.computePosition = function() {
 
   var shouldITurn = (Math.random() < 0.7) ? true : false;
 
-  // playzone rules - If the enemy hits the edges of the playfield
-  // he is kindly asked to go away.
 
   // Going right
   if (this.direction === 1) {
