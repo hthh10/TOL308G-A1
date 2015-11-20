@@ -215,13 +215,13 @@ var g_sprites = {};
 function preloadDone() {
     g_sprites.brick = new Sprite(g_images.brick);
     g_sprites.wall = new Sprite(g_images.wall);
-	g_sprites.bomberman = new Sprite(g_images.bomberman);
+	  g_sprites.bomberman = new Sprite(g_images.bomberman);
     g_sprites.ballom = new Sprite(g_images.ballom);
     g_sprites.onil = new Sprite(g_images.onil);
     g_sprites.pakupaku = new Sprite(g_images.pakupaku);
     g_sprites.bomb = new Sprite(g_images.Bomb);
     g_sprites.Explosion = new Sprite(g_images.explosion);
-	g_sprites.powerups = [new Sprite(g_images.bagspace),
+	  g_sprites.powerups = [new Sprite(g_images.bagspace),
 						  new Sprite(g_images.trigger),
                           new Sprite(g_images.strength),
                           new Sprite(g_images.speed)];

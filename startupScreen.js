@@ -24,7 +24,7 @@ render : function(ctx) {
 
 	ctx.save();
     if (!g_gameStarted) {
-    	
+
     	ctx.fillStyle = "black";
     	ctx.fillRect(0,0,640,640);
     	ctx.drawImage(g_images.Brickdeath,0,257,400,143,80,40,800,286);
@@ -36,7 +36,7 @@ render : function(ctx) {
 		ctx.fillText("Press 'V' for INFO", g_canvas.width/2,g_canvas.height-180);
     }
     if(g_showInfo) {
-    	
+
     	// linebreak = 20;
     	ctx.fillStyle = "black";
     	ctx.fillRect(0,0,g_canvas.width,g_canvas.height);
@@ -53,7 +53,7 @@ render : function(ctx) {
 		ctx.fillText("Player 2 controls", g_canvas.width/2,240);
 		ctx.fillText("0 - Add player 2 to story mode", g_canvas.width/2,260);
 
-		ctx.fillText("IJKL - Move player 1 ", g_canvas.width/2,300);
+		ctx.fillText("IJKL - Move player 2 ", g_canvas.width/2,300);
 		ctx.fillText("O - Player 2 drop bomb ", g_canvas.width/2,320);
 		ctx.fillText("U - Player 2 detonate bomb (if active) ", g_canvas.width/2,340);
 		ctx.font="24px Arial";
@@ -71,7 +71,7 @@ render : function(ctx) {
 
 
     }
-		
+
 	ctx.restore();
 	ctx.fillStyle = oldFillStyle;
 },

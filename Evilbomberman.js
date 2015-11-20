@@ -105,7 +105,7 @@ Evilbomberman.prototype.update = function(du) {
       if(this.direction === 4) this.direction = 2;
     }
     // if hit by player's bombs, lose hp.
-    if ((hitEntity instanceof Explosion && hitEntity.bombermanID < 4) &&
+    if ((hitEntity instanceof Explosion && hitEntity.bombermanID > 0) &&
           this.immunity < 20) {
       //award points?
       this.lives -= 1;
@@ -180,6 +180,8 @@ Evilbomberman.prototype.computePosition = function() {
 
   var shouldITurn = (Math.random() < 0.7) ? true : false;
 
+  // playzone rules - If the enemy hits the edges of the playfield
+  // he is kindly asked to go away.
 
   // Going right
   if (this.direction === 1) {
@@ -317,13 +319,13 @@ Evilbomberman.prototype.changeDirection = function(direction, leftX, rightX, top
 
   switch(direction) {
 		case 1:
-			if (bmanYprox < 0) { // 50% chance on checking down first
+			if (bmanYprox < 0) {
 				if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
 					this.direction = 2;
 				else if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
 					this.direction = 4;
 			}
-			else { // 50% chance on checking up first
+			else {
 				if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
 					this.direction = 4;
 				else if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
@@ -332,13 +334,13 @@ Evilbomberman.prototype.changeDirection = function(direction, leftX, rightX, top
 			break;
 
 		case 2:
-			if (bmanXprox > 0) { // 50% chance checking move left first
+			if (bmanXprox > 0) {
 				if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
 					this.direction = 3;
 				else if (this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
 					this.direction = 1;
 			}
-			else { // 50% chance on checking move right first
+			else {
 				if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
 					this.direction = 1;
 				else if (this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
@@ -347,13 +349,13 @@ Evilbomberman.prototype.changeDirection = function(direction, leftX, rightX, top
 			break;
 
 		case 3: // Going left
-			if (bmanYprox < 0) { // 50% chance on checking down first
+			if (bmanYprox < 0) {
 				if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
 					this.direction = 2;
 				else if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
 					this.direction = 4;
 			}
-			else { // 50% chance on checking up first
+			else {
 				if(this.canMoveUp(leftX,rightX,topY-this.getRadius(),bottomY))
 					this.direction = 4;
 				else if(this.canMoveDown(leftX,rightX,topY,bottomY+this.getRadius()))
@@ -362,13 +364,13 @@ Evilbomberman.prototype.changeDirection = function(direction, leftX, rightX, top
 			break;
 
 		case 4: // Going up
-			if (bmanXprox > 0) { // 50% chance checking move left first
+			if (bmanXprox > 0) {
 				if(this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))
 					this.direction = 3;
 				else if (this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
 					this.direction = 1;
 			}
-			else { // 50% chance on checking move right first
+			else {
 				if(this.canMoveRight(leftX,rightX+this.getRadius(),topY,bottomY))
 					this.direction = 1;
 				else if (this.canMoveLeft(leftX-this.getRadius(),rightX,topY,bottomY))

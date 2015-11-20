@@ -155,7 +155,6 @@ destroyBrick : function (yId, xId) {
 	else if (this.baseWall[yId][xId] > 2){
 		for (var i = 3; i<10; i++) {
 			descr.id = i-3;
-			// ATH: EFTIR AÐ CROSS REFERENCE'A OG ÚTFÆRA GENERATE
 			if (this.baseWall[yId][xId] === i) {
 				entityManager.generatePowerup(descr);
 			}
